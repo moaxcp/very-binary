@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ShiftBytes.shiftBytes;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ByteArrayUint32Test {
 
@@ -55,5 +56,32 @@ public class ByteArrayUint32Test {
     }
     assertThat(bytes).isEqualTo(ba().int8(100));
     assertThat(events).containsExactly(shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4), shiftBytes(0, -4));
+  }
+
+  @Test
+  void uint32_accepts_boundaries_and_rejects_out_of_range() {
+    ByteArray arr = new ByteArray(new byte[8]);
+    arr.setUint32(0, 0L);
+    arr.setUint32(4, 0xFFFF_FFFFL);
+    assertThat(arr.getUint32(0)).isEqualTo(0L);
+    assertThat(arr.getUint32(4)).isEqualTo(0xFFFF_FFFFL);
+
+    assertThatThrownBy(() -> arr.setUint32(0, -1L))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint32 out of range: -1");
+    assertThatThrownBy(() -> arr.setUint32(0, 0x1_0000_0000L))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint32 out of range: 4294967296");
+  }
+
+  @Test
+  void uint32_array_element_validation() {
+    ByteArray arr = new ByteArray(new byte[8]);
+    assertThatThrownBy(() -> arr.setUint32(0, new long[]{0, -1}))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint32 out of range: -1");
+    assertThatThrownBy(() -> arr.setUint32(0, new long[]{0, 0x1_0000_0000L}))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint32 out of range: 4294967296");
   }
 }

@@ -1,7 +1,7 @@
 
 1. [ ] Phase 1 — Primitive definitions and rules
   - [x] Define constants for supported primitives and their byte widths: bool (1), int8/uint8 (1), int16/uint16 (2), int32/uint32 (4), int64/uint64 (8), float32 (4), float64 (8).
-  - [ ] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types.
+  - [x] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
   - [ ] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling.
   - [ ] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
   - [ ] Provide shared utilities for range checks and constant-width lookups used across layers.
@@ -58,12 +58,12 @@
    - [ ] Introduce helper utilities for computed lengths or conditional fields if required by schemas.
 
 10. [ ] Phase 10 — Testing strategy
-   - [ ] Add unit tests for each primitive under both endianness serializers with edge values, including unsigned boundaries.
-   - [ ] Add ByteArray tests for set/get, append, insert, remove, capacity growth, and listener notifications verifying indices/lengths.
-   - [ ] Add Type tests confirming offset calculations and delegation to ByteArray.
-   - [ ] Add StructType tests for total size, field offsets, and padding correctness.
-   - [ ] Add Struct tests for full read/write round-trips across multiple fields, including nested structs and shifting scenarios.
-   - [ ] Add property-based or fuzz tests for random sequences of inserts/removes validating invariants (lengths, contents).
+  - [x] Add unit tests for each primitive under both endianness serializers with edge values, including unsigned boundaries — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [ ] Add ByteArray tests for set/get, append, insert, remove, capacity growth, and listener notifications verifying indices/lengths.
+  - [ ] Add Type tests confirming offset calculations and delegation to ByteArray.
+  - [ ] Add StructType tests for total size, field offsets, and padding correctness.
+  - [ ] Add Struct tests for full read/write round-trips across multiple fields, including nested structs and shifting scenarios.
+  - [ ] Add property-based or fuzz tests for random sequences of inserts/removes validating invariants (lengths, contents).
 
 11. [ ] Phase 11 — Performance and memory
    - [ ] Benchmark common operations (sequential appends, scattered inserts, large removals) and set target thresholds.

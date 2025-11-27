@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ShiftBytes.shiftBytes;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ByteArrayUint64Test {
 
@@ -80,5 +81,34 @@ public class ByteArrayUint64Test {
     }
     assertThat(bytes).isEqualTo(ba().int8(100));
     assertThat(events).containsExactly(shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8), shiftBytes(0, -8));
+  }
+
+  @Test
+  void uint64_accepts_boundaries_and_rejects_out_of_range() {
+    ByteArray arr = new ByteArray(new byte[16]);
+    BigInteger max = BigInteger.ONE.shiftLeft(64).subtract(BigInteger.ONE);
+    arr.setUint64(0, BigInteger.ZERO);
+    arr.setUint64(8, max);
+    assertThat(arr.getUint64(0)).isEqualTo(BigInteger.ZERO);
+    assertThat(arr.getUint64(8)).isEqualTo(max);
+
+    assertThatThrownBy(() -> arr.setUint64(0, BigInteger.valueOf(-1)))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint64 out of range: -1");
+    assertThatThrownBy(() -> arr.setUint64(0, BigInteger.ONE.shiftLeft(64)))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint64 out of range: 18446744073709551616");
+  }
+
+  @Test
+  void uint64_array_element_validation() {
+    ByteArray arr = new ByteArray(new byte[16]);
+    BigInteger tooLarge = BigInteger.ONE.shiftLeft(64);
+    assertThatThrownBy(() -> arr.setUint64(0, new BigInteger[]{BigInteger.ZERO, BigInteger.valueOf(-1)}))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint64 out of range: -1");
+    assertThatThrownBy(() -> arr.setUint64(0, new BigInteger[]{BigInteger.ZERO, tooLarge}))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("uint64 out of range: 18446744073709551616");
   }
 }

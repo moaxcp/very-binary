@@ -314,17 +314,17 @@ public class ByteArray {
 
   public ByteArray setUint8(long index, short value) {
     // Accept either an unsigned 0..255 value (short) or a signed byte widened to short (-128..127)
-    if(value < -128 || value > 0xFF) {
+    if(value < 0 || value > 0xFF) {
       throw new IllegalArgumentException("uint8 out of range: " + value);
     }
     serializer.writeUint8(bytes, Math.toIntExact(index), value);
     return this;
   }
 
-  public ByteArray setUint8(long index, short[] values) {
+  public ByteArray setUint8(long index, short... values) {
     if(values != null) {
       for(short v : values) {
-        if(v < -128 || v > 0xFF) {
+        if(v < 0 || v > 0xFF) {
           throw new IllegalArgumentException("uint8 out of range: " + v);
         }
       }

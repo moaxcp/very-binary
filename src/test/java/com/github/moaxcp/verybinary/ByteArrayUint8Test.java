@@ -49,28 +49,22 @@ public class ByteArrayUint8Test {
 
   @Test
   void uint8_accepts_boundaries_and_signed_byte_range() {
-    ByteArray arr = new ByteArray(new byte[5]);
-    // Accept signed byte widened values (-128..127)
-    arr.setUint8(0, (short) -128);
-    arr.setUint8(1, (short) -1);
-    arr.setUint8(2, (short) 0);
-    arr.setUint8(3, (short) 127);
-    // And canonical unsigned max 255
-    arr.setUint8(4, (short) 255);
+    ByteArray arr = new ByteArray(new byte[3]);
+    arr.setUint8(0, (short) 0);
+    arr.setUint8(1, (short) 127);
+    arr.setUint8(2, (short) 255);
 
-    assertThat(arr.getUint8(0)).isEqualTo((short) 128);
-    assertThat(arr.getUint8(1)).isEqualTo((short) 255);
-    assertThat(arr.getUint8(2)).isEqualTo((short) 0);
-    assertThat(arr.getUint8(3)).isEqualTo((short) 127);
-    assertThat(arr.getUint8(4)).isEqualTo((short) 255);
+    assertThat(arr.getUint8(0)).isEqualTo((short) 0);
+    assertThat(arr.getUint8(1)).isEqualTo((short) 127);
+    assertThat(arr.getUint8(2)).isEqualTo((short) 255);
   }
 
   @Test
   void uint8_rejects_below_minus128_and_above_255() {
     ByteArray arr = new ByteArray(new byte[2]);
-    assertThatThrownBy(() -> arr.setUint8(0, (short) -129))
+    assertThatThrownBy(() -> arr.setUint8(0, (short) -1))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("uint8 out of range: -129");
+        .hasMessage("uint8 out of range: -1");
     assertThatThrownBy(() -> arr.setUint8(0, (short) 256))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint8 out of range: 256");
@@ -82,8 +76,8 @@ public class ByteArrayUint8Test {
     assertThatThrownBy(() -> arr.setUint8(0, new short[]{0, (short) 256}))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint8 out of range: 256");
-    assertThatThrownBy(() -> arr.setUint8(0, new short[]{0, (short) -129}))
+    assertThatThrownBy(() -> arr.setUint8(0, new short[]{0, (short) -1}))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("uint8 out of range: -129");
+        .hasMessage("uint8 out of range: -1");
   }
 }

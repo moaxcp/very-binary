@@ -2,8 +2,8 @@
 1. [ ] Phase 1 — Primitive definitions and rules
   - [x] Define constants for supported primitives and their byte widths: bool (1), int8/uint8 (1), int16/uint16 (2), int32/uint32 (4), int64/uint64 (8), float32 (4), float64 (8).
   - [x] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
-  - [ ] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling.
-  - [ ] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
+  - [x] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
+  - [x] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
   - [ ] Provide shared utilities for range checks and constant-width lookups used across layers.
 
 2. [ ] Phase 2 — Serializer layer

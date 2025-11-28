@@ -29,6 +29,13 @@ twos-complement encoding.
 * float32 - 32 bit floating point number
 * float64 - 64 bit floating point number
 
+### NaN handling policy
+
+For float32 and float64, NaN payloads and sign bits are preserved on round-trips. Serializers must use raw bit conversions
+when writing floating-point values to avoid canonicalizing NaNs. Specifically: Float.floatToRawIntBits and
+Double.doubleToRawLongBits are used during writes; reads use the corresponding intBitsToFloat and longBitsToDouble. This
+ensures bit pattern preservation for all floating-point values, including NaNs.
+
 # Serializer
 
 Serializers implement how each primitive type is read and written to the byte[]. Serializers include Big Endian and 

@@ -326,14 +326,16 @@ public final class LittleEndianSerializer implements Serializer {
   }
 
   public void writeFloat32(byte[] bytes, int index, float value) {
-    int bits = Float.floatToIntBits(value);
+    // Preserve NaN payloads by using raw bits (no canonicalization)
+    int bits = Float.floatToRawIntBits(value);
     writeInt32(bytes, index, bits);
   }
 
   public void writeFloat32(byte[] bytes, int index, float[] values) {
     int pos = index;
     for (float v : values) {
-      int bits = Float.floatToIntBits(v);
+      // Preserve NaN payloads by using raw bits (no canonicalization)
+      int bits = Float.floatToRawIntBits(v);
       writeInt32(bytes, pos, bits);
       pos += 4;
     }
@@ -373,14 +375,16 @@ public final class LittleEndianSerializer implements Serializer {
   }
 
   public void writeFloat64(byte[] bytes, int index, double value) {
-    long bits = Double.doubleToLongBits(value);
+    // Preserve NaN payloads by using raw bits (no canonicalization)
+    long bits = Double.doubleToRawLongBits(value);
     writeInt64(bytes, index, bits);
   }
 
   public void writeFloat64(byte[] bytes, int index, double[] values) {
     int pos = index;
     for (double v : values) {
-      long bits = Double.doubleToLongBits(v);
+      // Preserve NaN payloads by using raw bits (no canonicalization)
+      long bits = Double.doubleToRawLongBits(v);
       writeInt64(bytes, pos, bits);
       pos += 8;
     }

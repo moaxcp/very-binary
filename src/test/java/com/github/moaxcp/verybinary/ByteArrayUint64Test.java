@@ -18,7 +18,7 @@ public class ByteArrayUint64Test {
     for (int i = 0; i < 10; i++) {
       bytes.setUint64(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
     }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {
+    assertThat(bytes).isEqualTo(ba(new byte[] {
         -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -2,
         -1, -1, -1, -1, -1, -1, -1, -3,
@@ -29,7 +29,7 @@ public class ByteArrayUint64Test {
         -1, -1, -1, -1, -1, -1, -1, -8,
         -1, -1, -1, -1, -1, -1, -1, -9,
         -1, -1, -1, -1, -1, -1, -1, -10
-    });
+    }));
     for (int i = 0; i < 10; i++) {
       assertThat(bytes.getUint64(i * 8)).isEqualTo(new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
     }
@@ -43,7 +43,7 @@ public class ByteArrayUint64Test {
     for (int i = 0; i < 10; i++) {
       bytes.addUint64(0, BigInteger.valueOf(i));
     }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {
+    assertThat(bytes).isEqualTo(ba(new byte[] {
         0, 0, 0, 0, 0, 0, 0, 9,
         0, 0, 0, 0, 0, 0, 0, 8,
         0, 0, 0, 0, 0, 0, 0, 7,
@@ -55,7 +55,7 @@ public class ByteArrayUint64Test {
         0, 0, 0, 0, 0, 0, 0, 1,
         0, 0, 0, 0, 0, 0, 0, 0,
         100
-    });
+    }));
     assertThat(events).containsExactly(shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8), shiftBytes(0, 8));
   }
 

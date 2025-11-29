@@ -83,7 +83,7 @@ public class Int8TypeTest {
         .int8()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {0}));
   }
 
   @Test
@@ -92,7 +92,7 @@ public class Int8TypeTest {
         .primitive().constant((byte) 5).int8()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {5}));
   }
 
   @Test
@@ -102,7 +102,7 @@ public class Int8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {0});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {0}));
   }
 
   @Test
@@ -112,7 +112,7 @@ public class Int8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 0, 0, 0, 0, 0});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {5, 0, 0, 0, 0, 0}));
   }
 
   @Test
@@ -122,7 +122,7 @@ public class Int8TypeTest {
         .primitive().constant((byte) 6).lengthField(0).int8()
         .build();
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {5, 6, 6, 6, 6, 6});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {5, 6, 6, 6, 6, 6}));
   }
 
   @Test
@@ -144,7 +144,7 @@ public class Int8TypeTest {
 
     struct.setInt8(0, (byte) 2);
 
-    assertThat(struct.getByteArray().getBytes()).isEqualTo(new byte[] {2});
+    assertThat(struct.getByteArray()).isEqualTo(ba(new byte[] {2}));
   }
 
   @Test

@@ -17,7 +17,7 @@ public class ByteArrayUint32Test {
     for (int i = 0; i < 10; i++) {
       bytes.setUint32(i * 4, 4294967295L - i);
     }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {
+    assertThat(bytes).isEqualTo(ba(new byte[] {
         -1, -1, -1, -1,
         -1, -1, -1, -2,
         -1, -1, -1, -3,
@@ -28,7 +28,7 @@ public class ByteArrayUint32Test {
         -1, -1, -1, -8,
         -1, -1, -1, -9,
         -1, -1, -1, -10
-    });
+    }));
     for (int i = 0; i < 10; i++) {
       assertThat(bytes.getUint32(i * 4)).isEqualTo(4294967295L - i);
     }
@@ -42,7 +42,7 @@ public class ByteArrayUint32Test {
     for (int i = 0; i < 10; i++) {
       bytes.addUint32(0, i);
     }
-    assertThat(bytes.getBytes()).isEqualTo(new byte[] {0, 0, 0, 9, 0, 0, 0, 8, 0, 0, 0, 7, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 100});
+    assertThat(bytes).isEqualTo(ba(new byte[] {0, 0, 0, 9, 0, 0, 0, 8, 0, 0, 0, 7, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 100}));
     assertThat(events).containsExactly(shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4), shiftBytes(0, 4));
   }
 

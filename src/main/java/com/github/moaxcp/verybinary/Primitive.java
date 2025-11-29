@@ -1,5 +1,7 @@
 package com.github.moaxcp.verybinary;
 
+import java.math.BigInteger;
+
 public enum Primitive {
   BOOL(1),
   INT8(1),
@@ -55,5 +57,78 @@ public enum Primitive {
       case FLOAT32 -> "Float";
       case FLOAT64 -> "Double";
     };
+  }
+
+  public static boolean isUint8(int value) {
+    return value >= 0 && value <= 0xFF;
+  }
+
+  public static boolean isUint16(int value) {
+    return value >= 0 && value <= 0xFFFF;
+  }
+
+  public static boolean isUint32(long value) {
+    return value >= 0 && value <= 0xFFFF_FFFFL;
+  }
+
+  public static boolean isUint64(java.math.BigInteger value) {
+    if (value == null) return false;
+    return value.signum() >= 0 && value.compareTo(new java.math.BigInteger("18446744073709551615")) <= 0;
+  }
+
+  public static void requireUint8(int value) {
+    if (!isUint8(value)) {
+      throw new IllegalArgumentException("uint8 out of range: " + value);
+    }
+  }
+
+  public static void requireUint8(short[] values) {
+    if(values != null) {
+      for(int v : values) {
+        requireUint8(v);
+      }
+    }
+  }
+
+  public static void requireUint16(int value) {
+    if (!isUint16(value)) {
+      throw new IllegalArgumentException("uint16 out of range: " + value);
+    }
+  }
+
+  public static void requireUint16(int[] values) {
+    if(values != null) {
+      for(int v : values) {
+        requireUint16(v);
+      }
+    }
+  }
+
+  public static void requireUint32(long value) {
+    if (!isUint32(value)) {
+      throw new IllegalArgumentException("uint32 out of range: " + value);
+    }
+  }
+
+  public static void requireUint32(long[] values) {
+    if(values != null) {
+      for(long v : values) {
+        requireUint32(v);
+      }
+    }
+  }
+
+  public static void requireUint64(BigInteger value) {
+    if (!isUint64(value)) {
+      throw new IllegalArgumentException("uint64 out of range: " + value);
+    }
+  }
+
+  public static void requireUint64(BigInteger[] values) {
+    if (values != null) {
+      for (var value : values) {
+        requireUint64(value);
+      }
+    }
   }
 }

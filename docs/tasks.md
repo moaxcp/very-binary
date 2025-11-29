@@ -4,7 +4,7 @@
   - [x] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
   - [x] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
   - [x] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
-  - [ ] Provide shared utilities for range checks and constant-width lookups used across layers.
+  - [x] Provide shared utilities for range checks and constant-width lookups used across layers — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
 
 2. [ ] Phase 2 — Serializer layer
    - [ ] Implement BigEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.

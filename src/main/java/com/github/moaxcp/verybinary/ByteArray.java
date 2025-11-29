@@ -313,22 +313,13 @@ public class ByteArray {
   }
 
   public ByteArray setUint8(long index, short value) {
-    // Accept either an unsigned 0..255 value (short) or a signed byte widened to short (-128..127)
-    if(value < 0 || value > 0xFF) {
-      throw new IllegalArgumentException("uint8 out of range: " + value);
-    }
+    requireUint8(value);
     serializer.writeUint8(bytes, Math.toIntExact(index), value);
     return this;
   }
 
   public ByteArray setUint8(long index, short... values) {
-    if(values != null) {
-      for(short v : values) {
-        if(v < 0 || v > 0xFF) {
-          throw new IllegalArgumentException("uint8 out of range: " + v);
-        }
-      }
-    }
+    requireUint8(values);
     serializer.writeUint8(bytes, Math.toIntExact(index), values);
     return this;
   }
@@ -442,21 +433,13 @@ public class ByteArray {
   }
 
   public ByteArray setUint16(long index, int value) {
-    if(value < 0 || value > 0xFFFF) {
-      throw new IllegalArgumentException("uint16 out of range: " + value);
-    }
+    requireUint16(value);
     serializer.writeUint16(bytes, Math.toIntExact(index), value);
     return this;
   }
 
   public ByteArray setUint16(long index, int[] values) {
-    if(values != null) {
-      for(int v : values) {
-        if(v < 0 || v > 0xFFFF) {
-          throw new IllegalArgumentException("uint16 out of range: " + v);
-        }
-      }
-    }
+    requireUint16(values);
     serializer.writeUint16(bytes, Math.toIntExact(index), values);
     return this;
   }
@@ -554,21 +537,13 @@ public class ByteArray {
   }
 
   public ByteArray setUint32(long index, long value) {
-    if(value < 0 || value > 0xFFFF_FFFFL) {
-      throw new IllegalArgumentException("uint32 out of range: " + value);
-    }
+    requireUint32(value);
     serializer.writeUint32(bytes, Math.toIntExact(index), value);
     return this;
   }
 
   public ByteArray setUint32(long index, long[] values) {
-    if(values != null) {
-      for(long v : values) {
-        if(v < 0 || v > 0xFFFF_FFFFL) {
-          throw new IllegalArgumentException("uint32 out of range: " + v);
-        }
-      }
-    }
+    requireUint32(values);
     serializer.writeUint32(bytes, Math.toIntExact(index), values);
     return this;
   }
@@ -666,22 +641,13 @@ public class ByteArray {
   }
 
   public ByteArray setUint64(long index, BigInteger value) {
-    if(value.signum() < 0 || value.compareTo(BigInteger.ONE.shiftLeft(64).subtract(BigInteger.ONE)) > 0) {
-      throw new IllegalArgumentException("uint64 out of range: " + value);
-    }
+    requireUint64(value);
     serializer.writeUint64(bytes, Math.toIntExact(index), value);
     return this;
   }
 
   public ByteArray setUint64(long index, BigInteger[] values) {
-    if(values != null) {
-      BigInteger max = BigInteger.ONE.shiftLeft(64).subtract(BigInteger.ONE);
-      for(BigInteger v : values) {
-        if(v.signum() < 0 || v.compareTo(max) > 0) {
-          throw new IllegalArgumentException("uint64 out of range: " + v);
-        }
-      }
-    }
+    requireUint64(values);
     serializer.writeUint64(bytes, Math.toIntExact(index), values);
     return this;
   }

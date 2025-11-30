@@ -6,24 +6,24 @@
   - [x] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
   - [x] Provide shared utilities for range checks and constant-width lookups used across layers — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
 
-2. [ ] Phase 2 — Serializer layer
+2. [x] Phase 2 — Serializer layer
   - [x] Implement BigEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Implement LittleEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Ensure all reads/writes go through the Serializer (no direct byte[] access in higher layers).
   - [x] Add cross-endian unit tests validating symmetry, correct byte order, and edge values (including unsigned bounds and NaN payloads).
   - [x] Add cross-endian unit tests for float32/float64 non-NaN values — refs: req: Layers of abstraction > primitive types; plan: 4.2. Serializer layer
-  - [ ] Update tests comparing bytes to assert ByteArray equality using ba() instead of getBytes() — refs: req: ByteArray; plan: 4.2. Serializer layer
+  - [x] Update tests comparing bytes to assert ByteArray equality using ba() instead of getBytes() — refs: req: ByteArray; plan: 4.2. Serializer layer
 
-3. [ ] Phase 3 — ByteArray core
-   - [ ] Provide constructors with optional initial capacity and pluggable Serializer.
-   - [ ] Use long for public indices/lengths; add defensive checks against exceeding single-array addressable limits.
-   - [ ] Implement capacity management with growth strategy and efficient shifting via System.arraycopy.
-   - [ ] Implement per-primitive APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length).
-   - [ ] Implement setX(index, value), setX(index, values...), setX(index, List).
-   - [ ] Implement append APIs: x(value), x(values...), x(List) with auto-allocation.
-   - [ ] Implement insert APIs: addX(index, value/array/List) with shifting.
-   - [ ] Implement remove APIs: removeX(index) and removeX(index, length).
-   - [ ] Validate all index/length arguments; throw descriptive out-of-range exceptions.
+3. [x] Phase 3 — ByteArray core
+  - [x] Provide constructors with optional initial capacity and pluggable Serializer.
+  - [x] Use long for public indices/lengths; add defensive checks against exceeding single-array addressable limits — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [x] Implement capacity management with growth strategy and efficient shifting via System.arraycopy.
+  - [x] Implement per-primitive APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length). — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [ ] Implement setX(index, value), setX(index, values...), setX(index, List).
+  - [ ] Implement append APIs: x(value), x(values...), x(List) with auto-allocation.
+  - [ ] Implement insert APIs: addX(index, value/array/List) with shifting.
+  - [ ] Implement remove APIs: removeX(index) and removeX(index, length).
+  - [ ] Validate all index/length arguments; throw descriptive out-of-range exceptions.
 
 4. [ ] Phase 4 — ByteArray listeners and shift events
    - [ ] Implement listener registration and removal APIs.

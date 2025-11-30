@@ -226,6 +226,15 @@ public class ByteArray {
     return serializer.readInt8(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Byte> getInt8List(long index, long length) {
+    byte[] array = getInt8(index, length);
+    List<Byte> list = new ArrayList<>(array.length);
+    for (byte v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setInt8(long index, byte b) {
     checkAllocation(index, INT8.size());
     serializer.writeInt8(bytes, Math.toIntExact(index), b);
@@ -312,6 +321,15 @@ public class ByteArray {
     return serializer.readUint8(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Short> getUint8List(long index, long length) {
+    short[] array = getUint8(index, length);
+    List<Short> list = new ArrayList<>(array.length);
+    for (short v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setUint8(long index, short value) {
     requireUint8(value);
     serializer.writeUint8(bytes, Math.toIntExact(index), value);
@@ -373,6 +391,15 @@ public class ByteArray {
     return serializer.readInt16(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Short> getInt16List(long index, long length) {
+    short[] array = getInt16(index, length);
+    List<Short> list = new ArrayList<>(array.length);
+    for (short v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setInt16(long index, short s) {
     serializer.writeInt16(bytes, Math.toIntExact(index), s);
     return this;
@@ -432,6 +459,15 @@ public class ByteArray {
     return serializer.readUint16(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Integer> getUint16List(long index, long length) {
+    int[] array = getUint16(index, length);
+    List<Integer> list = new ArrayList<>(array.length);
+    for (int v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setUint16(long index, int value) {
     requireUint16(value);
     serializer.writeUint16(bytes, Math.toIntExact(index), value);
@@ -485,6 +521,15 @@ public class ByteArray {
     return serializer.readInt32(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Integer> getInt32List(long index, long length) {
+    int[] array = getInt32(index, length);
+    List<Integer> list = new ArrayList<>(array.length);
+    for (int v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setInt32(long index, int value) {
     serializer.writeInt32(bytes, Math.toIntExact(index), value);
     return this;
@@ -534,6 +579,15 @@ public class ByteArray {
 
   public long[] getUint32(long index, long length) {
     return serializer.readUint32(bytes, Math.toIntExact(index), Math.toIntExact(length));
+  }
+
+  public List<Long> getUint32List(long index, long length) {
+    long[] array = getUint32(index, length);
+    List<Long> list = new ArrayList<>(array.length);
+    for (long v : array) {
+      list.add(v);
+    }
+    return list;
   }
 
   public ByteArray setUint32(long index, long value) {
@@ -589,6 +643,15 @@ public class ByteArray {
     return serializer.readInt64(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Long> getInt64List(long index, long length) {
+    long[] array = getInt64(index, length);
+    List<Long> list = new ArrayList<>(array.length);
+    for (long v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setInt64(long index, long value) {
     serializer.writeInt64(bytes, Math.toIntExact(index), value);
     return this;
@@ -638,6 +701,15 @@ public class ByteArray {
 
   public BigInteger[] getUint64(long index, long length) {
     return serializer.readUint64(bytes, Math.toIntExact(index), Math.toIntExact(length));
+  }
+
+  public List<BigInteger> getUint64List(long index, long length) {
+    BigInteger[] array = getUint64(index, length);
+    List<BigInteger> list = new ArrayList<>(array.length);
+    for (BigInteger v : array) {
+      list.add(v);
+    }
+    return list;
   }
 
   public ByteArray setUint64(long index, BigInteger value) {
@@ -693,6 +765,15 @@ public class ByteArray {
     return serializer.readFloat32(bytes, Math.toIntExact(index), Math.toIntExact(length));
   }
 
+  public List<Float> getFloat32List(long index, long length) {
+    float[] array = getFloat32(index, length);
+    List<Float> list = new ArrayList<>(array.length);
+    for (float v : array) {
+      list.add(v);
+    }
+    return list;
+  }
+
   public ByteArray setFloat32(long index, float value) {
     serializer.writeFloat32(bytes, Math.toIntExact(index), value);
     return this;
@@ -742,6 +823,15 @@ public class ByteArray {
 
   public double[] getFloat64(long index, long length) {
     return serializer.readFloat64(bytes, Math.toIntExact(index), Math.toIntExact(length));
+  }
+
+  public List<Double> getFloat64List(long index, long length) {
+    double[] array = getFloat64(index, length);
+    List<Double> list = new ArrayList<>(array.length);
+    for (double v : array) {
+      list.add(v);
+    }
+    return list;
   }
 
   public ByteArray setFloat64(long index, double value) {

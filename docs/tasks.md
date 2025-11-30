@@ -21,7 +21,7 @@
   - [x] Implement per-primitive APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length). — refs: req: ByteArray; plan: 4.3. ByteArray core
   - [x] Implement per-primitive APIs (pattern applies to all types): setX(index, value), setX(index, values...), setX(index, List).
   - [x] Implement per-primitive APIs (pattern applies to all types): insert APIs: addX(index, value), addX(index, values), addX(index, List) with shifting — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [ ] Implement per-primitive APIs (pattern applies to all types): append APIs: x(value), x(values...), x(List) with auto-allocation.
+  - [x] Implement per-primitive APIs (pattern applies to all types: bool, int8, uint8, int16, uint16, int32, uint32, int64, uint64, float32, flaot64): append APIs: x(value), x(values...), x(List) using the add methods with an index of the length of the bytes. — refs: req: ByteArray; plan: 4.3. ByteArray core
   - [ ] Implement per-primitive APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
   - [ ] Validate per-primitive APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
 

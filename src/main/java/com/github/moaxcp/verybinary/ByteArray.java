@@ -283,6 +283,10 @@ public class ByteArray {
     return addInt8(allocated, values);
   }
 
+  public ByteArray int8(List<Byte> values) {
+    return addInt8(allocated, values);
+  }
+
   public ByteArray addInt8(long index, byte b) {
     shiftBytesFor(index, INT8.size());
     setInt8(index, b);
@@ -370,11 +374,11 @@ public class ByteArray {
   }
 
   public ByteArray uint8(short value) {
-    return addUint8(bytes.length, value);
+    return addUint8(allocated, value);
   }
 
   public ByteArray uint8(short... values) {
-    return addUint8(bytes.length, values);
+    return addUint8(allocated, values);
   }
 
   public ByteArray uint8(int... values) {
@@ -382,7 +386,11 @@ public class ByteArray {
     for(int i = 0; i < values.length; i++) {
       s[i] = (short) values[i];
     }
-    return addUint8(bytes.length, s);
+    return addUint8(allocated, s);
+  }
+
+  public ByteArray uint8(List<Short> values) {
+    return addUint8(allocated, values);
   }
 
   public ByteArray addUint8(long index, short value) {
@@ -455,11 +463,11 @@ public class ByteArray {
   }
 
   public ByteArray int16(short value) {
-    return addInt16(bytes.length, value);
+    return addInt16(allocated, value);
   }
 
   public ByteArray int16(short... values) {
-    return addInt16(bytes.length, values);
+    return addInt16(allocated, values);
   }
 
   public ByteArray int16(int... values) {
@@ -467,7 +475,11 @@ public class ByteArray {
     for(int i = 0; i < values.length; i++) {
       s[i] = (short) values[i];
     }
-    return addInt16(bytes.length, s);
+    return addInt16(allocated, s);
+  }
+
+  public ByteArray int16(List<Short> values) {
+    return addInt16(allocated, values);
   }
 
   public ByteArray addInt16(long index, short s) {
@@ -544,11 +556,15 @@ public class ByteArray {
   }
 
   public ByteArray uint16(int value) {
-    return addUint16(bytes.length, value);
+    return addUint16(allocated, value);
   }
 
   public ByteArray uint16(int... values) {
-    return addUint16(bytes.length, values);
+    return addUint16(allocated, values);
+  }
+
+  public ByteArray uint16(List<Integer> values) {
+    return addUint16(allocated, values);
   }
 
   public ByteArray addUint16(long index, int value) {
@@ -621,11 +637,15 @@ public class ByteArray {
   }
 
   public ByteArray int32(int value) {
-    return addInt32(bytes.length, value);
+    return addInt32(allocated, value);
   }
 
   public ByteArray int32(int... values) {
-    return addInt32(bytes.length, values);
+    return addInt32(allocated, values);
+  }
+
+  public ByteArray int32(List<Integer> values) {
+    return addInt32(allocated, values);
   }
 
   public ByteArray addInt32(long index, int value) {
@@ -702,11 +722,15 @@ public class ByteArray {
   }
 
   public ByteArray uint32(Long value) {
-    return addUint32(bytes.length, value);
+    return addUint32(allocated, value);
   }
 
   public ByteArray uint32(long... values) {
-    return addUint32(bytes.length, values);
+    return addUint32(allocated, values);
+  }
+
+  public ByteArray uint32(List<Long> values) {
+    return addUint32(allocated, values);
   }
 
   public ByteArray addUint32(long index, long value) {
@@ -779,11 +803,15 @@ public class ByteArray {
   }
 
   public ByteArray int64(Long value) {
-    return addInt64(bytes.length, value);
+    return addInt64(allocated, value);
   }
 
   public ByteArray int64(long... values) {
-    return addInt64(bytes.length, values);
+    return addInt64(allocated, values);
+  }
+
+  public ByteArray int64(List<Long> values) {
+    return addInt64(allocated, values);
   }
 
   public ByteArray addInt64(long index, long value) {
@@ -860,11 +888,15 @@ public class ByteArray {
   }
 
   public ByteArray uint64(BigInteger value) {
-    return addUint64(bytes.length, value);
+    return addUint64(allocated, value);
   }
 
   public ByteArray uint64(BigInteger... values) {
-    return addUint64(bytes.length, values);
+    return addUint64(allocated, values);
+  }
+
+  public ByteArray uint64(List<BigInteger> values) {
+    return addUint64(allocated, values);
   }
 
   public ByteArray addUint64(long index, BigInteger value) {
@@ -937,11 +969,15 @@ public class ByteArray {
   }
 
   public ByteArray float32(float value) {
-    return addFloat32(bytes.length, value);
+    return addFloat32(allocated, value);
   }
 
   public ByteArray float32(float... values) {
-    return addFloat32(bytes.length, values);
+    return addFloat32(allocated, values);
+  }
+
+  public ByteArray float32(List<Float> values) {
+    return addFloat32(allocated, values);
   }
 
   public ByteArray addFloat32(long index, float value) {
@@ -1014,11 +1050,15 @@ public class ByteArray {
   }
 
   public ByteArray float64(double value) {
-    return addFloat64(bytes.length, value);
+    return addFloat64(allocated, value);
   }
 
   public ByteArray float64(double... values) {
-    return addFloat64(bytes.length, values);
+    return addFloat64(allocated, values);
+  }
+
+  public ByteArray float64(List<Double> values) {
+    return addFloat64(allocated, values);
   }
 
   public ByteArray addFloat64(long index, double value) {

@@ -10,7 +10,8 @@
   - [x] Implement BigEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Implement LittleEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Ensure all reads/writes go through the Serializer (no direct byte[] access in higher layers).
-  - [ ] Add cross-endian unit tests validating symmetry, correct byte order, and edge values (including unsigned bounds and NaN payloads).
+  - [x] Add cross-endian unit tests validating symmetry, correct byte order, and edge values (including unsigned bounds and NaN payloads).
+  - [x] Add cross-endian unit tests for float32/float64 non-NaN values — refs: req: Layers of abstraction > primitive types; plan: 4.2. Serializer layer
   - [ ] Update tests comparing bytes to assert ByteArray equality using ba() instead of getBytes() — refs: req: ByteArray; plan: 4.2. Serializer layer
 
 3. [ ] Phase 3 — ByteArray core

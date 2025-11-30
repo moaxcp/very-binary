@@ -19,11 +19,11 @@
   - [x] Use long for public indices/lengths; add defensive checks against exceeding single-array addressable limits — refs: req: ByteArray; plan: 4.3. ByteArray core
   - [x] Implement capacity management with growth strategy and efficient shifting via System.arraycopy.
   - [x] Implement per-primitive APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length). — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [ ] Implement setX(index, value), setX(index, values...), setX(index, List).
-  - [ ] Implement append APIs: x(value), x(values...), x(List) with auto-allocation.
-  - [ ] Implement insert APIs: addX(index, value/array/List) with shifting.
-  - [ ] Implement remove APIs: removeX(index) and removeX(index, length).
-  - [ ] Validate all index/length arguments; throw descriptive out-of-range exceptions.
+  - [x] Implement per-primitive APIs (pattern applies to all types): setX(index, value), setX(index, values...), setX(index, List).
+  - [x] Implement per-primitive APIs (pattern applies to all types): insert APIs: addX(index, value), addX(index, values), addX(index, List) with shifting — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [ ] Implement per-primitive APIs (pattern applies to all types): append APIs: x(value), x(values...), x(List) with auto-allocation.
+  - [ ] Implement per-primitive APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
+  - [ ] Validate per-primitive APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
 
 4. [ ] Phase 4 — ByteArray listeners and shift events
    - [ ] Implement listener registration and removal APIs.

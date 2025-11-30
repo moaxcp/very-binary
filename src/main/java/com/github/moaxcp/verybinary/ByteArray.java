@@ -259,6 +259,14 @@ public class ByteArray {
     return setInt8(index, b);
   }
 
+  public ByteArray setInt8(long index, List<Byte> values) {
+    checkAllocation(index, INT8.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeInt8(bytes, Math.toIntExact(index + i), values.get(i));
+    }
+    return this;
+  }
+
   public ByteArray int8(byte value) {
     return addInt8(allocated, value);
   }
@@ -303,6 +311,15 @@ public class ByteArray {
     return addInt8(index, b);
   }
 
+  public ByteArray addInt8(long index, List<Byte> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, INT8.size() * values.size());
+    setInt8(index, values);
+    return this;
+  }
+
   public ByteArray removeInt8(long index) {
     shiftBytesFor(index, -INT8.size());
     return this;
@@ -342,6 +359,16 @@ public class ByteArray {
     return this;
   }
 
+  public ByteArray setUint8(long index, List<Short> values) {
+    checkAllocation(index, UINT8.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      short v = values.get(i);
+      requireUint8(v);
+      serializer.writeUint8(bytes, Math.toIntExact(index + i), v);
+    }
+    return this;
+  }
+
   public ByteArray uint8(short value) {
     return addUint8(bytes.length, value);
   }
@@ -364,11 +391,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addUint8(long index, short[] values) {
+  public ByteArray addUint8(long index, short... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, UINT8.size() * values.length);
+    setUint8(index, values);
+    return this;
+  }
+
+  public ByteArray addUint8(long index, List<Short> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, UINT8.size() * values.size());
     setUint8(index, values);
     return this;
   }
@@ -405,8 +441,16 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setInt16(long index, short[] values) {
+  public ByteArray setInt16(long index, short... values) {
     serializer.writeInt16(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setInt16(long index, List<Short> values) {
+    checkAllocation(index, INT16.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeInt16(bytes, Math.toIntExact(index + (long)i * INT16.size()), values.get(i));
+    }
     return this;
   }
 
@@ -432,11 +476,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addInt16(long index, short[] values) {
+  public ByteArray addInt16(long index, short... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, INT16.size() * values.length);
+    setInt16(index, values);
+    return this;
+  }
+
+  public ByteArray addInt16(long index, List<Short> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, INT16.size() * values.size());
     setInt16(index, values);
     return this;
   }
@@ -474,9 +527,19 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setUint16(long index, int[] values) {
+  public ByteArray setUint16(long index, int... values) {
     requireUint16(values);
     serializer.writeUint16(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setUint16(long index, List<Integer> values) {
+    checkAllocation(index, UINT16.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      int v = values.get(i);
+      requireUint16(v);
+      serializer.writeUint16(bytes, Math.toIntExact(index + (long)i * UINT16.size()), v);
+    }
     return this;
   }
 
@@ -494,11 +557,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addUint16(long index, int[] values) {
+  public ByteArray addUint16(long index, int... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, UINT16.size() * values.length);
+    setUint16(index, values);
+    return this;
+  }
+
+  public ByteArray addUint16(long index, List<Integer> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, UINT16.size() * values.size());
     setUint16(index, values);
     return this;
   }
@@ -535,8 +607,16 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setInt32(long index, int[] values) {
+  public ByteArray setInt32(long index, int... values) {
     serializer.writeInt32(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setInt32(long index, List<Integer> values) {
+    checkAllocation(index, INT32.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeInt32(bytes, Math.toIntExact(index + (long)i * INT32.size()), values.get(i));
+    }
     return this;
   }
 
@@ -554,11 +634,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addInt32(long index, int[] values) {
+  public ByteArray addInt32(long index, int... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, INT32.size() * values.length);
+    setInt32(index, values);
+    return this;
+  }
+
+  public ByteArray addInt32(long index, List<Integer> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, INT32.size() * values.size());
     setInt32(index, values);
     return this;
   }
@@ -596,9 +685,19 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setUint32(long index, long[] values) {
+  public ByteArray setUint32(long index, long... values) {
     requireUint32(values);
     serializer.writeUint32(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setUint32(long index, List<Long> values) {
+    checkAllocation(index, UINT32.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      long v = values.get(i);
+      requireUint32(v);
+      serializer.writeUint32(bytes, Math.toIntExact(index + (long)i * UINT32.size()), v);
+    }
     return this;
   }
 
@@ -616,11 +715,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addUint32(long index, long[] values) {
+  public ByteArray addUint32(long index, long... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, UINT32.size() * values.length);
+    setUint32(index, values);
+    return this;
+  }
+
+  public ByteArray addUint32(long index, List<Long> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, UINT32.size() * values.size());
     setUint32(index, values);
     return this;
   }
@@ -657,8 +765,16 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setInt64(long index, long[] values) {
+  public ByteArray setInt64(long index, long... values) {
     serializer.writeInt64(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setInt64(long index, List<Long> values) {
+    checkAllocation(index, INT64.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeInt64(bytes, Math.toIntExact(index + (long)i * INT64.size()), values.get(i));
+    }
     return this;
   }
 
@@ -676,11 +792,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addInt64(long index, long[] values) {
+  public ByteArray addInt64(long index, long... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, INT64.size() * values.length);
+    setInt64(index, values);
+    return this;
+  }
+
+  public ByteArray addInt64(long index, List<Long> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, INT64.size() * values.size());
     setInt64(index, values);
     return this;
   }
@@ -718,9 +843,19 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setUint64(long index, BigInteger[] values) {
+  public ByteArray setUint64(long index, BigInteger... values) {
     requireUint64(values);
     serializer.writeUint64(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setUint64(long index, List<BigInteger> values) {
+    checkAllocation(index, UINT64.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      BigInteger v = values.get(i);
+      requireUint64(v);
+      serializer.writeUint64(bytes, Math.toIntExact(index + (long)i * UINT64.size()), v);
+    }
     return this;
   }
 
@@ -738,11 +873,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addUint64(long index, BigInteger[] values) {
+  public ByteArray addUint64(long index, BigInteger... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, UINT64.size() * values.length);
+    setUint64(index, values);
+    return this;
+  }
+
+  public ByteArray addUint64(long index, List<BigInteger> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, UINT64.size() * values.size());
     setUint64(index, values);
     return this;
   }
@@ -779,8 +923,16 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setFloat32(long index, float[] values) {
+  public ByteArray setFloat32(long index, float... values) {
     serializer.writeFloat32(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setFloat32(long index, List<Float> values) {
+    checkAllocation(index, FLOAT32.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeFloat32(bytes, Math.toIntExact(index + (long)i * FLOAT32.size()), values.get(i));
+    }
     return this;
   }
 
@@ -798,11 +950,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addFloat32(long index, float[] values) {
+  public ByteArray addFloat32(long index, float... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, FLOAT32.size() * values.length);
+    setFloat32(index, values);
+    return this;
+  }
+
+  public ByteArray addFloat32(long index, List<Float> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, FLOAT32.size() * values.size());
     setFloat32(index, values);
     return this;
   }
@@ -839,8 +1000,16 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray setFloat64(long index, double[] values) {
+  public ByteArray setFloat64(long index, double... values) {
     serializer.writeFloat64(bytes, Math.toIntExact(index), values);
+    return this;
+  }
+
+  public ByteArray setFloat64(long index, List<Double> values) {
+    checkAllocation(index, FLOAT64.size() * values.size());
+    for (int i = 0; i < values.size(); i++) {
+      serializer.writeFloat64(bytes, Math.toIntExact(index + (long)i * FLOAT64.size()), values.get(i));
+    }
     return this;
   }
 
@@ -858,11 +1027,20 @@ public class ByteArray {
     return this;
   }
 
-  public ByteArray addFloat64(long index, double[] values) {
+  public ByteArray addFloat64(long index, double... values) {
     if(values == null || values.length == 0) {
       return this;
     }
     shiftBytesFor(index, FLOAT64.size() * values.length);
+    setFloat64(index, values);
+    return this;
+  }
+
+  public ByteArray addFloat64(long index, List<Double> values) {
+    if(values == null || values.isEmpty()) {
+      return this;
+    }
+    shiftBytesFor(index, FLOAT64.size() * values.size());
     setFloat64(index, values);
     return this;
   }

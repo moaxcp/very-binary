@@ -45,6 +45,15 @@ public class ByteArrayBooleanTest {
   }
 
   @Test
+  void setBoolList() {
+    var bytes = ba().allocate(5).addListener(events::add);
+    bytes.setBool(0, List.of(true, false, true, false, true));
+
+    assertThat(bytes).isEqualTo(ba().bool(true, false, true, false, true));
+    assertThat(events).isEmpty();
+  }
+
+  @Test
   void bool_overwrite() {
     var bytes = ba().bool(true, true, true, true, true).addListener(events::add);
     bytes.setBool(0, true, false, true, false, true);

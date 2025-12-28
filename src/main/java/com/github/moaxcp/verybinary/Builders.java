@@ -8,4 +8,8 @@ public class Builders {
   public static StructBuilder struct() {
     return new StructBuilder();
   }
+
+  public static StructTypeStructTypeBuilder structType() {
+    return new StructTypeStructTypeBuilder();
+  }
 }

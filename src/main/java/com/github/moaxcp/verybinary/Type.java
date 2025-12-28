@@ -40,6 +40,10 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     return offset;
   }
 
+  public long getAllocationLength() {
+    return getAllocationLength(null);
+  }
+
   public abstract long getAllocationLength(Type<?> parent);
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer);

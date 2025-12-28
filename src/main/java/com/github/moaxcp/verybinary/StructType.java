@@ -27,8 +27,8 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  public long getAllocationLength(Type<?> parent) {
-    return fields.stream().mapToLong(f -> getAllocationLength(parent)).sum();
+  public long getAllocationLength(@Nullable Type<?> parent) {
+    return fields.stream().mapToLong(f -> f.getAllocationLength(this)).sum();
   }
 
   public int getPositions() {

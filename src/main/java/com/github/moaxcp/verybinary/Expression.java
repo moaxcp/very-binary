@@ -14,12 +14,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> type) {
+    public boolean isConstant(Type<?> parent) {
       return true;
     }
 
     @Override
-    public long defaultValue(Type<?> type) {
+    public long constantValue(Type<?> parent) {
+      return value;
+    }
+
+    @Override
+    public long defaultValue(Type<?> parent) {
       return value;
     }
 
@@ -58,13 +63,18 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> type) {
-      return type.getType(position) instanceof NumberType<?, ?> v && v.isConstant(type);
+    public boolean isConstant(Type<?> parent) {
+      return parent.getType(position) instanceof NumberType<?, ?> v && v.isConstant(parent);
     }
 
     @Override
-    public long defaultValue(Type<?> type) {
-      return ((NumberType<?, ?>) type.getType(position)).defaultValue();
+    public long constantValue(Type<?> parent) {
+      return ((NumberType<?, ?>) parent.getType(position)).getConstantValue().longValue();
+    }
+
+    @Override
+    public long defaultValue(Type<?> parent) {
+      return ((NumberType<?, ?>) parent.getType(position)).defaultValue();
     }
 
     @Override
@@ -124,13 +134,18 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> type) {
-      return Arrays.stream(expressions).allMatch(e -> e.isConstant(type));
+    public boolean isConstant(Type<?> parent) {
+      return Arrays.stream(expressions).allMatch(e -> e.isConstant(parent));
     }
 
     @Override
-    public long defaultValue(Type<?> type) {
-      return Arrays.stream(expressions).mapToLong(e -> e.defaultValue(type)).sum();
+    public long constantValue(Type<?> parent) {
+      return Arrays.stream(expressions).mapToLong(e -> e.constantValue(parent)).sum();
+    }
+
+    @Override
+    public long defaultValue(Type<?> parent) {
+      return Arrays.stream(expressions).mapToLong(e -> e.defaultValue(parent)).sum();
     }
 
     @Override
@@ -171,9 +186,11 @@ public interface Expression {
     return new Sum(expressions);
   }
 
-  boolean isConstant(Type<?> type);
+  boolean isConstant(Type<?> parent);
 
-  long defaultValue(Type<?> type);
+  long constantValue(Type<?> parent);
+
+  long defaultValue(Type<?> parent);
 
   long evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

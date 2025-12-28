@@ -95,4 +95,18 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new double[Math.toIntExact(length)];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0.0d;
+        }
+        pointer.getByteArray().addFloat64(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

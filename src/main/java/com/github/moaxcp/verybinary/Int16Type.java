@@ -59,8 +59,9 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
       var old = pointer.getByteArray().getInt16(getOffset(pointer, index));
       pointer.getByteArray().setInt16(getOffset(pointer, index), value);
       notifyValueChange(reason, pointer, index, old, value);
+    } else {
+      pointer.getByteArray().setInt16(getOffset(pointer, index), value);
     }
-    pointer.getByteArray().setInt16(getOffset(pointer, index), value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, short value) {
@@ -92,6 +93,20 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
       callWithByteLengthChange(pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addInt16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
+      });
+    });
+  }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new short[Math.toIntExact(length)];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0;
+        }
+        pointer.getByteArray().addInt16(getOffset(pointer, index), values);
       });
     });
   }

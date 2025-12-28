@@ -295,8 +295,8 @@ public class Float32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, 0, 2.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -340,9 +340,9 @@ public class Float32TypeTest {
         .fromBytes(ba().float32(2).float32(3).float32(3))
         .build();
 
-    assertThatThrownBy(() -> struct.setFloat32(1, 1, 2.0f))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float32Type at position 1 is constant index: 1 value: 2.0 constant: 3.0");
+    struct.setFloat32(1, 1, 2.0f);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().float32(2).float32(3).float32(2));
   }
 
   @Test
@@ -440,7 +440,9 @@ public class Float32TypeTest {
         .float32()
         .build();
 
-    assertThatThrownBy(() -> struct.getFloat32(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getFloat32(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -541,7 +543,7 @@ public class Float32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -643,8 +645,8 @@ public class Float32TypeTest {
         .float32Array(0)
         .build();
     assertThatThrownBy(() -> struct.addFloat32(1, 3.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -718,8 +720,8 @@ public class Float32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(1, 0, 3.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -803,8 +805,8 @@ public class Float32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test

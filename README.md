@@ -17,3 +17,4 @@ to different memory for reuse.
 Memory can be Little Endian or Big Endian. Currently, it is limited to the max size of a byte array.
 
 This project is built to support the protocol in x11-client.
+

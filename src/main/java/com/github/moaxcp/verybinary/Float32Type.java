@@ -95,4 +95,18 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new float[Math.toIntExact(length)];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0.0f;
+        }
+        pointer.getByteArray().addFloat32(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

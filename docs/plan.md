@@ -43,7 +43,7 @@ Development plan for very-binary based on docs/requirements.md
 
 4.4. ByteArray listeners and shift events
 - Implement listener registration/removal.
-- Fire notifications on structural changes: before/after byte insertions/removals and on total length changes. Include old/new indices and delta.
+- Fire notifications on structural changes: after byte insertions/removals. Include index and delta.
 - Prevent re-entrant modification hazards by defining event ordering and documentation.
 
 4.5. Primitive Type classes

@@ -261,8 +261,8 @@ public class Int16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(1, 0, (short) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -303,12 +303,11 @@ public class Int16TypeTest {
     var struct = struct()
         .int16()
         .primitive().constant((short) 5).lengthField(0).int16()
-        .fromBytes(new byte[] {2, 5, 5})
+        .fromBytes(ba().int16(2, 5, 5))
         .build();
+    struct.setInt16(1, 1, 2);
 
-    assertThatThrownBy(() -> struct.setInt16(1, 1, (short) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int16Type at position 1 is constant index: 1 value: 2 constant: 5");
+    assertThat(struct.getByteArray()).isEqualTo(ba().int16(2, 5, 2));
   }
 
   @Test
@@ -398,7 +397,9 @@ public class Int16TypeTest {
         .int16()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt16(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getInt16(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -491,7 +492,7 @@ public class Int16TypeTest {
 
     assertThatThrownBy(() -> struct.getInt16(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -575,8 +576,8 @@ public class Int16TypeTest {
         .int16Array(0)
         .build();
     assertThatThrownBy(() -> struct.addInt16(1, (short) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -650,8 +651,8 @@ public class Int16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(1, 0, (short) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -735,8 +736,8 @@ public class Int16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test

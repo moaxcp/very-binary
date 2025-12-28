@@ -95,4 +95,18 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new int[(int) length];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0;
+        }
+        pointer.getByteArray().addUint16(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

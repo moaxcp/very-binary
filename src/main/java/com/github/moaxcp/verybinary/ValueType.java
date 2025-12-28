@@ -80,6 +80,8 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index);
 
+  public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index, long length);
+
   public final long getArrayLength(Pointer<?, ? extends Type<?>> pointer) {
     if (!isArray()) {
       return 1;
@@ -88,7 +90,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public final boolean isConstant(Type<?> type) {
-    return constantValue != null || (lengthExpression != null && lengthExpression.isConstant(type));
+    return constantValue != null && (lengthExpression == null || lengthExpression.isConstant(type));
   }
 
   public T get(Pointer<?, ? extends Type<?>> pointer) {
@@ -96,6 +98,14 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public abstract T get(Pointer<?, ? extends Type<?>> pointer, long index);
+
+  public abstract T[] getArray(Pointer<?, ? extends Type<?>> pointer);
+
+  public abstract T[] getArray(Pointer<?, ? extends Type<?>> pointer, long index, long length);
+
+  public abstract List<T> getList(Pointer<?, ? extends Type<?>> pointer);
+
+  public abstract List<T> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
   protected void checkIndex(Pointer<?, ? extends Type<?>> pointer, long index) {
     var length = getArrayLength(pointer);
@@ -108,8 +118,21 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     set(pointer, 0, value);
   }
 
+  public void set(Pointer<?, ? extends Type<?>> pointer, T... values) {
+    set(pointer, 0, values);
+  }
+
+  public void set(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
+    set(pointer, 0, values);
+  }
+
   public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
 
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T... values);
+
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, List<T> values);
+
+  //todo push down to each type to avoid wrapping
   protected void checkConstant(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     if (isConstant(pointer.getType()) && !Objects.equals(constantValue, value)) {
       throw new UnsupportedOperationException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
@@ -120,6 +143,22 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     add(pointer, getArrayLength(pointer), value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, T... values) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
+    }
+    allocate(pointer, getArrayLength(pointer), values.length);
+    set(pointer, getArrayLength(pointer), values);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer,List<T> values) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
+    }
+    allocate(pointer, getArrayLength(pointer), values.size());
+    set(pointer, getArrayLength(pointer), values);
+  }
+
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
@@ -128,11 +167,33 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     set(pointer, index, value);
   }
 
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, T... values) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
+    }
+    allocate(pointer, index, values.length);
+    set(pointer, index, values);
+  }
+
+  public void add(Pointer<?, ? extends Type<?>> pointer,long index, List<T> values) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
+    }
+    allocate(pointer, index, values.size());
+    set(pointer, index, values);
+  }
+
   public void allocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     allocate(ALLOCATED, pointer, index);
   }
 
-  protected abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index);
+  public void allocate(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    allocate(ALLOCATED, pointer, index, length);
+  }
+
+  abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index);
+
+  abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
   void checkIndexAllocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     var newLength = getArrayLength(pointer) + 1;
@@ -148,14 +209,18 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
     }
-    callWithArrayLengthChange(DEALLOCATED, pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().remove(getOffset(pointer), getByteLength(pointer))));
+    callWithArrayLengthChange(DEALLOCATED, pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer))));
   }
 
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
     remove(DEALLOCATED, pointer, index);
   }
 
-  public final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  public final void remove(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    remove(DEALLOCATED, pointer, index, length);
+  }
+
+  final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
@@ -167,7 +232,24 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     }
     callWithArrayLengthChange(reason, pointer, -1, () -> {
       callWithByteLengthChange(pointer, () -> {
-        pointer.getByteArray().remove(getOffset(pointer, index), getByteLength(pointer, index));
+        pointer.getByteArray().removeInt8(getOffset(pointer, index), getByteLength(pointer, index));
+      });
+    });
+  }
+
+  final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    if (!isArray()) {
+      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
+    }
+    if (isFixedLength(pointer)) {
+      throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
+    }
+    if (reason != RESIZED_BY_LENGTH_FIELD) {
+      checkIndex(pointer, index + length);
+    }
+    callWithArrayLengthChange(reason, pointer, -length, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        pointer.getByteArray().removeInt8(getOffset(pointer, index), getByteLength(pointer, index, length));
       });
     });
   }

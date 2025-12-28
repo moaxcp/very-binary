@@ -3,7 +3,6 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import org.jspecify.annotations.Nullable;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +50,27 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    long result = 0;
+    for (long i = 0; i < length; i++) {
+      result += getByteLength(pointer, index + i);
+    }
+    return result;
+  }
+
+  public long getFieldByteLength(Pointer<?, ? extends Type<?>> pointer, int position) {
+    return fields.get(position).getByteLength(pointer);
+  }
+
+  public long getFieldByteLength(Pointer<?, ? extends Type<?>> pointer, int position, long index) {
+    return ((ValueType) fields.get(position)).getByteLength(pointer, index);
+  }
+
+  public long getFieldByteLength(Pointer<?, ? extends Type<?>> pointer, int position, long index, long length) {
+    return ((ValueType) fields.get(position)).getByteLength(pointer, index, length);
+  }
+
+  @Override
   public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
     for (int i = 0; i < fields.size(); i++) {
       var type = fields.get(i);
@@ -66,6 +86,44 @@ public final class StructType extends ValueType<StructType, Struct> {
     var offset = getOffset(pointer, index);
     return new Struct(offset, this, pointer.getByteArray());
   }
+  
+  @Override
+  public Struct[] getArray(Pointer<?, ? extends Type<?>> pointer) {
+    var length = getArrayLength(pointer);
+    var result = new Struct[Math.toIntExact(length)];
+    for (long i = 0; i < length; i++) {
+      result[Math.toIntExact(i)] = get(pointer, i);
+    }
+    return result;
+  }
+
+  @Override
+  public Struct[] getArray(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    var result = new Struct[Math.toIntExact(length)];
+    for (long i = 0; i < length; i++) {
+      result[Math.toIntExact(i)] = get(pointer, index + i);
+    }
+    return result;
+  }
+  
+  @Override
+  public List<Struct> getList(Pointer<?, ? extends Type<?>> pointer) {
+    var length = getArrayLength(pointer);
+    var result = new ArrayList<Struct>();
+    for (long i = 0; i < length; i++) {
+      result.add(get(pointer, i));
+    }
+    return result;
+  }
+
+  @Override
+  public List<Struct> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    var result = new ArrayList<Struct>();
+    for (long i = 0; i < length; i++) {
+      result.add(get(pointer, index + i));
+    }
+    return result;
+  }
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
@@ -75,6 +133,20 @@ public final class StructType extends ValueType<StructType, Struct> {
       notifyValueChange(SET_VALUE, pointer, index, old, value);
     }
     pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
+  }
+
+  @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct... values) {
+    for (int i = 0; i < values.length; i++) {
+      set(pointer, index + i, values[i]);
+    }
+  }
+
+  @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Struct> values) {
+    for (int i = 0; i < values.size(); i++) {
+      set(pointer, index + i, values.get(i));
+    }
   }
 
   @Override
@@ -106,6 +178,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
         var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());
         for (int i = 0; i < fields.size(); i++) {
           struct.getType(i).allocate(pointer);
@@ -114,196 +187,19 @@ public final class StructType extends ValueType<StructType, Struct> {
     });
   }
 
-  public boolean getBool(Struct struct, int position) {
-    return ((BoolType) fields.get(position)).getBoolean(struct);
-  }
-
-  public void setBool(Struct struct, int position, boolean value) {
-    ((BoolType) fields.get(position)).set(struct, value);
-  }
-
-  public boolean getBool(Struct struct, int position, long index) {
-    return ((BoolType) fields.get(position)).getBoolean(struct, index);
-  }
-
-  public void setBool(Struct struct, int position, long index, boolean value) {
-    ((BoolType) fields.get(position)).set(struct, index, value);
-  }
-
-  public byte getInt8(Struct struct, int position) {
-    return ((Int8Type) fields.get(position)).getInt8(struct);
-  }
-
-  public void setInt8(Struct struct, int position, byte b) {
-    ((Int8Type) fields.get(position)).set(struct, b);
-  }
-
-  public byte getInt8(Struct struct, int position, long index) {
-    return ((Int8Type) fields.get(position)).getInt8(struct, index);
-  }
-
-  public void setInt8(Struct struct, int position, long index, byte b) {
-    ((Int8Type) fields.get(position)).set(struct, index, b);
-  }
-  
-  public short getUint8(Struct struct, int position) {
-    return ((Uint8Type) fields.get(position)).getUint8(struct);
-  }
-
-  public void setUint8(Struct struct, int position, short s) {
-    ((Uint8Type) fields.get(position)).set(struct, s);
-  }
-
-  public short getUint8(Struct struct, int position, long index) {
-    return ((Uint8Type) fields.get(position)).getUint8(struct, index);
-  }
-
-  public void setUint8(Struct struct, int position, long index, short s) {
-    ((Uint8Type) fields.get(position)).set(struct, index, s);
-  }
-
-  public short getInt16(Struct struct, int position) {
-    return ((Int16Type) fields.get(position)).getInt16(struct);
-  }
-
-  public void setInt16(Struct struct, int position, short s) {
-    ((Int16Type) fields.get(position)).set(struct, s);
-  }
-
-  public short getInt16(Struct struct, int position, long index) {
-    return ((Int16Type) fields.get(position)).getInt16(struct, index);
-  }
-
-  public void setInt16(Struct struct, int position, long index, short s) {
-    ((Int16Type) fields.get(position)).set(struct, index, s);
-  }
-
-  public int getUint16(Struct struct, int position) {
-    return ((Uint16Type) fields.get(position)).getUint16(struct);
-  }
-
-  public void setUint16(Struct struct, int position, int i) {
-    ((Uint16Type) fields.get(position)).set(struct, i);
-  }
-
-  public int getUint16(Struct struct, int position, long index) {
-    return ((Uint16Type) fields.get(position)).getUint16(struct, index);
-  }
-
-  public void setUint16(Struct struct, int position, long index, int i) {
-    ((Uint16Type) fields.get(position)).set(struct, index, i);
-  }
-
-  public int getInt32(Struct struct, int position) {
-    return ((Int32Type) fields.get(position)).getInt32(struct);
-  }
-
-  public void setInt32(Struct struct, int position, int i) {
-    ((Int32Type) fields.get(position)).set(struct, i);
-  }
-
-  public int getInt32(Struct struct, int position, long index) {
-    return ((Int32Type) fields.get(position)).getInt32(struct, index);
-  }
-
-  public void setInt32(Struct struct, int position, long index, int i) {
-    ((Int32Type) fields.get(position)).set(struct, index, i);
-  }
-
-  public long getUint32(Struct struct, int position) {
-    return ((Uint32Type) fields.get(position)).getUint32(struct);
-  }
-
-  public void setUint32(Struct struct, int position, long l) {
-    ((Uint32Type) fields.get(position)).set(struct, l);
-  }
-
-  public long getUint32(Struct struct, int position, long index) {
-    return ((Uint32Type) fields.get(position)).getUint32(struct, index);
-  }
-
-  public void setUint32(Struct struct, int position, long index, long l) {
-    ((Uint32Type) fields.get(position)).set(struct, index, l);
-  }
-
-  public long getInt64(Struct struct, int position) {
-    return ((Int64Type) fields.get(position)).getInt64(struct);
-  }
-
-  public void setInt64(Struct struct, int position, long l) {
-    ((Int64Type) fields.get(position)).set(struct, l);
-  }
-
-  public long getInt64(Struct struct, int position, long index) {
-    return ((Int64Type) fields.get(position)).getInt64(struct, index);
-  }
-
-  public void setInt64(Struct struct, int position, long index, long l) {
-    ((Int64Type) fields.get(position)).set(struct, index, l);
-  }
-
-  public BigInteger getUint64(Struct struct, int position) {
-    return ((Uint64Type) fields.get(position)).getUint64(struct);
-  }
-
-  public void setUint64(Struct struct, int position, BigInteger bi) {
-    ((Uint64Type) fields.get(position)).set(struct, bi);
-  }
-
-  public BigInteger getUint64(Struct struct, int position, long index) {
-    return ((Uint64Type) fields.get(position)).getUint64(struct, index);
-  }
-
-  public void setUint64(Struct struct, int position, long index, BigInteger bi) {
-    ((Uint64Type) fields.get(position)).set(struct, index, bi);
-  }
-
-  public float getFloat32(Struct struct, int position) {
-    return ((Float32Type) fields.get(position)).getFloat32(struct);
-  }
-
-  public void setFloat32(Struct struct, int position, float f) {
-    ((Float32Type) fields.get(position)).set(struct, f);
-  }
-
-  public float getFloat32(Struct struct, int position, long index) {
-    return ((Float32Type) fields.get(position)).getFloat32(struct, index);
-  }
-
-  public void setFloat32(Struct struct, int position, long index, float f) {
-    ((Float32Type) fields.get(position)).set(struct, index, f);
-  }
-
-  public double getFloat64(Struct struct, int position) {
-    return ((Float64Type) fields.get(position)).getFloat64(struct);
-  }
-
-  public void setFloat64(Struct struct, int position, double d) {
-    ((Float64Type) fields.get(position)).set(struct, d);
-  }
-
-  public double getFloat64(Struct struct, int position, long index) {
-    return ((Float64Type) fields.get(position)).getFloat64(struct, index);
-  }
-
-  public void setFloat64(Struct struct, int position, long index, double d) {
-    ((Float64Type) fields.get(position)).set(struct, index, d);
-  }
-
-  public Struct getStruct(Struct struct, int position) {
-    return ((StructType) fields.get(position)).get(struct);
-  }
-
-  public void setStruct(Struct struct, int position, Struct other) {
-    ((StructType) fields.get(position)).set(struct, other);
-  }
-
-  public void addStruct(int position, Struct struct) {
-    ((StructType) fields.get(position)).addStruct(position, struct);
-  }
-
-  public void addStruct(int position, long index, Struct struct) {
-    ((StructType) fields.get(position)).addStruct(position, index, struct);
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        for (long i = 0; i < length; i++) {
+          var struct = new Struct(false, getOffset(pointer, index + i), this, pointer.getByteArray());
+          for (int j = 0; j < fields.size(); j++) {
+            struct.getType(j).allocate(pointer);
+          }
+        }
+      });
+    });
   }
 
   @Override

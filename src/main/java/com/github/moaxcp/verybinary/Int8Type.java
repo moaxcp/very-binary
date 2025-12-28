@@ -95,4 +95,18 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new byte[Math.toIntExact(length)];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0;
+        }
+        pointer.getByteArray().addInt8(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

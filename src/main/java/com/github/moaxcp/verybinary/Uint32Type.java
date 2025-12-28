@@ -95,4 +95,18 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new long[(int) length];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : 0;
+        }
+        pointer.getByteArray().addUint32(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

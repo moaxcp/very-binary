@@ -97,4 +97,18 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
       });
     });
   }
+
+  @Override
+  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    callWithArrayLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        var values = new BigInteger[(int) length];
+        for (int i = 0; i < length; i++) {
+          values[i] = constantValue != null ? constantValue : BigInteger.ZERO;
+        }
+        pointer.getByteArray().addUint64(getOffset(pointer, index), values);
+      });
+    });
+  }
 }

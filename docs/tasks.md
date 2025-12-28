@@ -22,24 +22,36 @@
   - [x] Implement per-primitive APIs (pattern applies to all types): setX(index, value), setX(index, values...), setX(index, List).
   - [x] Implement per-primitive APIs (pattern applies to all types): insert APIs: addX(index, value), addX(index, values), addX(index, List) with shifting — refs: req: ByteArray; plan: 4.3. ByteArray core
   - [x] Implement per-primitive APIs (pattern applies to all types: bool, int8, uint8, int16, uint16, int32, uint32, int64, uint64, float32, flaot64): append APIs: x(value), x(values...), x(List) using the add methods with an index of the length of the bytes. — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [ ] Implement per-primitive APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
-  - [ ] Validate per-primitive APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
+  - [x] Implement per-primitive APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
+  - [x] Validate per-primitive APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
 
-4. [ ] Phase 4 — ByteArray listeners and shift events
-   - [ ] Implement listener registration and removal APIs.
-   - [ ] Fire notifications on structural changes: before/after insertions/removals and on total length changes.
-   - [ ] Include event metadata (old/new indices, length delta) in notifications.
+4. [x] Phase 4 — ByteArray listeners and shift events
+   - [x] Implement listener registration and removal APIs.
+   - [x] Fire notifications on structural changes: after insertions/removals.
+   - [x] Include event metadata (index, length delta) in notifications.
    - [ ] Define and enforce non-reentrant listener behavior; document ordering and re-entrancy rules.
 
 5. [ ] Phase 5 — Primitive Type classes
-   - [ ] Create Type classes for each primitive with known byte-width and any alignment rules.
-   - [ ] Compute absolute byte indices from Pointer offset and field index.
-   - [ ] Delegate all data access to ByteArray methods (no direct serialization logic here).
+   - [x] Create Type classes for each primitive with known byte-width and any alignment rules.
+   - [x] Compute absolute byte indices from Pointer offset and field index.
+   - [x] Delegate all data access to ByteArray methods (no direct serialization logic here).
    - [ ] Expose value, array, and list operations mirroring ByteArray’s surface.
+     - [ ] BoolType
+     - [ ] Int8Type
+     - [ ] Uint8Type
+     - [ ] Int16Type
+     - [ ] Uint16Type
+     - [ ] Int32Type
+     - [ ] Uint32Type
+     - [ ] Int64Type
+     - [ ] Uint64Type
+     - [ ] Float32Type
+     - [ ] Float64Type
+     - [ ] StructType
 
 6. [ ] Phase 6 — StructType schema
-   - [ ] Define ordered fields with indexes and associated Type instances.
-   - [ ] Support explicit padding entries via a PadType.
+   - [x] Define ordered fields with indexes and associated Type instances.
+   - [x] Support explicit padding entries via a PadType.
    - [ ] Implement total size calculation including padding.
    - [ ] Provide utilities to compute per-field byte offsets.
    - [ ] Provide builders to ergonomically assemble StructType definitions; support embedding child structs.

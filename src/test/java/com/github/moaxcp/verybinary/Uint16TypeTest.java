@@ -253,8 +253,8 @@ public class Uint16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint16(1, 0, 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -298,9 +298,9 @@ public class Uint16TypeTest {
         .fromBytes(new byte[] {0, 2, 0, 5, 0, 5})
         .build();
 
-    assertThatThrownBy(() -> struct.setUint16(1, 1, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint16Type at position 1 is constant index: 1 value: 2 constant: 5");
+    struct.setUint16(1, 1, 2);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().uint16(2, 5, 2));
   }
 
   @Test
@@ -390,7 +390,9 @@ public class Uint16TypeTest {
         .uint16()
         .build();
 
-    assertThatThrownBy(() -> struct.getUint16(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getUint16(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -483,7 +485,7 @@ public class Uint16TypeTest {
 
     assertThatThrownBy(() -> struct.getUint16(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -567,8 +569,8 @@ public class Uint16TypeTest {
         .uint16Array(0)
         .build();
     assertThatThrownBy(() -> struct.addUint16(1, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -642,8 +644,8 @@ public class Uint16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(1, 0, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test
@@ -727,8 +729,8 @@ public class Uint16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test

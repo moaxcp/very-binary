@@ -296,8 +296,8 @@ public class Int32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(1, 0, 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -338,16 +338,12 @@ public class Int32TypeTest {
     var struct = struct()
         .int32()
         .primitive().constant(5).lengthField(0).int32()
-        .fromBytes(new byte[] {
-            0, 0, 0, 2,
-            0, 0, 0, 5,
-            0, 0, 0, 5
-        })
+        .fromBytes(ba().int32(2, 5, 5))
         .build();
 
-    assertThatThrownBy(() -> struct.setInt32(1, 1, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int32Type at position 1 is constant index: 1 value: 2 constant: 5");
+    struct.setInt32(1, 1, 2);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int32(2, 5, 2));
   }
 
   @Test
@@ -445,7 +441,9 @@ public class Int32TypeTest {
         .int32()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt32(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getInt32(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -546,7 +544,7 @@ public class Int32TypeTest {
 
     assertThatThrownBy(() -> struct.getInt32(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -648,8 +646,8 @@ public class Int32TypeTest {
         .int32Array(0)
         .build();
     assertThatThrownBy(() -> struct.addInt32(1, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -741,8 +739,8 @@ public class Int32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(1, 0, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -830,8 +828,8 @@ public class Int32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test

@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class Struct implements Pointer<Struct, StructType> {
@@ -96,7 +97,17 @@ public class Struct implements Pointer<Struct, StructType> {
 
   @Override
   public long getByteLength(int position) {
-    return structType.getType(position).getByteLength(this);
+    return structType.getFieldByteLength(this, position);
+  }
+
+  @Override
+  public long getByteLength(int position, long index) {
+     return structType.getFieldByteLength(this, position, index);
+  }
+
+  @Override
+  public long getByteLength(int position, long index, long length) {
+     return structType.getFieldByteLength(this, position, index, length);
   }
 
   @Override
@@ -105,20 +116,56 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public boolean getBool(int position) {
-    return structType.getBool(this, position);
-  }
-
-  public boolean getBool(int position, long index) {
-    return structType.getBool(this, position, index);
+    return ((BoolType) structType.getType(position)).getBoolean(this);
   }
 
   public Struct setBool(int position, boolean b) {
-    structType.setBool(this, position, b);
+    ((BoolType) structType.getType(position)).set(this, b);
     return this;
   }
 
+  public boolean getBool(int position, long index) {
+    return ((BoolType) structType.getType(position)).getBoolean(this, index);
+  }
+
   public Struct setBool(int position, long index, boolean b) {
-    structType.setBool(this, position, index, b);
+    ((BoolType) structType.getType(position)).set(this, index, b);
+    return this;
+  }
+  
+  public boolean[] getBoolArray(int position) {
+    return ((BoolType) structType.getType(position)).getBooleanArray(this);
+  }
+
+  public Struct setBoolArray(int position, boolean... values) {
+    ((BoolType) structType.getType(position)).set(this, values);
+    return this;
+  }
+  
+  public boolean[] getBoolArray(int position, long index, long length) {
+    return ((BoolType) structType.getType(position)).getBooleanArray(this, index, length);
+  }
+  
+  public Struct setBoolArray(int position, long index, boolean... values) {
+    ((BoolType) structType.getType(position)).set(this, index, values);
+    return this;
+  }
+  
+  public List<Boolean> getBoolList(int position) {
+    return ((BoolType) structType.getType(position)).getBooleanList(this);
+  }
+  
+  public Struct setBoolList(int position, List<Boolean> values) {
+    ((BoolType) structType.getType(position)).set(this, values);
+    return this;
+  }
+  
+  public List<Boolean> getBoolList(int position, long index, long length) {
+    return ((BoolType) structType.getType(position)).getBooleanList(this, index, length);
+  }
+  
+  public Struct setBoolList(int position, long index, List<Boolean> values) {
+    ((BoolType) structType.getType(position)).set(this, index, values);
     return this;
   }
 
@@ -133,21 +180,29 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public byte getInt8(int position) {
-    return structType.getInt8(this, position);
+    return ((Int8Type) structType.getType(position)).getInt8(this);
   }
 
   public byte getInt8(int position, long index) {
-     return structType.getInt8(this, position, index);
+    return ((Int8Type) structType.getType(position)).getInt8(this, index);
   }
 
   public Struct setInt8(int position, byte b) {
-    structType.setInt8(this, position, b);
+    ((Int8Type) structType.getType(position)).set(this, b);
     return this;
   }
 
+  public Struct setInt8(int position, int b) {
+     return setInt8(position, (byte) b);
+  }
+
   public Struct setInt8(int position, long index, byte b) {
-    structType.setInt8(this, position, index, b);
+    ((Int8Type) structType.getType(position)).set(this, index, b);
     return this;
+  }
+
+  public Struct setInt8(int position, long index, int b) {
+     return setInt8(position, index, (byte) b);
   }
 
   public Struct addInt8(int position, byte b) {
@@ -161,21 +216,29 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public short getUint8(int position) {
-    return structType.getUint8(this, position);
+    return ((Uint8Type) structType.getType(position)).getUint8(this);
   }
 
   public short getUint8(int position, long index) {
-    return structType.getUint8(this, position, index);
+    return ((Uint8Type) structType.getType(position)).getUint8(this, index);
   }
 
   public Struct setUint8(int position, short s) {
-    structType.setUint8(this, position, s);
+    ((Uint8Type) structType.getType(position)).set(this, s);
     return this;
   }
 
+  public Struct setUint8(int position, int s) {
+     return setUint8(position, s);
+  }
+
   public Struct setUint8(int position, long index, short s) {
-    structType.setUint8(this, position, index, s);
+    ((Uint8Type) structType.getType(position)).set(this, index, s);
     return this;
+  }
+
+  public Struct setUint8(int position, long index, int s) {
+     return setUint8(position, index, (short) s);
   }
 
   public Struct addUint8(int position, short s) {
@@ -189,21 +252,29 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public short getInt16(int position) {
-    return structType.getInt16(this, position);
+    return ((Int16Type) structType.getType(position)).getInt16(this);
   }
 
   public short getInt16(int position, long index) {
-    return structType.getInt16(this, position, index);
+    return ((Int16Type) structType.getType(position)).getInt16(this, index);
   }
 
   public Struct setInt16(int position, short s) {
-    structType.setInt16(this, position, s);
+    ((Int16Type) structType.getType(position)).set(this, s);
     return this;
   }
 
+  public Struct setInt16(int position, int s) {
+     return setInt16(position, (short) s);
+  }
+
   public Struct setInt16(int position, long index, short s) {
-    structType.setInt16(this, position, index, s);
+    ((Int16Type) structType.getType(position)).set(this, index, s);
     return this;
+  }
+
+  public Struct setInt16(int position, long index, int s) {
+     return setInt16(position, index, (short) s);
   }
 
   public Struct addInt16(int position, short s) {
@@ -217,20 +288,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public int getUint16(int position) {
-    return structType.getUint16(this, position);
+    return ((Uint16Type) structType.getType(position)).getUint16(this);
   }
 
   public int getUint16(int position, long index) {
-    return structType.getUint16(this, position, index);
+    return ((Uint16Type) structType.getType(position)).getUint16(this, index);
   }
 
   public Struct setUint16(int position, int i) {
-    structType.setUint16(this, position, i);
+    ((Uint16Type) structType.getType(position)).set(this, i);
     return this;
   }
 
   public Struct setUint16(int position, long index, int i) {
-    structType.setUint16(this, position, index, i);
+    ((Uint16Type) structType.getType(position)).set(this, index, i);
     return this;
   }
 
@@ -245,20 +316,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public int getInt32(int position) {
-    return structType.getInt32(this, position);
+    return ((Int32Type) structType.getType(position)).getInt32(this);
   }
 
   public int getInt32(int position, long index) {
-    return structType.getInt32(this, position, index);
+    return ((Int32Type) structType.getType(position)).getInt32(this, index);
   }
 
   public Struct setInt32(int position, int i) {
-    structType.setInt32(this, position, i);
+    ((Int32Type) structType.getType(position)).set(this, i);
     return this;
   }
 
   public Struct setInt32(int position, long index, int i) {
-    structType.setInt32(this, position, index, i);
+    ((Int32Type) structType.getType(position)).set(this, index, i);
     return this;
   }
 
@@ -273,20 +344,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public long getUint32(int position) {
-    return structType.getUint32(this, position);
+    return ((Uint32Type) structType.getType(position)).getUint32(this);
   }
 
   public long getUint32(int position, long index) {
-    return structType.getUint32(this, position, index);
+    return ((Uint32Type) structType.getType(position)).getUint32(this, index);
   }
 
   public Struct setUint32(int position, long l) {
-    structType.setUint32(this, position, l);
+    ((Uint32Type) structType.getType(position)).set(this, l);
     return this;
   }
 
   public Struct setUint32(int position, long index, long l) {
-    structType.setUint32(this, position, index, l);
+    ((Uint32Type) structType.getType(position)).set(this, index, l);
     return this;
   }
 
@@ -301,20 +372,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public long getInt64(int position) {
-    return structType.getInt64(this, position);
+    return ((Int64Type) structType.getType(position)).getInt64(this);
   }
 
   public long getInt64(int position, long index) {
-    return structType.getInt64(this, position, index);
+    return ((Int64Type) structType.getType(position)).getInt64(this, index);
   }
 
   public Struct setInt64(int position, long l) {
-    structType.setInt64(this, position, l);
+    ((Int64Type) structType.getType(position)).set(this, l);
     return this;
   }
 
   public Struct setInt64(int position, long index, long l) {
-    structType.setInt64(this, position, index, l);
+    ((Int64Type) structType.getType(position)).set(this, index, l);
     return this;
   }
 
@@ -329,21 +400,29 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public BigInteger getUint64(int position) {
-    return structType.getUint64(this, position);
+    return ((Uint64Type) structType.getType(position)).getUint64(this);
   }
 
   public BigInteger getUint64(int position, long index) {
-    return structType.getUint64(this, position, index);
+    return ((Uint64Type) structType.getType(position)).getUint64(this, index);
   }
 
   public Struct setUint64(int position, BigInteger bi) {
-    structType.setUint64(this, position, bi);
+    ((Uint64Type) structType.getType(position)).set(this, bi);
     return this;
   }
 
+  public Struct setUint64(int position, long bi) {
+     return setUint64(position, BigInteger.valueOf(bi));
+  }
+
   public Struct setUint64(int position, long index, BigInteger bi) {
-    structType.setUint64(this, position, index, bi);
+    ((Uint64Type) structType.getType(position)).set(this, index, bi);
     return this;
+  }
+
+  public Struct setUint64(int position, long index, long bi) {
+     return setUint64(position, index, BigInteger.valueOf(bi));
   }
 
   public Struct addUint64(int position, BigInteger bi) {
@@ -357,20 +436,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public float getFloat32(int position) {
-    return structType.getFloat32(this, position);
+    return ((Float32Type) structType.getType(position)).getFloat32(this);
   }
 
   public float getFloat32(int position, long index) {
-    return structType.getFloat32(this, position, index);
+    return ((Float32Type) structType.getType(position)).getFloat32(this, index);
   }
 
   public Struct setFloat32(int position, float f) {
-    structType.setFloat32(this, position, f);
+    ((Float32Type) structType.getType(position)).set(this, f);
     return this;
   }
 
   public Struct setFloat32(int position, long index, float f) {
-    structType.setFloat32(this, position, index, f);
+    ((Float32Type) structType.getType(position)).set(this, index, f);
     return this;
   }
 
@@ -385,20 +464,20 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public double getFloat64(int position) {
-    return structType.getFloat64(this, position);
+    return ((Float64Type) structType.getType(position)).getFloat64(this);
   }
 
   public double getFloat64(int position, long index) {
-    return structType.getFloat64(this, position, index);
+    return ((Float64Type) structType.getType(position)).getFloat64(this, index);
   }
 
   public Struct setFloat64(int position, double d) {
-    structType.setFloat64(this, position, d);
+    ((Float64Type) structType.getType(position)).set(this, d);
     return this;
   }
 
   public Struct setFloat64(int position, long index, double d) {
-    structType.setFloat64(this, position, index, d);
+    ((Float64Type) structType.getType(position)).set(this, index, d);
     return this;
   }
 
@@ -413,21 +492,21 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public Struct getStruct(int position) {
-    return structType.getStruct(this, position);
+    return ((StructType) structType.getType(position)).get(this);
   }
 
   public Struct setStruct(int position, Struct other) {
-    structType.setStruct(this, position, other);
+    ((StructType) structType.getType(position)).set(this, other);
     return this;
   }
 
   public Struct addStruct(int position, Struct struct) {
-     structType.addStruct(position, struct);
+    ((StructType) structType.getType(position)).add(this, struct);
      return this;
   }
 
   public Struct addStruct(int position, long index, Struct struct) {
-    structType.addStruct(position, index, struct);
+    ((StructType) structType.getType(position)).add(this, index, struct);
     return this;
   }
 

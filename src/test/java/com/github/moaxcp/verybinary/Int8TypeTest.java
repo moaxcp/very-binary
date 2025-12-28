@@ -178,7 +178,7 @@ public class Int8TypeTest {
 
     assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("cannot allocate more bytes allocated: 0, index: 0, length: 1");
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -261,8 +261,8 @@ public class Int8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(1, 0, (byte) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -306,9 +306,9 @@ public class Int8TypeTest {
         .fromBytes(new byte[] {2, 5, 5})
         .build();
 
-    assertThatThrownBy(() -> struct.setInt8(1, 1, (byte) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Int8Type at position 1 is constant index: 1 value: 2 constant: 5");
+    struct.setInt8(1, 1, 2);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2, 5, 2));
   }
 
   @Test
@@ -412,7 +412,9 @@ public class Int8TypeTest {
         .int8()
         .build();
 
-    assertThatThrownBy(() -> struct.getInt8(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getInt8(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -505,7 +507,7 @@ public class Int8TypeTest {
 
     assertThatThrownBy(() -> struct.getInt8(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -589,8 +591,8 @@ public class Int8TypeTest {
         .int8Array(0)
         .build();
     assertThatThrownBy(() -> struct.addInt8(1, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -664,8 +666,8 @@ public class Int8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(1, 0, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -749,8 +751,8 @@ public class Int8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

@@ -11,7 +11,15 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<?>> {
 
   long getByteLength(int position);
 
-  long getArrayLength(int i);
+  long getByteLength(int position, long index);
+
+  long getByteLength(int position, long index, long length);
+
+  long getArrayLength(int position);
+
+  default boolean isFixedLength() {
+    return getType().isFixedLength(this);
+  }
 
   T getType();
 
@@ -22,8 +30,4 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<?>> {
   ByteArray getByteArray();
 
   void setByteArray(ByteArray memory);
-
-  default boolean isFixedLength() {
-    return getType().isFixedLength(this);
-  }
 }

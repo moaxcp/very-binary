@@ -52,8 +52,47 @@ public class BoolTypeTest {
         .bool()
         .build();
 
-    assertThat(struct.getByteLength()).isEqualTo(BOOL.size());
+    assertThat(struct.getByteLength(0)).isEqualTo(BOOL.size());
     assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(BOOL.size());
+  }
+
+  @Test
+  void getByteLength_array() {
+    var struct = struct()
+        .boolArray(constant(5))
+        .build();
+
+    assertThat(struct.getByteLength(0)).isEqualTo(BOOL.size() * 5);
+    assertThat(struct.getType(0).getByteLength(struct)).isEqualTo(BOOL.size() * 5);
+  }
+
+  @Test
+  void getByteLength_array_with_length_field() {
+    var struct = struct()
+        .primitive().constant((short) 5).int8()
+        .boolArray(0)
+        .build();
+
+    assertThat(struct.getByteLength(1)).isEqualTo(BOOL.size() * 5);
+    assertThat(struct.getType(1).getByteLength(struct)).isEqualTo(BOOL.size() * 5);
+  }
+
+  @Test
+  void getByteLength_array_with_index() {
+    var struct = struct()
+        .boolArray(constant(5))
+        .build();
+
+    assertThat(struct.getByteLength(0, 2)).isEqualTo(1);
+  }
+
+  @Test
+  void getByteLength_array_with_index_length() {
+    var struct = struct()
+        .boolArray(constant(5))
+        .build();
+
+    assertThat(struct.getByteLength(0, 2, 2)).isEqualTo(2);
   }
 
   @Test
@@ -176,7 +215,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, true))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("cannot allocate more bytes allocated: 0, index: 0, length: 1");
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -188,6 +227,16 @@ public class BoolTypeTest {
     assertThatThrownBy(() -> struct.setBool(0, false))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("BoolType at position 0 is constant index: 0 value: false constant: true");
+  }
+
+  @Test
+  void setBool_array() {
+    var struct = struct()
+        .boolArray(constant(5))
+        .build();
+    struct.setBoolArray(0, true, false, true, false, true);
+
+    assertThat(struct.getBoolArray(0)).isEqualTo(new boolean[]{true, false, true, false, true});
   }
 
   @Test
@@ -259,8 +308,8 @@ public class BoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setBool(1, 0, true))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -297,16 +346,15 @@ public class BoolTypeTest {
   }
 
   @Test
-  void setBoolArray_constant_value() {
+  void setBoolArray_constant_value_not_constant_length() {
     var struct = struct()
         .int8()
         .primitive().constant(true).lengthField(0).bool()
         .fromBytes(new byte[] {2, 1, 1})
         .build();
+    struct.setBool(1, 1, false);
 
-    assertThatThrownBy(() -> struct.setBool(1, 1, false))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("BoolType at position 1 is constant index: 1 value: false constant: true");
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2).bool(true, false));
   }
 
   @Test
@@ -405,7 +453,9 @@ public class BoolTypeTest {
         .bool()
         .build();
 
-    assertThatThrownBy(() -> struct.getBool(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getBool(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -498,7 +548,7 @@ public class BoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBool(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -583,8 +633,8 @@ public class BoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, true))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -658,8 +708,8 @@ public class BoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, 0, true))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
@@ -743,8 +793,8 @@ public class BoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

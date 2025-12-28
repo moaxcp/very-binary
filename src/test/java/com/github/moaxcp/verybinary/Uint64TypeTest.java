@@ -275,8 +275,8 @@ public class Uint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint64(1, 0, BigInteger.valueOf(2)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("arraycopy: last source index 8 out of bounds for byte[0]");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
@@ -324,9 +324,9 @@ public class Uint64TypeTest {
         })
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(1, 1, BigInteger.valueOf(2)))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint64Type at position 1 is constant index: 1 value: 2 constant: 5");
+    struct.setUint64(1, 1, 2);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().uint64(2, 5, 2));
   }
 
   @Test
@@ -413,7 +413,9 @@ public class Uint64TypeTest {
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.getUint64(0)).isInstanceOf(ArrayIndexOutOfBoundsException.class);
+    assertThatThrownBy(() -> struct.getUint64(0))
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
@@ -502,7 +504,7 @@ public class Uint64TypeTest {
 
     assertThatThrownBy(() -> struct.getUint64(1, 0))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("arraycopy: last source index 8 out of bounds for byte[0]");
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
@@ -580,8 +582,8 @@ public class Uint64TypeTest {
         .uint64Array(0)
         .build();
     assertThatThrownBy(() -> struct.addUint64(1, BigInteger.valueOf(3)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("arraycopy: last source index 8 out of bounds for byte[0]");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
@@ -673,8 +675,8 @@ public class Uint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(1, 0, BigInteger.valueOf(3)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("arraycopy: last source index 8 out of bounds for byte[0]");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
@@ -762,8 +764,8 @@ public class Uint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("arraycopy: last source index 8 out of bounds for byte[0]");
+        .isInstanceOf(IndexOutOfBoundsException.class)
+        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test

@@ -12,7 +12,7 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     this.position = position;
   }
 
-  protected abstract SELF copy(int position);
+  public abstract SELF copy(int position);
 
   public final SELF addByteLengthChangeListener(ByteLengthListener listener) {
     byteLengthListeners.add(listener);

@@ -28,7 +28,7 @@ public final class PadType extends Type<PadType> {
   }
 
   @Override
-  protected PadType copy(int position) {
+  public PadType copy(int position) {
     return new PadType(position, this.length, this.align);
   }
 

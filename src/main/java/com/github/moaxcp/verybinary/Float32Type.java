@@ -27,7 +27,7 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
   }
 
   @Override
-  protected Float32Type copy(int position) {
+  public Float32Type copy(int position) {
     return new Float32Type(position, constantValue, lengthExpression);
   }
 

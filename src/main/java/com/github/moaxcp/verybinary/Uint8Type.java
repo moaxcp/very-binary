@@ -27,7 +27,7 @@ public final class Uint8Type extends NumberType<Uint8Type, Short> {
   }
 
   @Override
-  protected Uint8Type copy(int position) {
+  public Uint8Type copy(int position) {
     return new Uint8Type(position, constantValue, lengthExpression);
   }
 

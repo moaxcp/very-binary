@@ -12,7 +12,7 @@ public class Struct implements Pointer<Struct, StructType> {
   private ByteArrayListener listener;
 
    public Struct(Struct struct) {
-    this(struct.allocated, struct.offset, struct.structType.copy(-1), struct.bytes.copy());
+    this(struct.allocated, struct.offset, struct.structType, struct.bytes.copy());
    }
 
   public Struct(StructType structType) {
@@ -116,7 +116,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public boolean getBool(int position) {
-    return ((BoolType) structType.getType(position)).getBoolean(this);
+    return ((BoolType) structType.getType(position)).getBool(this);
   }
 
   public Struct setBool(int position, boolean b) {
@@ -125,7 +125,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public boolean getBool(int position, long index) {
-    return ((BoolType) structType.getType(position)).getBoolean(this, index);
+    return ((BoolType) structType.getType(position)).getBool(this, index);
   }
 
   public Struct setBool(int position, long index, boolean b) {
@@ -134,37 +134,37 @@ public class Struct implements Pointer<Struct, StructType> {
   }
   
   public boolean[] getBoolArray(int position) {
-    return ((BoolType) structType.getType(position)).getBooleanArray(this);
+    return ((BoolType) structType.getType(position)).getBoolArray(this);
   }
 
-  public Struct setBoolArray(int position, boolean... values) {
+  public Struct setBool(int position, boolean... values) {
     ((BoolType) structType.getType(position)).set(this, values);
     return this;
   }
   
   public boolean[] getBoolArray(int position, long index, long length) {
-    return ((BoolType) structType.getType(position)).getBooleanArray(this, index, length);
+    return ((BoolType) structType.getType(position)).getBoolArray(this, index, length);
   }
   
-  public Struct setBoolArray(int position, long index, boolean... values) {
+  public Struct setBool(int position, long index, boolean... values) {
     ((BoolType) structType.getType(position)).set(this, index, values);
     return this;
   }
   
   public List<Boolean> getBoolList(int position) {
-    return ((BoolType) structType.getType(position)).getBooleanList(this);
+    return ((BoolType) structType.getType(position)).getBoolList(this);
   }
   
-  public Struct setBoolList(int position, List<Boolean> values) {
+  public Struct setBool(int position, List<Boolean> values) {
     ((BoolType) structType.getType(position)).set(this, values);
     return this;
   }
   
   public List<Boolean> getBoolList(int position, long index, long length) {
-    return ((BoolType) structType.getType(position)).getBooleanList(this, index, length);
+    return ((BoolType) structType.getType(position)).getBoolList(this, index, length);
   }
   
-  public Struct setBoolList(int position, long index, List<Boolean> values) {
+  public Struct setBool(int position, long index, List<Boolean> values) {
     ((BoolType) structType.getType(position)).set(this, index, values);
     return this;
   }
@@ -177,6 +177,26 @@ public class Struct implements Pointer<Struct, StructType> {
   public Struct addBool(int position, long index, boolean b) {
     ((BoolType) structType.getType(position)).add(this, index, b);
     return this;
+  }
+
+  public Struct addBool(int position, boolean... values) {
+     ((BoolType) structType.getType(position)).add(this, values);
+     return this;
+  }
+
+  public Struct addBool(int position, long index, boolean... values) {
+     ((BoolType) structType.getType(position)).add(this, index, values);
+     return this;
+  }
+
+  public Struct addBool(int position, List<Boolean> values) {
+     ((BoolType) structType.getType(position)).add(this, values);
+     return this;
+  }
+
+  public Struct addBool(int position, long index, List<Boolean> values) {
+     ((BoolType) structType.getType(position)).add(this, index, values);
+     return this;
   }
 
   public byte getInt8(int position) {
@@ -515,9 +535,18 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public void remove(int position, long index) {
-     assert structType.getType(position) instanceof ValueType<?, ?> : "Field at postion " + position + " is " + structType.getType(position).getClass().getSimpleName() + " but it must be a ValueType";
      if (structType.getType(position) instanceof ValueType<?, ?> valueType) {
        valueType.remove(this, index);
+     } else {
+       throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
+     }
+  }
+
+  public void remove(int position, long index, long length) {
+     if (structType.getType(position) instanceof ValueType<?, ?> valueType) {
+       valueType.remove(this, index, length);
+     } else {
+       throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
      }
   }
 

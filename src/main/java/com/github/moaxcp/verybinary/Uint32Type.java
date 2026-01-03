@@ -27,7 +27,7 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
   }
 
   @Override
-  protected Uint32Type copy(int position) {
+  public Uint32Type copy(int position) {
     return new Uint32Type(position, constantValue, lengthExpression);
   }
 

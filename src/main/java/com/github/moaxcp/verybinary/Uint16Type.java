@@ -27,7 +27,7 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
   }
 
   @Override
-  protected Uint16Type copy(int position) {
+  public Uint16Type copy(int position) {
     return new Uint16Type(position, constantValue, lengthExpression);
   }
 

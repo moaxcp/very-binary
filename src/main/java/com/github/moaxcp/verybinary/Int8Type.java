@@ -27,7 +27,7 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
   }
 
   @Override
-  protected Int8Type copy(int position) {
+  public Int8Type copy(int position) {
     return new Int8Type(position, constantValue, lengthExpression);
   }
 
@@ -57,8 +57,10 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
     checkConstant(pointer, index, value);
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getInt8(getOffset(pointer, index));
-      pointer.getByteArray().setInt8(getOffset(pointer, index), value);
-      notifyValueChange(reason, pointer, index, old, value);
+      if(value != old) {
+        pointer.getByteArray().setInt8(getOffset(pointer, index), value);
+        notifyValueChange(reason, pointer, index, old, value);
+      }
     }
     pointer.getByteArray().setInt8(getOffset(pointer, index), value);
   }

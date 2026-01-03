@@ -27,7 +27,7 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
   }
 
   @Override
-  protected Int16Type copy(int position) {
+  public Int16Type copy(int position) {
     return new Int16Type(position, constantValue, lengthExpression);
   }
 

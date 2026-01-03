@@ -27,7 +27,7 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
   }
 
   @Override
-  protected Float64Type copy(int position) {
+  public Float64Type copy(int position) {
     return new Float64Type(position, constantValue, lengthExpression);
   }
 

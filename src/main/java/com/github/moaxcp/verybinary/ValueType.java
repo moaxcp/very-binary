@@ -93,6 +93,10 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     return constantValue != null && (lengthExpression == null || lengthExpression.isConstant(type));
   }
 
+  public final boolean isConstantValue(Type<?> type) {
+    return constantValue != null;
+  }
+
   public T get(Pointer<?, ? extends Type<?>> pointer) {
     return get(pointer, 0);
   }
@@ -114,21 +118,28 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     }
   }
 
+  protected void checkIndexRange(Pointer<?, ? extends Type<?>> pointer, long start, long end) {
+    var length = getArrayLength(pointer);
+    if (start < 0 || end >= length || start >= end) {
+      throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " length: " + length + " start: " + start + " end: " + end);
+    }
+  }
+
   public void set(Pointer<?, ? extends Type<?>> pointer, T value) {
     set(pointer, 0, value);
   }
+
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
 
   public void set(Pointer<?, ? extends Type<?>> pointer, T... values) {
     set(pointer, 0, values);
   }
 
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T... values);
+
   public void set(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
     set(pointer, 0, values);
   }
-
-  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T value);
-
-  public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, T... values);
 
   public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, List<T> values);
 
@@ -245,7 +256,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     if (reason != RESIZED_BY_LENGTH_FIELD) {
-      checkIndex(pointer, index + length);
+      checkIndexRange(pointer, index, index + length - 1);
     }
     callWithArrayLengthChange(reason, pointer, -length, () -> {
       callWithByteLengthChange(pointer, () -> {

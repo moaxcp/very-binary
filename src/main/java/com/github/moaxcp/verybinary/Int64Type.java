@@ -27,7 +27,7 @@ public final class Int64Type extends NumberType<Int64Type, Long> {
   }
 
   @Override
-  protected Int64Type copy(int position) {
+  public Int64Type copy(int position) {
     return new Int64Type(position, constantValue, lengthExpression);
   }
 

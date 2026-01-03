@@ -80,7 +80,7 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
 
   @Override
   public T[] getArray(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    throw new UnsupportedOperationException("get(Pointer, long, long) not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "(Pointer, long, long) instead.");
+    throw new UnsupportedOperationException("getArray(Pointer, long, long) not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "Array(Pointer, long, long) instead.");
   }
 
   @Override
@@ -98,6 +98,11 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
     throw new UnsupportedOperationException("set(Pointer, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, " + unitSize.primitive() + ") instead.");
   }
 
+  @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    throw new UnsupportedOperationException("set(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, long, " + unitSize.primitive() + ") instead.");
+  }
+
   @SafeVarargs
   @Override
   public final void set(Pointer<?, ? extends Type<?>> pointer, T... values) {
@@ -105,18 +110,13 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
-    throw new UnsupportedOperationException("set(Pointer, List<" + unitSize.wrapper() + ">) not supported for " + getClass().getSimpleName() + ". Use set(Pointer, List<" + unitSize.primitive() + ">) instead.");
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    throw new UnsupportedOperationException("set(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, long, " + unitSize.primitive() + ") instead.");
-  }
-
-  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, T... values) {
     throw new UnsupportedOperationException("set(Pointer, long, " + unitSize.wrapper() + "...) not supported for " + getClass().getSimpleName() + ". Use set(Pointer, long, " + unitSize.primitive() + "...) instead.");
+  }
+
+  @Override
+  public void set(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
+    throw new UnsupportedOperationException("set(Pointer, List<" + unitSize.wrapper() + ">) not supported for " + getClass().getSimpleName() + ". Use set(Pointer, List<" + unitSize.primitive() + ">) instead.");
   }
 
   @Override
@@ -130,23 +130,23 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
-  public void add(Pointer<?, ? extends Type<?>> pointer, T... values) {
-    throw new UnsupportedOperationException("add(Pointer, " + unitSize.wrapper() + "...) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, " + unitSize.primitive() + "...) instead.");
-  }
-
-  @Override
-  public void add(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
-    throw new UnsupportedOperationException("add(Pointer, List<" + unitSize.wrapper() + ">) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, List<" + unitSize.primitive() + ">) instead.");
-  }
-
-  @Override
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     throw new UnsupportedOperationException("add(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use add(Pointer, long, " + unitSize.primitive() + ") instead.");
   }
 
   @Override
+  public void add(Pointer<?, ? extends Type<?>> pointer, T... values) {
+    throw new UnsupportedOperationException("add(Pointer, " + unitSize.wrapper() + "...) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, " + unitSize.primitive() + "...) instead.");
+  }
+
+  @Override
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T... values) {
     throw new UnsupportedOperationException("add(Pointer, long, " + unitSize.wrapper() + "...) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, long, " + unitSize.primitive() + "...) instead.");
+  }
+
+  @Override
+  public void add(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
+    throw new UnsupportedOperationException("add(Pointer, List<" + unitSize.wrapper() + ">) not supported for " + getClass().getSimpleName() + ". Use add(Pointer, List<" + unitSize.primitive() + ">) instead.");
   }
 
   @Override

@@ -29,7 +29,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  protected Uint64Type copy(int position) {
+  public Uint64Type copy(int position) {
     return new Uint64Type(position, constantValue, lengthExpression);
   }
 

@@ -27,7 +27,7 @@ public final class Int32Type extends NumberType<Int32Type, Integer> {
   }
 
   @Override
-  protected Int32Type copy(int position) {
+  public Int32Type copy(int position) {
     return new Int32Type(position, constantValue, lengthExpression);
   }
 

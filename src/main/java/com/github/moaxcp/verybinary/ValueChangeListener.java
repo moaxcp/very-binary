@@ -37,17 +37,13 @@ public interface ValueChangeListener {
       ValueType<?, ?> type = pointer.getType(position);
       if (current > old) {
         var length = current - old;
-        for (long i = 0; i < length; i++) {
-          type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old + i);
-        }
+        type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old, length);
       } else {
         var length = old - current;
-        for (long i = length - 1; i >= 0; i--) {
-          type.remove(RESIZED_BY_LENGTH_FIELD, pointer, old - 1 + i);
-        }
+        type.remove(RESIZED_BY_LENGTH_FIELD, pointer, old - 1, length);
       }
     }
   }
 
-  void valueChanged(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Object oldValue, Object newValue);
+  void valueChanged(ValueChangeListener.ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Object oldValue, Object newValue);
 }

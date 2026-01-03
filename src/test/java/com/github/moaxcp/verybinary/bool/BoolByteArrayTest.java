@@ -1,5 +1,6 @@
-package com.github.moaxcp.verybinary;
+package com.github.moaxcp.verybinary.bool;
 
+import com.github.moaxcp.verybinary.ShiftBytes;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ShiftBytes.shiftBytes;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ByteArrayBooleanTest {
+public class BoolByteArrayTest {
   private List<ShiftBytes> events = new ArrayList<>();
 
   @Test

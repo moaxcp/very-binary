@@ -26,8 +26,20 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
     return this;
   }
 
+  public StructTypePrimitiveSubBuilder<PARENT> byteLengthField(int byteLengthFieldPosition) {
+    primitiveBuilder.byteLengthExpression(Expression.valueOf(byteLengthFieldPosition));
+    primitiveBuilder.byteLengthListener(ByteLengthListener.lengthField(byteLengthFieldPosition));
+    ((ValueType<?, ?>) structTypeBuilder.getField(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(structTypeBuilder.fields()));
+    return this;
+  }
+
   public StructTypePrimitiveSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
     primitiveBuilder.lengthExpression(lengthExpression);
+    return this;
+  }
+
+  public StructTypePrimitiveSubBuilder<PARENT> byteLengthExpression(Expression byteLengthExpression) {
+    primitiveBuilder.byteLengthExpression(byteLengthExpression);
     return this;
   }
 

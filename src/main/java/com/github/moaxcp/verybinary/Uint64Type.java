@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
@@ -20,8 +19,8 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     return new Uint64Type(position);
   }
 
-  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression) {
-    super(position, UINT64, constantValue, lengthExpression);
+  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, UINT64, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public Uint64Type(int position) {
@@ -30,7 +29,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
 
   @Override
   public Uint64Type copy(int position) {
-    return new Uint64Type(position, constantValue, lengthExpression);
+    return new Uint64Type(position, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public BigInteger getUint64(Pointer<?, ? extends Type<?>> pointer) {
@@ -89,9 +88,9 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addUint64(getOffset(pointer, index), constantValue != null ? constantValue : BigInteger.ZERO);
       });
@@ -99,9 +98,9 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var values = new BigInteger[(int) length];
         for (int i = 0; i < length; i++) {

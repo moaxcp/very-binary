@@ -52,11 +52,11 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
 
   public abstract void allocate(Pointer<?, ? extends Type<?>> pointer);
 
-  protected final void notifyByteLengthChange(Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
-    byteLengthListeners.forEach(b -> b.byteLengthChanged(pointer, previousLength, currentLength));
+  protected final void notifyByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
+    byteLengthListeners.forEach(b -> b.byteLengthChanged(reason, pointer, previousLength, currentLength));
   }
 
-  protected void callWithByteLengthChange(Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
+  protected void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
     if (byteLengthListeners.isEmpty()) {
       runnable.run();
       return;
@@ -64,7 +64,7 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     var previous = getByteLength(pointer);
     runnable.run();
     var current = getByteLength(pointer);
-    notifyByteLengthChange(pointer, previous, current);
+    notifyByteLengthChange(reason, pointer, previous, current);
   }
 
   @Override

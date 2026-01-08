@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -22,8 +21,8 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     return new BoolType(position);
   }
 
-  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression) {
-    super(position, BOOL, constantValue, lengthExpression);
+  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, BOOL, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public BoolType(int position) {
@@ -32,7 +31,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   @Override
   public BoolType copy(int position) {
-    return new BoolType(position, constantValue, lengthExpression);
+    return new BoolType(position, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public boolean getBool(Pointer<?, ? extends Type<?>> pointer) {
@@ -203,9 +202,9 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   @Override
-  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addBool(getOffset(pointer, index), constantValue != null ? constantValue : false);
       });
@@ -213,9 +212,9 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   @Override
-  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, length, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var values = new boolean[Math.toIntExact(length)];
         for (int i = 0; i < length; i++) {

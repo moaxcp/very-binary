@@ -9,6 +9,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   private final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   private final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
   private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
+  private Expression byteLengthExpression;
   private Expression lengthExpression;
   private Struct constant;
   private final List<Type<?>> fields = new ArrayList<>();
@@ -41,10 +42,22 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
+  public SELF byteLengthField(int byteLengthFieldPosition) {
+    this.byteLengthExpression = Expression.valueOf(byteLengthFieldPosition);
+    this.byteLengthListeners.add(ByteLengthListener.lengthField(byteLengthFieldPosition));
+    ((ValueType<?, ?>) fields.get(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(byteLengthFieldPosition));
+    return (SELF) this;
+  }
+
   public SELF lengthField(int lengthFieldPosition) {
     this.lengthExpression = Expression.valueOf(lengthFieldPosition);
     this.arrayLengthListeners.add(ArrayLengthListener.lengthField(lengthFieldPosition));
     ((ValueType<?, ?>) fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(lengthFieldPosition));
+    return (SELF) this;
+  }
+
+  public SELF byteLengthExpression(Expression byteLengthExpression) {
+    this.byteLengthExpression = byteLengthExpression;
     return (SELF) this;
   }
 
@@ -223,7 +236,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
-    var type = new StructType(position, constant, lengthExpression, fields);
+    var type = new StructType(position, constant, lengthExpression, byteLengthExpression, fields);
     type.addByteLengthChangeListeners(byteLengthListeners);
     type.addArrayLengthChangeListeners(arrayLengthListeners);
     type.addValueChangeListeners(valueChangeListeners);

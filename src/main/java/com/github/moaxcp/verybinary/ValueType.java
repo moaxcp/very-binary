@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
@@ -8,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason.*;
+import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 
 public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits PrimitiveType, StructType {
   @Nullable
   protected final Expression lengthExpression;
+  @Nullable
+  protected final Expression byteLengthExpression;
   @Nullable
   protected final T constantValue;
   protected final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
@@ -21,12 +22,14 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   public ValueType(int position) {
     super(position);
     this.lengthExpression = null;
+    this.byteLengthExpression = null;
     this.constantValue = null;
   }
 
-  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression) {
+  public ValueType(int position, @Nullable T constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position);
     this.lengthExpression = lengthExpression;
+    this.byteLengthExpression = byteLengthExpression;
     this.constantValue = constantValue;
   }
 
@@ -36,6 +39,10 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
 
   public final @Nullable Expression getLengthExpression() {
     return lengthExpression;
+  }
+
+  public final @Nullable Expression getByteLengthExpression() {
+    return byteLengthExpression;
   }
 
   public SELF addArrayLengthChangeListeners(List<ArrayLengthListener> arrayLengthChange) {
@@ -62,7 +69,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public final boolean isArray() {
-    return lengthExpression != null;
+    return lengthExpression != null || byteLengthExpression != null;
   }
 
   @Override
@@ -82,7 +89,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
-  public final long getArrayLength(Pointer<?, ? extends Type<?>> pointer) {
+  public long getArrayLength(Pointer<?, ? extends Type<?>> pointer) {
     if (!isArray()) {
       return 1;
     }
@@ -202,9 +209,9 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     allocate(ALLOCATED, pointer, index, length);
   }
 
-  abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index);
+  abstract void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index);
 
-  abstract void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length);
+  abstract void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
   void checkIndexAllocate(Pointer<?, ? extends Type<?>> pointer, long index) {
     var newLength = getArrayLength(pointer) + 1;
@@ -220,7 +227,8 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     if (isFixedLength(pointer)) {
       throw new UnsupportedOperationException("Cannot remove fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
     }
-    callWithArrayLengthChange(DEALLOCATED, pointer, -getArrayLength(pointer), () -> callWithByteLengthChange(pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer))));
+    callWithArrayLengthChange(DEALLOCATED, pointer, -getArrayLength(pointer),
+        () -> callWithByteLengthChange(DEALLOCATED, pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer))));
   }
 
   public final void remove(Pointer<?, ? extends Type<?>> pointer, long index) {
@@ -231,7 +239,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     remove(DEALLOCATED, pointer, index, length);
   }
 
-  final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  final void remove(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
@@ -242,13 +250,13 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
       checkIndex(pointer, index);
     }
     callWithArrayLengthChange(reason, pointer, -1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         pointer.getByteArray().removeInt8(getOffset(pointer, index), getByteLength(pointer, index));
       });
     });
   }
 
-  final void remove(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  final void remove(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot remove from non-array type at position " + getPosition());
     }
@@ -259,13 +267,13 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
       checkIndexRange(pointer, index, index + length - 1);
     }
     callWithArrayLengthChange(reason, pointer, -length, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         pointer.getByteArray().removeInt8(getOffset(pointer, index), getByteLength(pointer, index, length));
       });
     });
   }
 
-  protected void callWithArrayLengthChange(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long added, Runnable runnable) {
+  protected void callWithArrayLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long added, Runnable runnable) {
     if (arrayLengthListeners.isEmpty()) {
       runnable.run();
       return;

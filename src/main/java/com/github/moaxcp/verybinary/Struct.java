@@ -249,7 +249,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   public Struct setUint8(int position, int s) {
-     return setUint8(position, s);
+     return setUint8(position, (short) s);
   }
 
   public Struct setUint8(int position, long index, short s) {

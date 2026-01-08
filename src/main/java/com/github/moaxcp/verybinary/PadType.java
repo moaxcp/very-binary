@@ -85,7 +85,7 @@ public final class PadType extends Type<PadType> {
         pointer.getByteArray().removeInt8(getOffset(pointer));
       }
     }
-    notifyByteLengthChange(pointer, previousLength, currentLength);
+    notifyByteLengthChange(LengthChangeReason.ALIGN, pointer, previousLength, currentLength);
   }
 
   @Override

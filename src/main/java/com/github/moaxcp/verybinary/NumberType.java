@@ -8,8 +8,8 @@ public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T exte
     super(position, size);
   }
 
-  NumberType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression) {
-    super(position, unitSize, constantValue, lengthExpression);
+  NumberType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, unitSize, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public long defaultValue() {

@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
@@ -18,8 +17,8 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
     return new Uint16Type(position);
   }
 
-  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression) {
-    super(position, UINT16, constantValue, lengthExpression);
+  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, UINT16, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public Uint16Type(int position) {
@@ -28,7 +27,7 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
 
   @Override
   public Uint16Type copy(int position) {
-    return new Uint16Type(position, constantValue, lengthExpression);
+    return new Uint16Type(position, constantValue, lengthExpression, byteLengthExpression);
   }
 
   public int getUint16(Pointer<?, ? extends Type<?>> pointer) {
@@ -87,9 +86,9 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
   }
 
   @Override
-  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         pointer.getByteArray().addUint16(getOffset(pointer, index), constantValue != null ? constantValue : 0);
       });
@@ -97,9 +96,9 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
   }
 
   @Override
-  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var values = new int[(int) length];
         for (int i = 0; i < length; i++) {

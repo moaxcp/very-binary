@@ -12,8 +12,8 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
     this.unitSize = size;
   }
 
-  PrimitiveType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression) {
-    super(position, constantValue, lengthExpression);
+  PrimitiveType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, constantValue, lengthExpression, byteLengthExpression);
     this.unitSize = unitSize;
   }
 
@@ -56,6 +56,19 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   @Override
   public final long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     return getUnitSize().size() * length;
+  }
+
+  public final long getArrayLength(Pointer<?, ? extends Type<?>> pointer) {
+    if (!isArray()) {
+      return 1;
+    }
+    if (lengthExpression != null) {
+      return lengthExpression.evaluate(pointer);
+    }
+    if (byteLengthExpression != null) {
+      return byteLengthExpression.evaluate(pointer) / unitSize.size();
+    }
+    throw new IllegalStateException("lengthExpression and byteLengthExpression are both null");
   }
 
   @Override

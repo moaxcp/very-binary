@@ -2,20 +2,6 @@ package com.github.moaxcp.verybinary;
 
 @FunctionalInterface
 public interface ArrayLengthListener {
-  enum ArrayLengthReason {
-    /**
-     * Item requested to be removed from array
-     */
-    DEALLOCATED,
-    /**
-     * Item requested to be added to array
-     */
-    ALLOCATED,
-    /**
-     * Length field changed and array needs to adjust from previous size
-     */
-    RESIZED_BY_LENGTH_FIELD
-  }
 
   static ArrayLengthListener lengthField(int position) {
     return new SetLengthFieldListener(position);
@@ -29,8 +15,8 @@ public interface ArrayLengthListener {
     }
 
     @Override
-    public void arrayLengthChanged(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current) {
-      if(reason == ArrayLengthReason.RESIZED_BY_LENGTH_FIELD) {
+    public void arrayLengthChanged(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current) {
+      if(reason == LengthChangeReason.RESIZED_BY_LENGTH_FIELD) {
         return;
       }
       ((NumberType) pointer.getType(position)).setForArrayLength(pointer, current);
@@ -57,5 +43,5 @@ public interface ArrayLengthListener {
     }
   }
 
-  void arrayLengthChanged(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current);
+  void arrayLengthChanged(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current);
 }

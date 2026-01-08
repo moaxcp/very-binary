@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.ArrayLengthListener.ArrayLengthReason;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -12,14 +11,14 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   private final List<Type<?>> fields;
 
-  StructType(int position, @Nullable Struct constant, @Nullable Expression lengthExpression, List<Type<?>> fields) {
-    super(position, constant, lengthExpression);
+  StructType(int position, @Nullable Struct constant, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, List<Type<?>> fields) {
+    super(position, constant, lengthExpression, byteLengthExpression);
     this.fields = fields;
   }
 
   @Override
   public StructType copy(int position) {
-    return new StructType(position, this.constantValue, this.lengthExpression, new ArrayList<>(fields));
+    return new StructType(position, this.constantValue, this.lengthExpression, byteLengthExpression, new ArrayList<>(fields));
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -175,9 +174,9 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  protected void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());
         for (int i = 0; i < fields.size(); i++) {
@@ -188,9 +187,9 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  void allocate(ArrayLengthReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
-      callWithByteLengthChange(pointer, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         for (long i = 0; i < length; i++) {
           var struct = new Struct(false, getOffset(pointer, index + i), this, pointer.getByteArray());

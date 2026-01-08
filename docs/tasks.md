@@ -77,6 +77,16 @@
   - [ ] Add Type tests confirming offset calculations and delegation to ByteArray.
   - [ ] Add StructType tests for total size, field offsets, and padding correctness.
   - [ ] Add Struct tests for full read/write round-trips across multiple fields, including nested structs and shifting scenarios.
+  - [x] Split Float32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Float64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Int8TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Int16TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Int32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Int64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Uint8TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Uint16TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Uint32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Uint64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
   - [ ] Add property-based or fuzz tests for random sequences of inserts/removes validating invariants (lengths, contents).
 
 11. [ ] Phase 11 — Performance and memory

@@ -12,7 +12,6 @@ import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.BOOL;
 import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class BoolTypeTest {
 
@@ -215,6 +214,30 @@ public class BoolTypeTest {
         .build();
 
     struct.setInt8(0, 5);
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(true, true, true, true, true));
+  }
+
+  @Test
+  void setting_byte_length_field_extends_array() {
+    var struct = struct()
+        .int8()
+        .primitive().byteLengthField(0).bool()
+        .build();
+
+    struct.setInt8(0, 5);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
+  }
+
+  @Test
+  void setting_byte_length_field_extends_array_with_constant_values() {
+    var struct = struct()
+        .int8()
+        .primitive().byteLengthField(0).constant(true).bool()
+        .build();
+
+    struct.setInt8(0, 5);
+
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(true, true, true, true, true));
   }
 }

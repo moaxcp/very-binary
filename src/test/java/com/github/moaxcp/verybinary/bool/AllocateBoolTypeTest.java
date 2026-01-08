@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateBoolTypeTest {
-
 
   @Test
   void allocate() {
@@ -54,5 +54,34 @@ public class AllocateBoolTypeTest {
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
+  }
+
+  @Test
+  void allocate_array_length_field_constant() {
+    var struct = struct()
+        .primitive().constant(5).int8()
+        .boolArray(0)
+        .build();
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
+  }
+
+  @Test
+  void allocate_byte_length_field_constant() {
+    var struct = struct()
+        .primitive().constant(5).int8()
+        .primitive().byteLengthField(0).bool()
+        .build();
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
+  }
+
+  @Test
+  void allocate_array_constant() {
+    var struct = struct()
+        .primitive().constant(true).lengthExpression(constant(5)).bool()
+        .build();
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().bool(true, true, true, true, true));
   }
 }

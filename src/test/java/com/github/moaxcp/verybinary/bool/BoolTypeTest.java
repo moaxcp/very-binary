@@ -82,7 +82,8 @@ public class BoolTypeTest {
         .int8()
         .boolArray(0)
         .build();
-    assertThat(type.getType(0).getAllocationLength()).isEqualTo(1);
+    assertThat(type.getType(1).getAllocationLength(type)).isEqualTo(0);
+    assertThat(type.getAllocationLength()).isEqualTo(1);
   }
 
   @Test

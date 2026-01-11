@@ -93,8 +93,8 @@ public class AddFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 3 value: 4.0 constant: 3.0");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float64Type at position 0 is constant length: 3 index: 3");
   }
 
   @Test
@@ -192,7 +192,7 @@ public class AddFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 2 value: 4.0 constant: 3.0");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float64Type at position 0 is constant length: 3 index: 2");
   }
 }

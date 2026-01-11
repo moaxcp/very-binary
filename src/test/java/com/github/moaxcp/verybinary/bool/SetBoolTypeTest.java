@@ -162,7 +162,7 @@ public class SetBoolTypeTest {
   }
 
   @Test
-  void setBool_index_index_not_allocated() {
+  void setBool_index_not_allocated() {
     var struct = struct()
         .allocated()
         .int8()
@@ -201,7 +201,7 @@ public class SetBoolTypeTest {
     var struct = struct()
         .int8()
         .primitive().constant(true).lengthField(0).bool()
-        .fromBytes(new byte[] {2, 1, 1})
+        .fromBytes(ba().int8(2).bool(true, true))
         .build();
 
     struct.setBool(1, 1, true);
@@ -309,7 +309,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, -1, true, false))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 length: 5 start: -1 end: 0");
+        .hasMessage("BoolType at position 0 length: 5 start: -1 end: 1");
   }
 
   @Test
@@ -320,7 +320,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, 5, true, false))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 length: 5 start: 5 end: 6");
+        .hasMessage("BoolType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test

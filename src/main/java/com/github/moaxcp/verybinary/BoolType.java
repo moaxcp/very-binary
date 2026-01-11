@@ -1,11 +1,13 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.Primitive.BOOL;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 /**
  * Boolean type backed by a single byte in ByteArray.
@@ -50,7 +52,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   public boolean[] getBoolArray(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    checkIndex(pointer, index + length - 1);
+    checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getBool(getOffset(pointer, index), length);
   }
 
@@ -61,48 +63,54 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   public List<Boolean> getBoolList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    checkIndex(pointer, index + length - 1);
+    checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getBoolList(getOffset(pointer, index), length);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean value) {
     checkForConstantValue(pointer, 0, value);
-    setUnchecked(pointer, 0, value);
+    setUnchecked(SET_VALUE, pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean... values) {
-    checkIndexRange(pointer, 0, values.length - 1);
+    checkArrayRange(pointer, 0, values.length);
     checkForConstantValues(pointer, 0, values);
-    setUnchecked(pointer, 0, values);
+    setUnchecked(SET_VALUE, pointer, 0, values);
   }
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, List<Boolean> values) {
     checkForConstantValues(pointer, 0, values);
-    setUnchecked(pointer, 0, values);
+    setUnchecked(SET_VALUE, pointer, 0, values);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
     checkIndex(pointer, index);
     checkForConstantValue(pointer, index, value);
-    setUnchecked(pointer, index, value);
+    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, boolean... values) {
-    checkIndexRange(pointer, index, index + values.length - 1);
+    checkArrayRange(pointer, index, index + values.length);
     checkForConstantValues(pointer, index, values);
-    setUnchecked(pointer, index, values);
+    setUnchecked(SET_VALUE, pointer, index, values);
   }
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
-    checkIndexRange(pointer, index, index + values.size() - 1);
+    checkArrayRange(pointer, index, index + values.size() - 1);
     checkForConstantValues(pointer, index, values);
-    setUnchecked(pointer, index, values);
+    setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
-    pointer.getByteArray().setBool(getOffset(pointer, index), value);
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
+    if (!valueChangeListeners.isEmpty()) {
+      var old = pointer.getByteArray().getBool(getOffset(pointer, index));
+      pointer.getByteArray().setBool(getOffset(pointer, index), value);
+      notifyValueChange(reason, pointer, index, old, value);
+    } else {
+      pointer.getByteArray().setBool(getOffset(pointer, index), value);
+    }
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
@@ -111,7 +119,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     }
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, boolean... values) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean... values) {
     pointer.getByteArray().setBool(getOffset(pointer, index), values);
   }
 
@@ -125,7 +133,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     }
   }
 
-  private void setUnchecked(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
     pointer.getByteArray().setBool(getOffset(pointer, index), values);
   }
 
@@ -161,7 +169,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     }
     checkForConstantValue(pointer, index, value);
     allocate(pointer, index);
-    setUnchecked(pointer, index, value);
+    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean... values) {
@@ -173,7 +181,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     }
     checkForConstantValues(pointer, index, values);
     allocate(pointer, index, values.length);
-    setUnchecked(pointer, index, values);
+    setUnchecked(SET_VALUE, pointer, index, values);
   }
 
   @Override
@@ -186,7 +194,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     }
     checkForConstantValues(pointer, index, values);
     allocate(pointer, index, values.size());
-    setUnchecked(pointer, index, values);
+    setUnchecked(SET_VALUE, pointer, index, values);
   }
 
   @Override

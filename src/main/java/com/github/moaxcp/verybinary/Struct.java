@@ -459,18 +459,49 @@ public class Struct implements Pointer<Struct, StructType> {
     return ((Float32Type) structType.getType(position)).getFloat32(this);
   }
 
-  public float getFloat32(int position, long index) {
-    return ((Float32Type) structType.getType(position)).getFloat32(this, index);
-  }
-
   public Struct setFloat32(int position, float f) {
     ((Float32Type) structType.getType(position)).set(this, f);
     return this;
   }
 
+  public float getFloat32(int position, long index) {
+    return ((Float32Type) structType.getType(position)).getFloat32(this, index);
+  }
+
   public Struct setFloat32(int position, long index, float f) {
     ((Float32Type) structType.getType(position)).set(this, index, f);
     return this;
+  }
+
+  public float[] getFloat32Array(int position) {
+    return ((Float32Type) structType.getType(position)).getFloat32Array(this);
+  }
+
+  public Struct setFloat32(int position, float... values) {
+     ((Float32Type) structType.getType(position)).set(this, values);
+     return this;
+  }
+
+  public float[] getFloat32Array(int position, long index, long length) {
+    return ((Float32Type) structType.getType(position)).getFloat32Array(this, index, length);
+  }
+
+  public Struct setFloat32(int position, long index, float... values) {
+    ((Float32Type) structType.getType(position)).set(this, index, values);
+    return this;
+  }
+
+  public List<Float> getFloat32List(int position) {
+     return ((Float32Type) structType.getType(position)).getFloat32List(this);
+  }
+
+  public List<Float> getFloat32List(int position, long index, long length) {
+    return ((Float32Type) structType.getType(position)).getFloat32List(this, index, length);
+  }
+
+  public Struct setFloat32(int position, List<Float> values) {
+     ((Float32Type) structType.getType(position)).set(this, values);
+     return this;
   }
 
   public Struct addFloat32(int position, float f) {
@@ -481,6 +512,26 @@ public class Struct implements Pointer<Struct, StructType> {
   public Struct addFloat32(int position, long index, float f) {
     ((Float32Type) structType.getType(position)).add(this, index, f);
     return this;
+  }
+
+  public Struct addFloat32(int position, float... values) {
+     ((Float32Type) structType.getType(position)).add(this, values);
+     return this;
+  }
+
+  public Struct addFloat32(int position, long index, float... values) {
+     ((Float32Type) structType.getType(position)).add(this, index, values);
+     return this;
+  }
+
+  public Struct addFloat32(int position, List<Float> values) {
+     ((Float32Type) structType.getType(position)).add(this, values);
+     return this;
+  }
+
+  public Struct addFloat32(int position, long index, List<Float> values) {
+     ((Float32Type) structType.getType(position)).add(this, index, values);
+     return this;
   }
 
   public double getFloat64(int position) {
@@ -508,6 +559,57 @@ public class Struct implements Pointer<Struct, StructType> {
 
   public Struct addFloat64(int position, long index, double d) {
     ((Float64Type) structType.getType(position)).add(this, index, d);
+    return this;
+  }
+
+  public double[] getFloat64Array(int position) {
+    return ((Float64Type) structType.getType(position)).getFloat64Array(this);
+  }
+
+  public Struct setFloat64(int position, double... values) {
+    ((Float64Type) structType.getType(position)).set(this, values);
+    return this;
+  }
+
+  public double[] getFloat64Array(int position, long index, long length) {
+    return ((Float64Type) structType.getType(position)).getFloat64Array(this, index, length);
+  }
+
+  public Struct setFloat64(int position, long index, double... values) {
+    ((Float64Type) structType.getType(position)).set(this, index, values);
+    return this;
+  }
+
+  public List<Double> getFloat64List(int position) {
+    return ((Float64Type) structType.getType(position)).getFloat64List(this);
+  }
+
+  public List<Double> getFloat64List(int position, long index, long length) {
+    return ((Float64Type) structType.getType(position)).getFloat64List(this, index, length);
+  }
+
+  public Struct setFloat64(int position, List<Double> values) {
+    ((Float64Type) structType.getType(position)).set(this, values);
+    return this;
+  }
+
+  public Struct addFloat64(int position, double... values) {
+    ((Float64Type) structType.getType(position)).add(this, values);
+    return this;
+  }
+
+  public Struct addFloat64(int position, long index, double... values) {
+    ((Float64Type) structType.getType(position)).add(this, index, values);
+    return this;
+  }
+
+  public Struct addFloat64(int position, List<Double> values) {
+    ((Float64Type) structType.getType(position)).add(this, values);
+    return this;
+  }
+
+  public Struct addFloat64(int position, long index, List<Double> values) {
+    ((Float64Type) structType.getType(position)).add(this, index, values);
     return this;
   }
 

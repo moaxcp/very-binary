@@ -63,6 +63,7 @@
 
 8. [ ] Phase 8 — Struct
    - [ ] Implement Struct as a Pointer bound to a StructType.
+   - [ ] Add missing float64 methods in Struct — refs: req: Struct; plan: 4.8. Struct
    - [ ] Expose methods to access fields by index and, if supported, by symbolic name from the schema.
    - [ ] Ensure struct-sized inserts/removes shift bytes properly through ByteArray.
    - [ ] Ensure listener notifications propagate correctly on struct operations.

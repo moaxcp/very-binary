@@ -125,9 +125,9 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     }
   }
 
-  protected void checkIndexRange(Pointer<?, ? extends Type<?>> pointer, long start, long end) {
+  protected void checkArrayRange(Pointer<?, ? extends Type<?>> pointer, long start, long end) {
     var length = getArrayLength(pointer);
-    if (start < 0 || end >= length || start >= end) {
+    if (start < 0 || end > length || start > end) {
       throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " length: " + length + " start: " + start + " end: " + end);
     }
   }
@@ -264,7 +264,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     if (reason != RESIZED_BY_LENGTH_FIELD) {
-      checkIndexRange(pointer, index, index + length - 1);
+      checkArrayRange(pointer, index, index + length - 1);
     }
     callWithArrayLengthChange(reason, pointer, -length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {

@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class GetBoolTypeTest {
 
-
   @Test
   void get() {
     var struct = struct()
@@ -251,7 +250,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolArray(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 index: -1 length: 5");
+        .hasMessage("BoolType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -263,7 +262,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolArray(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 index: 6 length: 5");
+        .hasMessage("BoolType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
@@ -295,7 +294,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolList(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 index: -1 length: 5");
+        .hasMessage("BoolType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -307,6 +306,6 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolList(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 0 index: 6 length: 5");
+        .hasMessage("BoolType at position 0 length: 5 start: 5 end: 7");
   }
 }

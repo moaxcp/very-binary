@@ -18,3 +18,6 @@ Memory can be Little Endian or Big Endian. Currently, it is limited to the max s
 
 This project is built to support the protocol in x11-client.
 
+todo:
+
+* move constant value down to each type to prevent wrapping.

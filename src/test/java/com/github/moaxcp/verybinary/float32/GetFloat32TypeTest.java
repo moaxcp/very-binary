@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.float32;
 
-import com.github.moaxcp.verybinary.Float32Type;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -10,16 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class GetFloat32TypeTest {
-  @Test
-  void getWrapper() {
-    var struct = struct()
-        .float32()
-        .build();
-
-    assertThatThrownBy(() -> ((Float32Type) struct.getType(0)).get(struct))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer) not supported for Float32Type. Use getFloat32(Pointer) instead.");
-  }
+  //do not test wrapper methods. GetBoolTypeTest covers the only implementations in PrimitiveType.
 
   @Test
   void getFloat32() {
@@ -108,19 +98,7 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getArrayWrapper() {
-    var struct = struct()
-        .float32()
-        .float32Array(0)
-        .build();
-
-    assertThatThrownBy(() -> ((Float32Type) struct.getType(1)).get(struct, 0))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Float32Type. Use getFloat32(Pointer, long) instead.");
-  }
-
-  @Test
-  void getFloat32Array() {
+  void getFloat32_index() {
     var struct = struct()
         .float32()
         .float32Array(0)
@@ -132,7 +110,7 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getFloat32Array_negative() {
+  void getFloat32_index_negative() {
     var struct = struct()
         .float32()
         .float32Array(0)
@@ -144,7 +122,7 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getFloat32Array_greater_than_length() {
+  void getFloat32_index_greater_than_length() {
     var struct = struct()
         .float32()
         .float32Array(0)
@@ -157,7 +135,7 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getFloat32Array_not_allocated() {
+  void getFloat32_index_not_allocated() {
     var struct = struct()
         .allocated()
         .float32()
@@ -170,11 +148,99 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getFloat32Array_constant() {
+  void getFloat32_index_constant() {
     var struct = struct()
         .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
         .build();
 
     assertThat(struct.getFloat32(0, 2)).isEqualTo(3.0f);
+  }
+
+  @Test
+  void getFloat32Array() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThat(struct.getFloat32Array(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
+  }
+
+  @Test
+  void getFloat32Array_sub() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThat(struct.getFloat32Array(0, 2, 2)).containsExactly(5.5f, 5.5f);
+  }
+
+  @Test
+  void getFloat32Array_sub_index_negative() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThatThrownBy(() -> struct.getFloat32Array(0, -2, 2))
+        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
+        .hasMessage("Float32Type at position 0 length: 5 start: -2 end: 0");
+  }
+
+  @Test
+  void getFloat32Array_sub_index_over() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThatThrownBy(() -> struct.getFloat32Array(0, 5, 2))
+        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
+        .hasMessage("Float32Type at position 0 length: 5 start: 5 end: 7");
+  }
+
+  @Test
+  void getFloat32List() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThat(struct.getFloat32List(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
+  }
+
+  @Test
+  void getFloat32List_sub() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThat(struct.getFloat32List(0, 2, 2)).containsExactly(5.5f, 5.5f);
+  }
+
+  @Test
+  void getFloat32List_sub_index_negative() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThatThrownBy(() -> struct.getFloat32List(0, -2, 2))
+        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
+        .hasMessage("Float32Type at position 0 length: 5 start: -2 end: 0");
+  }
+
+  @Test
+  void getFloat32List_sub_index_over() {
+    var struct = struct()
+        .float32Array(constant(5))
+        .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
+        .build();
+
+    assertThatThrownBy(() -> struct.getFloat32List(0, 5, 2))
+        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
+        .hasMessage("Float32Type at position 0 length: 5 start: 5 end: 7");
   }
 }

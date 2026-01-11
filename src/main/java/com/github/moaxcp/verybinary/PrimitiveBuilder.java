@@ -81,7 +81,7 @@ public final class PrimitiveBuilder {
       }
       case Boolean b -> (T) b;
       case null -> null;
-      default -> throw new IllegalStateException("Unexpected value: " + constantValue);
+      default -> throw new IllegalStateException("Unexpected value: " + constantValue + " class: " + clazz);
     };
   }
 

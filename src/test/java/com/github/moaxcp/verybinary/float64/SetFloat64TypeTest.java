@@ -73,7 +73,7 @@ public class SetFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Float64Type at position 0 is constant index: 0 value: 2.0 constant: 3.0");
   }
 
@@ -177,7 +177,7 @@ public class SetFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Float64Type at position 0 is constant index: 2 value: 2.0 constant: 3.0");
   }
 
@@ -189,8 +189,9 @@ public class SetFloat64TypeTest {
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 
-    struct.setFloat64(1, 1, 2.0d);
-    assertThat(struct.getByteArray()).isEqualTo(ba().float64(2, 3, 2));
+    assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Float64Type at position 1 is constant index: 1 value: 2.0 constant: 3.0");
   }
 
   @Test

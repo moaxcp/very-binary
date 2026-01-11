@@ -255,10 +255,7 @@ public class ByteArray {
   }
 
   public ByteArray setInt8(long index, int... values) {
-    var b = new byte[values.length];
-    for(int i = 0; i < values.length; i++) {
-      b[i] = (byte) values[i];
-    }
+    var b = Util.mapIntsToBytes(values);
     return setInt8(index, b);
   }
 
@@ -311,10 +308,7 @@ public class ByteArray {
   }
 
   public ByteArray addInt8(long index, int... values) {
-    var b = new byte[values.length];
-    for(int i = 0; i < values.length; i++) {
-      b[i] = (byte) values[i];
-    }
+    var b = Util.mapIntsToBytes(values);
     return addInt8(index, b);
   }
 
@@ -374,10 +368,7 @@ public class ByteArray {
   }
 
   public ByteArray setUint8(long index, int... values) {
-    var s = new short[values.length];
-    for(int i = 0; i < values.length; i++) {
-      s[i] = (short) values[i];
-    }
+    var s = Util.mapIntsToShorts(values);
     return setUint8(index, s);
   }
 
@@ -427,10 +418,7 @@ public class ByteArray {
   }
 
   public ByteArray addUint8(long index, int... values) {
-    var s = new short[values.length];
-    for(int i = 0; i < values.length; i++) {
-      s[i] = (short) values[i];
-    }
+    var s = Util.mapIntsToShorts(values);
     return addUint8(index, s);
   }
 
@@ -488,10 +476,7 @@ public class ByteArray {
   }
 
   public ByteArray setInt16(long index, int... values) {
-    var s = new short[values.length];
-    for(int i = 0; i < values.length; i++) {
-      s[i] = (short) values[i];
-    }
+    var s = Util.mapIntsToShorts(values);
     return setInt16(index, s);
   }
 
@@ -539,10 +524,7 @@ public class ByteArray {
   }
 
   public ByteArray addInt16(long index, int... values) {
-    var s = new short[values.length];
-    for(int i = 0; i < values.length; i++) {
-      s[i] = (short) values[i];
-    }
+    var s = Util.mapIntsToShorts(values);
     return addInt16(index, s);
   }
 

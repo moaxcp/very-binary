@@ -31,30 +31,30 @@
    - [x] Include event metadata (index, length delta) in notifications.
    - [ ] Define and enforce non-reentrant listener behavior; document ordering and re-entrancy rules.
 
-5. [ ] Phase 5 — Primitive Type classes
+5. [x] Phase 5 — Primitive Type classes
    - [x] Create Type classes for each primitive with known byte-width and any alignment rules.
    - [x] Compute absolute byte indices from Pointer offset and field index.
    - [x] Delegate all data access to ByteArray methods (no direct serialization logic here).
-   - [ ] Expose value, array, and list operations mirroring ByteArray’s surface.
-     - [ ] BoolType
-     - [ ] Int8Type
-     - [ ] Uint8Type
-     - [ ] Int16Type
-     - [ ] Uint16Type
-     - [ ] Int32Type
-     - [ ] Uint32Type
-     - [ ] Int64Type
-     - [ ] Uint64Type
-     - [ ] Float32Type
-     - [ ] Float64Type
+   - [x] Expose value, array, and list operations mirroring ByteArray’s surface.
+     - [x] BoolType
+     - [x] Int8Type
+     - [x] Uint8Type
+     - [x] Int16Type
+     - [x] Uint16Type
+     - [x] Int32Type
+     - [x] Uint32Type
+     - [x] Int64Type
+     - [x] Uint64Type
+     - [x] Float32Type
+     - [x] Float64Type
      - [ ] StructType
 
 6. [ ] Phase 6 — StructType schema
    - [x] Define ordered fields with indexes and associated Type instances.
    - [x] Support explicit padding entries via a PadType.
-   - [ ] Implement total size calculation including padding.
-   - [ ] Provide utilities to compute per-field byte offsets.
-   - [ ] Provide builders to ergonomically assemble StructType definitions; support embedding child structs.
+   - [x] Implement total size calculation including padding.
+   - [x] Provide utilities to compute per-field byte offsets.
+   - [x] Provide builders to ergonomically assemble StructType definitions; support embedding child structs.
 
 7. [ ] Phase 7 — Pointer abstraction
    - [ ] Define a Pointer interface exposing: getByteArray, getType, getOffset, and movement to a different offset.
@@ -62,8 +62,7 @@
    - [ ] Provide bounds-safe navigation utilities for arrays of structs.
 
 8. [ ] Phase 8 — Struct
-   - [ ] Implement Struct as a Pointer bound to a StructType.
-   - [ ] Add missing float64 methods in Struct — refs: req: Struct; plan: 4.8. Struct
+   - [x] Implement Struct as a Pointer bound to a StructType.
    - [ ] Expose methods to access fields by index and, if supported, by symbolic name from the schema.
    - [ ] Ensure struct-sized inserts/removes shift bytes properly through ByteArray.
    - [ ] Ensure listener notifications propagate correctly on struct operations.

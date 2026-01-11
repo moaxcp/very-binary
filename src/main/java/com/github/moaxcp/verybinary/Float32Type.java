@@ -106,8 +106,10 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getFloat32(getOffset(pointer, index));
-      pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
-      notifyValueChange(reason, pointer, index, old, value);
+      if (value != old) {
+        pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
+        notifyValueChange(reason, pointer, index, old, value);
+      }
     } else {
       pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
     }

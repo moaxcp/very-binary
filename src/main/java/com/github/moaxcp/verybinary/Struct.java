@@ -177,9 +177,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct bool(int position, boolean b) {
+     return addBool(position, b);
+  }
+
   public Struct addBool(int position, long index, boolean b) {
     ((BoolType) structType.getType(position)).add(this, index, b);
     return this;
+  }
+
+  public Struct bool(int position, long index, boolean b) {
+     return addBool(position, index, b);
   }
 
   public Struct addBool(int position, boolean... values) {
@@ -187,9 +195,17 @@ public class Struct implements Pointer<Struct, StructType> {
      return this;
   }
 
+  public Struct bool(int position, boolean... values) {
+     return addBool(position, values);
+  }
+
   public Struct addBool(int position, long index, boolean... values) {
      ((BoolType) structType.getType(position)).add(this, index, values);
      return this;
+  }
+
+  public Struct bool(int position, long index, boolean... values) {
+     return addBool(position, index, values);
   }
 
   public Struct addBool(int position, List<Boolean> values) {
@@ -197,9 +213,17 @@ public class Struct implements Pointer<Struct, StructType> {
      return this;
   }
 
+  public Struct bool(int position, List<Boolean> values) {
+     return addBool(position, values);
+  }
+
   public Struct addBool(int position, long index, List<Boolean> values) {
      ((BoolType) structType.getType(position)).add(this, index, values);
      return this;
+  }
+
+  public Struct bool(int position, long index, List<Boolean> values) {
+     return addBool(position, index, values);
   }
 
   public byte getInt8(int position) {
@@ -421,6 +445,10 @@ public class Struct implements Pointer<Struct, StructType> {
      return addUint8(position, (short) s);
   }
 
+  public Struct uint8(int position, int s) {
+    return addUint8(position, s);
+  }
+
   public Struct addUint8(int position, short... values) {
     ((Uint8Type) structType.getType(position)).add(this, values);
     return this;
@@ -430,9 +458,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return addUint8(position, mapIntsToShorts(values));
   }
 
+  public Struct uint8(int position, int... values) {
+    return addUint8(position, values);
+  }
+
   public Struct addUint8(int position, List<Short> values) {
     ((Uint8Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct uint8(int position, List<Short> values) {
+    return addUint8(position, values);
   }
 
   public Struct addUint8(int position, long index, short s) {
@@ -444,6 +480,10 @@ public class Struct implements Pointer<Struct, StructType> {
      return addUint8(position, index, (short) s);
   }
 
+  public Struct uint8(int position, long index, int s) {
+    return addUint8(position, index, s);
+  }
+
   public Struct addUint8(int position, long index, short... values) {
     ((Uint8Type) structType.getType(position)).add(this, index, values);
     return this;
@@ -453,9 +493,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return addUint8(position, index, mapIntsToShorts(values));
   }
 
+  public Struct uint8(int position, long index, int... values) {
+    return addUint8(position, index, values);
+  }
+
   public Struct addUint8(int position, long index, List<Short> values) {
     ((Uint8Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct uint8(int position, long index, List<Short> values) {
+    return addUint8(position, index, values);
   }
 
   public short getInt16(int position) {
@@ -537,6 +585,10 @@ public class Struct implements Pointer<Struct, StructType> {
      return addInt16(position, (short) s);
   }
 
+  public Struct int16(int position, int s) {
+    return addInt16(position, s);
+  }
+
   public Struct addInt16(int position, short... values) {
     ((Int16Type) structType.getType(position)).add(this, values);
     return this;
@@ -546,9 +598,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return addInt16(position, mapIntsToShorts(values));
   }
 
+  public Struct int16(int position, int... values) {
+    return addInt16(position, values);
+  }
+
   public Struct addInt16(int position, List<Short> values) {
     ((Int16Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct int16(int position, List<Short> values) {
+    return addInt16(position, values);
   }
 
   public Struct addInt16(int position, long index, short s) {
@@ -560,6 +620,10 @@ public class Struct implements Pointer<Struct, StructType> {
      return addInt16(position, index, (short) s);
   }
 
+  public Struct int16(int position, long index, int s) {
+    return addInt16(position, index, s);
+  }
+
   public Struct addInt16(int position, long index, short... values) {
     ((Int16Type) structType.getType(position)).add(this, index, values);
     return this;
@@ -569,9 +633,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return addInt16(position, index, mapIntsToShorts(values));
   }
 
+  public Struct int16(int position, long index, int... values) {
+    return addInt16(position, index, values);
+  }
+
   public Struct addInt16(int position, long index, List<Short> values) {
     ((Int16Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct int16(int position, long index, List<Short> values) {
+    return addInt16(position, index, values);
   }
 
   public int getUint16(int position) {
@@ -633,9 +705,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint16(int position, int i) {
+    return addUint16(position, i);
+  }
+
   public Struct addUint16(int position, int... values) {
     ((Uint16Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct uint16(int position, int... values) {
+    return addUint16(position, values);
   }
 
   public Struct addUint16(int position, List<Integer> values) {
@@ -643,9 +723,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint16(int position, List<Integer> values) {
+    return addUint16(position, values);
+  }
+
   public Struct addUint16(int position, long index, int i) {
     ((Uint16Type) structType.getType(position)).add(this, index, i);
     return this;
+  }
+
+  public Struct uint16(int position, long index, int i) {
+    return addUint16(position, index, i);
   }
 
   public Struct addUint16(int position, long index, int... values) {
@@ -653,9 +741,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint16(int position, long index, int... values) {
+    return addUint16(position, index, values);
+  }
+
   public Struct addUint16(int position, long index, List<Integer> values) {
     ((Uint16Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct uint16(int position, long index, List<Integer> values) {
+    return addUint16(position, index, values);
   }
 
   public int getInt32(int position) {
@@ -722,9 +818,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct int32(int position, int... values) {
+    return addInt32(position, values);
+  }
+
   public Struct addInt32(int position, List<Integer> values) {
     ((Int32Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct int32(int position, List<Integer> values) {
+    return addInt32(position, values);
   }
 
   public Struct addInt32(int position, long index, int i) {
@@ -732,14 +836,26 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct int32(int position, long index, int i) {
+    return addInt32(position, index, i);
+  }
+
   public Struct addInt32(int position, long index, int... values) {
     ((Int32Type) structType.getType(position)).add(this, index, values);
     return this;
   }
 
+  public Struct int32(int position, long index, int... values) {
+     return addInt32(position, index, values);
+  }
+
   public Struct addInt32(int position, long index, List<Integer> values) {
     ((Int32Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct int32(int position, long index, List<Integer> values) {
+     return addInt32(position, index, values);
   }
 
   public long getUint32(int position) {
@@ -801,9 +917,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint32(int position, long l) {
+     return addUint32(position, l);
+  }
+
   public Struct addUint32(int position, long... values) {
     ((Uint32Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct uint32(int position, long... values) {
+     return addUint32(position, values);
   }
 
   public Struct addUint32(int position, List<Long> values) {
@@ -811,9 +935,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint32(int position, List<Long> values) {
+     return addUint32(position, values);
+  }
+
   public Struct addUint32(int position, long index, long l) {
     ((Uint32Type) structType.getType(position)).add(this, index, l);
     return this;
+  }
+
+  public Struct uint32(int position, long index, long l) {
+     return addUint32(position, index, l);
   }
 
   public Struct addUint32(int position, long index, long... values) {
@@ -821,9 +953,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint32(int position, long index, long... values) {
+     return addUint32(position, index, values);
+  }
+
   public Struct addUint32(int position, long index, List<Long> values) {
     ((Uint32Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct uint32(int position, long index, List<Long> values) {
+     return addUint32(position, index, values);
   }
 
   public long getInt64(int position) {
@@ -885,9 +1025,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct int64(int position, long l) {
+     return addInt64(position, l);
+  }
+
   public Struct addInt64(int position, long... values) {
     ((Int64Type) structType.getType(position)).add(this, values);
     return this;
+  }
+
+  public Struct int64(int position, long... values) {
+     return addInt64(position, values);
   }
 
   public Struct addInt64(int position, List<Long> values) {
@@ -895,9 +1043,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct int64(int position, List<Long> values) {
+     return addInt64(position, values);
+  }
+
   public Struct addInt64(int position, long index, long l) {
     ((Int64Type) structType.getType(position)).add(this, index, l);
     return this;
+  }
+
+  public Struct int64(int position, long index, long l) {
+     return addInt64(position, index, l);
   }
 
   public Struct addInt64(int position, long index, long... values) {
@@ -905,9 +1061,17 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct int64(int position, long index, long... values) {
+     return addInt64(position, index, values);
+  }
+
   public Struct addInt64(int position, long index, List<Long> values) {
     ((Int64Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct int64(int position, long index, List<Long> values) {
+     return addInt64(position, index, values);
   }
 
   public BigInteger getUint64(int position) {
@@ -959,8 +1123,16 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint64(int position, BigInteger bi) {
+     return addUint64(position, bi);
+  }
+
   public Struct addUint64(int position, long bi) {
      return addUint64(position, BigInteger.valueOf(bi));
+  }
+
+  public Struct uint64(int position, long bi) {
+     return addUint64(position, bi);
   }
 
   public Struct addUint64(int position, List<BigInteger> values) {
@@ -968,18 +1140,34 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct uint64(int position, List<BigInteger> values) {
+     return addUint64(position, values);
+  }
+
   public Struct addUint64(int position, long index, BigInteger bi) {
     ((Uint64Type) structType.getType(position)).add(this, index, bi);
     return this;
+  }
+
+  public Struct uint64(int position, long index, BigInteger bi) {
+     return addUint64(position, index, bi);
   }
 
   public Struct addUint64(int position, long index, long bi) {
      return addUint64(position, index, BigInteger.valueOf(bi));
   }
 
+  public Struct uint64(int position, long index, long bi) {
+     return addUint64(position, index, bi);
+  }
+
   public Struct addUint64(int position, long index, List<BigInteger> values) {
     ((Uint64Type) structType.getType(position)).add(this, index, values);
     return this;
+  }
+
+  public Struct uint64(int position, long index, List<BigInteger> values) {
+     return addUint64(position, index, values);
   }
 
   public float getFloat32(int position) {

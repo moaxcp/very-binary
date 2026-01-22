@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.Primitive.UINT16;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_BY_ARRAY_LENGTH;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
 public final class Uint16Type extends NumberType<Uint16Type, Integer> {
 
@@ -103,6 +102,10 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, (int) value);
   }
 
+  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+    setUnchecked(SET_BY_BYTE_LENGTH, pointer, 0, (int) value);
+  }
+
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, int value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getUint16(getOffset(pointer, index));
@@ -173,17 +176,6 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
     setUnchecked(SET_VALUE, pointer, index, value);
   }
 
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if(isArray()) {
-      long length = getArrayLength(pointer);
-      for (int i = 0; i < length; i++) {
-        pointer.getByteArray().addUint16(getOffset(pointer, i), constantValue != null ? constantValue : 0);
-      }
-    } else {
-      pointer.getByteArray().addUint16(getOffset(pointer, 0), constantValue != null ? constantValue : 0);
-    }
-  }
-
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, int... values) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition() + " index: " + index + " length: " + values.length);
@@ -192,7 +184,7 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
-    allocate(pointer, index);
+    allocate(pointer, index, values.length);
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
@@ -204,8 +196,19 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
-    allocate(pointer, index);
+    allocate(pointer, index, values.size());
     setUnchecked(SET_VALUE, pointer, index, values);
+  }
+
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    if(isArray()) {
+      long length = getArrayLength(pointer);
+      for (int i = 0; i < length; i++) {
+        pointer.getByteArray().addUint16(getOffset(pointer, i), constantValue != null ? constantValue : 0);
+      }
+    } else {
+      pointer.getByteArray().addUint16(getOffset(pointer, 0), constantValue != null ? constantValue : 0);
+    }
   }
 
   @Override
@@ -220,7 +223,7 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
 
   @Override
   void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    callWithArrayLengthChange(reason, pointer, 1, () -> {
+    callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var values = new int[(int) length];

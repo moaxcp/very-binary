@@ -1,5 +1,9 @@
-package com.github.moaxcp.verybinary;
+package com.github.moaxcp.verybinary.pad;
 
+import com.github.moaxcp.verybinary.Expression;
+import com.github.moaxcp.verybinary.PadType;
+import com.github.moaxcp.verybinary.Struct;
+import com.github.moaxcp.verybinary.StructBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

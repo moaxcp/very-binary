@@ -73,7 +73,7 @@ public class SetInt32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int32Type at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
@@ -175,7 +175,7 @@ public class SetInt32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 3, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int32Type at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
@@ -187,9 +187,9 @@ public class SetInt32TypeTest {
         .fromBytes(ba().int32(2, 5, 5))
         .build();
 
-    struct.setInt32(1, 1, 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int32(2, 5, 2));
+    assertThatThrownBy(() -> struct.setInt32(1, 1, 2))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Int32Type at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

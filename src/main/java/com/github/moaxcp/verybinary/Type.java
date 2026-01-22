@@ -1,6 +1,8 @@
 package com.github.moaxcp.verybinary;
 
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     return getAllocationLength(null);
   }
 
-  public abstract long getAllocationLength(Type<?> parent);
+  public abstract long getAllocationLength(@Nullable Type<?> parent);
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 

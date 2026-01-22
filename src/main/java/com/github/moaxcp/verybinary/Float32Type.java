@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.Primitive.FLOAT32;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_BY_ARRAY_LENGTH;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
 public final class Float32Type extends NumberType<Float32Type, Float> {
 
@@ -103,6 +102,10 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, (float) value);
   }
 
+  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+    setUnchecked(SET_BY_BYTE_LENGTH, pointer, 0, (float) value);
+  }
+
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getFloat32(getOffset(pointer, index));
@@ -183,7 +186,7 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
-    allocate(pointer, index);
+    allocate(pointer, index, values.length);
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
@@ -195,7 +198,7 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
-    allocate(pointer, index);
+    allocate(pointer, index, values.size());
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
@@ -222,12 +225,14 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
 
   @Override
   void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    callWithArrayLengthChange(reason, pointer, 1, () -> {
+    callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         var values = new float[Math.toIntExact(length)];
-        for (int i = 0; i < length; i++) {
-          values[i] = constantValue != null ? constantValue : 0.0f;
+        if (constantValue != null) {
+          for (int i = 0; i < length; i++) {
+            values[i] = constantValue;
+          }
         }
         pointer.getByteArray().addFloat32(getOffset(pointer, index), values);
       });

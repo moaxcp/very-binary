@@ -93,8 +93,8 @@ public class AddUint16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 3))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint16Type at position 0 is constant index: 5 value: 3 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint16Type at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -190,7 +190,7 @@ public class AddUint16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 0, 3))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint16Type at position 0 is constant index: 0 value: 3 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint16Type at position 0 is constant length: 5 index: 0");
   }
 }

@@ -27,7 +27,15 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   public long getAllocationLength(@Nullable Type<?> parent) {
-    return fields.stream().mapToLong(f -> f.getAllocationLength(this)).sum();
+    var allocationLength = fields.stream().mapToLong(f -> f.getAllocationLength(this)).sum();
+    if (isArray()) {
+      if (lengthExpression.isConstant(parent)) {
+        return lengthExpression.constantValue(parent) * allocationLength;
+      } else {
+        return lengthExpression.defaultValue(parent) * allocationLength;
+      }
+    }
+    return allocationLength;
   }
 
   public int getPositions() {
@@ -35,15 +43,33 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  public long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer) {
+    if (!isArray()) {
+      return getByteLength(pointer, 0);
+    }
     long byteLength = 0;
-    var length = getArrayLength(pointer);
-    for (long i = 0; i < length; i++) {
-      var struct = new Struct(getOffset(pointer, i), this, pointer.getByteArray());
-      for (int j = 0; j < fields.size(); j++) {
-        var field = fields.get(j);
-        byteLength += field.getByteLength(struct);
+    for (long i = 0; i < getArrayLength(pointer); i++) {
+      byteLength += getByteLength(pointer, i);
+    }
+    return byteLength;
+  }
+
+  @Override
+  public long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index) {
+    if (!isArray()) {
+      long byteLength = 0;
+      for (int i = 0; i < fields.size(); i++) {
+        var field = fields.get(i);
+        byteLength += field.getByteLength(pointer);
       }
+      return byteLength;
+    }
+    long byteLength = 0;
+    var type = this.copy(0);
+    var struct = new Struct(getOffset(pointer, index), type, pointer.getByteArray());
+    for (int j = 0; j < fields.size(); j++) {
+      var field = fields.get(j);
+      byteLength += field.getByteLength(struct);
     }
     return byteLength;
   }
@@ -128,10 +154,13 @@ public final class StructType extends ValueType<StructType, Struct> {
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = new Struct(getOffset(pointer, index), this, pointer.getByteArray());
+      if (!old.equals(value)) {
+        pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
+        notifyValueChange(SET_VALUE, pointer, index, old, value);
+      }
+    } else {
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
-      notifyValueChange(SET_VALUE, pointer, index, old, value);
     }
-    pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
   }
 
   @Override
@@ -188,7 +217,7 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    callWithArrayLengthChange(reason, pointer, 1, () -> {
+    callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         for (long i = 0; i < length; i++) {

@@ -73,7 +73,7 @@ public class SetUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Uint8Type at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
@@ -179,7 +179,7 @@ public class SetUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Uint8Type at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
@@ -191,9 +191,9 @@ public class SetUint8TypeTest {
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 
-    struct.setUint8(1, 1, 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint8(2, 5, 2));
+    assertThatThrownBy(() -> struct.setUint8(1, 1, 2))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Uint8Type at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

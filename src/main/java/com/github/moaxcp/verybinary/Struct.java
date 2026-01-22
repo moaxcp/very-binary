@@ -1337,14 +1337,67 @@ public class Struct implements Pointer<Struct, StructType> {
     return this;
   }
 
+  public Struct getStruct(int position, long index) {
+     return ((StructType) structType.getType(position)).get(this, index);
+  }
+
+  public Struct setStruct(int position, long index, Struct struct) {
+     ((StructType) structType.getType(position)).set(this, index, struct);
+     return this;
+  }
+
+  public List<Struct> getStructList(int position) {
+     return ((StructType) structType.getType(position)).getList(this);
+  }
+
+  public Struct setStruct(int position, List<Struct> structs) {
+    ((StructType) structType.getType(position)).set(this, structs);
+     return this;
+  }
+
+  public List<Struct> getStructList(int position, long index, long length) {
+     return ((StructType) structType.getType(position)).getList(this, index, length);
+  }
+
+  public Struct setStruct(int position, long index, List<Struct> structs) {
+    ((StructType) structType.getType(position)).set(this, index, structs);
+     return this;
+  }
+
   public Struct addStruct(int position, Struct struct) {
     ((StructType) structType.getType(position)).add(this, struct);
      return this;
   }
 
+  public Struct struct(int position, Struct struct) {
+    return addStruct(position, struct);
+  }
+
+  public Struct addStruct(int position, List<Struct> structs) {
+    ((StructType) structType.getType(position)).add(this, structs);
+    return this;
+  }
+
+  public Struct struct(int position, List<Struct> structs) {
+     return addStruct(position, structs);
+  }
+
   public Struct addStruct(int position, long index, Struct struct) {
     ((StructType) structType.getType(position)).add(this, index, struct);
     return this;
+  }
+
+  public Struct struct(int position, long index, Struct struct) {
+     return addStruct(position, index, struct);
+  }
+
+  public Struct addStruct(int position, long index, List<Struct> structs) {
+    ((StructType) structType.getType(position)).add(this, index, structs);
+    return this;
+  }
+
+  public Struct struct(int position, long index, List<Struct> structs) {
+     return addStruct(position, index, structs);
   }
 
   public void removeAll(int position) {
@@ -1383,9 +1436,104 @@ public class Struct implements Pointer<Struct, StructType> {
   public int hashCode() {
     int result = Math.toIntExact(offset);
     result = 31 * result + structType.hashCode();
-    for (int i = 0; i < getByteLength(); i++) {
-      result = Math.toIntExact(31 * result + bytes.getInt8(getOffset() + i));
+    var bytes = getByteArray().getInt8(getOffset(), getByteLength());
+    for (int i = 0; i < bytes.length; i++) {
+      result = 31 * result + bytes[i];
     }
     return result;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("Struct{");
+    for (int i = 0; i < getPositions(); i++) {
+      if (i > 0) builder.append(", ");
+      Type<?> type = getType(i);
+      if (type instanceof PrimitiveType<?,?> primitiveType) {
+        builder.append(primitiveType.getUnitSize().label()).append("=");
+      }
+      if (type instanceof BoolType) {
+        if (((BoolType) type).isArray()) {
+          builder.append(getBoolList(i));
+        } else {
+          builder.append(getBool(i));
+        }
+      } else if (type instanceof Int8Type) {
+        if (((Int8Type) type).isArray()) {
+          builder.append(getInt8List(i));
+        } else {
+          builder.append(getInt8(i));
+        }
+      } else if (type instanceof Uint8Type) {
+        if (((Uint8Type) type).isArray()) {
+          builder.append(getUint8List(i));
+        } else {
+          builder.append(getUint8(i));
+        }
+      } else if (type instanceof Int16Type) {
+        if (((Int16Type) type).isArray()) {
+          builder.append(getInt16List(i));
+        } else {
+          builder.append(getInt16(i));
+        }
+      } else if (type instanceof Uint16Type) {
+        if (((Uint16Type) type).isArray()) {
+          builder.append(getUint16List(i));
+        } else {
+          builder.append(getUint16(i));
+        }
+      } else if (type instanceof Int32Type) {
+        if (((Int32Type) type).isArray()) {
+          builder.append(getInt32List(i));
+        } else {
+          builder.append(getInt32(i));
+        }
+      } else if (type instanceof Uint32Type) {
+        if (((Uint32Type) type).isArray()) {
+          builder.append(getUint32List(i));
+        } else {
+          builder.append(getUint32(i));
+        }
+      } else if (type instanceof Int64Type) {
+        if (((Int64Type) type).isArray()) {
+          builder.append(getInt64List(i));
+        } else {
+          builder.append(getInt64(i));
+        }
+      } else if (type instanceof Uint64Type) {
+        if (((Uint64Type) type).isArray()) {
+          builder.append(getUint64List(i));
+        } else {
+          builder.append(getUint64(i));
+        }
+      } else if (type instanceof Float32Type) {
+        if (((Float32Type) type).isArray()) {
+          builder.append(getFloat32List(i));
+        } else {
+          builder.append(getFloat32(i));
+        }
+      } else if (type instanceof Float64Type) {
+        if (((Float64Type) type).isArray()) {
+          builder.append(getFloat64List(i));
+        } else {
+          builder.append(getFloat64(i));
+        }
+      } else if (type instanceof StructType) {
+        if (((StructType) type).isArray()) {
+          builder.append(getStructList(i));
+        } else {
+          builder.append(getStruct(i));
+        }
+      } else if (type instanceof PadType padType) {
+        if (padType.isAlign()) {
+          builder.append("align=").append(padType.getByteLength(this));
+        } else {
+          builder.append("pad=").append(padType.getByteLength(this));
+        }
+      }
+    }
+    builder.append("}");
+    return builder.toString();
   }
 }

@@ -56,10 +56,10 @@ public interface ByteLengthListener {
 
     @Override
     public void byteLengthChanged(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previous, long current) {
-      if(reason == LengthChangeReason.RESIZED_BY_LENGTH_FIELD) {
+      if(reason == LengthChangeReason.RESIZED_BY_BYTE_LENGTH_FIELD) {
         return;
       }
-      ((NumberType) pointer.getType(position)).setForArrayLength(pointer, current);
+      ((NumberType) pointer.getType(position)).setForByteLength(pointer, current);
     }
 
     @Override

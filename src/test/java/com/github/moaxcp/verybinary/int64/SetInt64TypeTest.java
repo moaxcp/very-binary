@@ -73,7 +73,7 @@ public class SetInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 2L))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int64Type at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
@@ -179,7 +179,7 @@ public class SetInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int64Type at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
@@ -191,9 +191,9 @@ public class SetInt64TypeTest {
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 
-    struct.setInt64(1, 1, 2);
-
-    assertThat(struct.getByteArray()).isEqualTo((ba().int64(2, 5, 2)));
+    assertThatThrownBy(() -> struct.setInt64(1, 1, 2))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Int64Type at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

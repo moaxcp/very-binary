@@ -29,7 +29,7 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
-  public long getAllocationLength(Type<?> parent) {
+  public long getAllocationLength(@Nullable Type<?> parent) {
     if (isArray()) {
       if (lengthExpression.isConstant(parent)) {
         return lengthExpression.constantValue(parent) * unitSize.size();

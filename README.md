@@ -20,4 +20,5 @@ This project is built to support the protocol in x11-client.
 
 todo:
 
+* allocation length needs to also check byteLengthExpression.
 * move constant value down to each type to prevent wrapping.

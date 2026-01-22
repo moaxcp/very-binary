@@ -327,7 +327,7 @@ public final class BigEndianSerializer implements Serializer {
 
   public void writeFloat32(byte[] bytes, int index, float[] values) {
     int pos = index;
-    for (float v : values) {
+    for (float v : values) { //todo convert to int[] first
       // Preserve NaN payloads by using raw bits (no canonicalization)
       int bits = Float.floatToRawIntBits(v);
       writeInt32(bytes, pos, bits);

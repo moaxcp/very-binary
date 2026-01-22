@@ -5,14 +5,11 @@ import java.util.List;
 
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
-  private int position;
-  private final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
-  private final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
-  private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
-  private Expression byteLengthExpression;
-  private Expression lengthExpression;
-  private Struct constant;
-  private final List<Type<?>> fields = new ArrayList<>();
+  final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
+  Expression byteLengthExpression;
+  Expression lengthExpression;
+  Struct constant;
+  final List<Type<?>> fields = new ArrayList<>();
 
   public int fields() {
     return fields.size();
@@ -20,44 +17,13 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public Type<?> getField(int position) {
     return fields.get(position);
-  }
-
-  public SELF position(int position) {
-    this.position = position;
-    return (SELF) this;
-  }
-
-  public SELF byteLengthListener(ByteLengthListener listener) {
-    byteLengthListeners.add(listener);
-    return (SELF) this;
-  }
-
-  public SELF arrayLengthListener(ArrayLengthListener listener) {
-    arrayLengthListeners.add(listener);
+  }  public SELF byteLengthExpression(Expression byteLengthExpression) {
+    this.byteLengthExpression = byteLengthExpression;
     return (SELF) this;
   }
 
   public SELF valueListener(ValueChangeListener listener) {
     valueChangeListeners.add(listener);
-    return (SELF) this;
-  }
-
-  public SELF byteLengthField(int byteLengthFieldPosition) {
-    this.byteLengthExpression = Expression.valueOf(byteLengthFieldPosition);
-    this.byteLengthListeners.add(ByteLengthListener.lengthField(byteLengthFieldPosition));
-    ((ValueType<?, ?>) fields.get(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(byteLengthFieldPosition));
-    return (SELF) this;
-  }
-
-  public SELF lengthField(int lengthFieldPosition) {
-    this.lengthExpression = Expression.valueOf(lengthFieldPosition);
-    this.arrayLengthListeners.add(ArrayLengthListener.lengthField(lengthFieldPosition));
-    ((ValueType<?, ?>) fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(lengthFieldPosition));
-    return (SELF) this;
-  }
-
-  public SELF byteLengthExpression(Expression byteLengthExpression) {
-    this.byteLengthExpression = byteLengthExpression;
     return (SELF) this;
   }
 
@@ -74,7 +40,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new StructTypePadSubBuilder<>((SELF) this, fields.size());
   }
 
-  SELF type(Type<?> type) {
+  public SELF type(Type<?> type) {
     if (type instanceof PadType p && p.isAlign()) {
       var previous = fields.getLast();
       fields.add(type);
@@ -236,9 +202,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
-    var type = new StructType(position, constant, lengthExpression, byteLengthExpression, fields);
-    type.addByteLengthChangeListeners(byteLengthListeners);
-    type.addArrayLengthChangeListeners(arrayLengthListeners);
+    var type = new StructType(-1, constant, lengthExpression, byteLengthExpression, fields);
     type.addValueChangeListeners(valueChangeListeners);
     return type;
   }

@@ -72,18 +72,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     return lengthExpression != null || byteLengthExpression != null;
   }
 
-  @Override
-  public long getByteLength(Pointer<?, ? extends Type<?>> pointer) {
-    if(!isArray()) {
-      return getByteLength(pointer, 0);
-    }
-    var length = 0L;
-    var l = getArrayLength(pointer);
-    for (int i = 0; i < l; i++) {
-      length += getByteLength(pointer, i);
-    }
-    return length;
-  }
+  public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index);
 
@@ -169,7 +158,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     set(pointer, getArrayLength(pointer), values);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer,List<T> values) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
     }

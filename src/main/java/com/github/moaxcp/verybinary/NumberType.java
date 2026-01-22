@@ -17,4 +17,6 @@ public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T exte
   }
 
   abstract void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value);
+
+  abstract void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value);
 }

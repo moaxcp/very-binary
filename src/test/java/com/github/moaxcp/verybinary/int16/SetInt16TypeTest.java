@@ -73,7 +73,7 @@ public class SetInt16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, (short) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int16Type at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
@@ -179,7 +179,7 @@ public class SetInt16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, 3, (short) 2))
-        .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Int16Type at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
@@ -190,9 +190,10 @@ public class SetInt16TypeTest {
         .primitive().constant((short) 5).lengthField(0).int16()
         .fromBytes(ba().int16(2, 5, 5))
         .build();
-    struct.setInt16(1, 1, 2);
 
-    assertThat(struct.getByteArray()).isEqualTo(ba().int16(2, 5, 2));
+    assertThatThrownBy(() -> struct.setInt16(1, 1, 2))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Int16Type at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.Primitive.UINT64;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_BY_ARRAY_LENGTH;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
 public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
 
@@ -81,6 +80,10 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, BigInteger.valueOf(value));
   }
 
+  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+    setUnchecked(SET_BY_BYTE_LENGTH, pointer, 0, BigInteger.valueOf(value));
+  }
+
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = pointer.getByteArray().getUint64(getOffset(pointer, index));
@@ -142,7 +145,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
-    allocate(pointer, index);
+    allocate(pointer, index, values.size());
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 

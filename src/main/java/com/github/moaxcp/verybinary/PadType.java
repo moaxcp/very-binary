@@ -65,8 +65,8 @@ public final class PadType extends Type<PadType> {
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     var padLength = getByteLength(pointer);
-    for(long i = 0; i < padLength; i++) {
-      pointer.getByteArray().addInt8(getOffset(pointer) + i, (byte) 0);
+    if(!align) {
+      pointer.getByteArray().addInt8(getOffset(pointer), new byte[Math.toIntExact(padLength)]);
     }
   }
 

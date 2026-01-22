@@ -1,13 +1,158 @@
-package com.github.moaxcp.verybinary;
+package com.github.moaxcp.verybinary.struct;
 
+import com.github.moaxcp.verybinary.Int16Type;
+import com.github.moaxcp.verybinary.Int8Type;
+import com.github.moaxcp.verybinary.Type;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
+import static com.github.moaxcp.verybinary.Builders.structType;
+import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StructTest {
+public class StructTypeTest {
+
+  @Test
+  void constructor() {
+    var type = structType().build();
+    assertThat(type.getPosition()).isEqualTo(-1);
+  }
+
+  @Test
+  void getType() {
+    var struct = struct()
+        .int8()
+        .int16()
+        .build();
+
+    assertThat(struct.<Type<?>>getType(0)).isInstanceOf(Int8Type.class);
+    assertThat(struct.<Type<?>>getType(1)).isInstanceOf(Int16Type.class);
+  }
+
+  @Test
+  void getOffset() {
+    var struct = struct()
+        .int8()
+        .struct()
+          .int8()
+          .int16()
+          .end()
+        .build();
+
+    assertThat(struct.getType().getOffset(struct)).isEqualTo(0);
+    assertThat(struct.getType(0).getOffset(struct)).isEqualTo(0);
+    assertThat(struct.getType(1).getOffset(struct)).isEqualTo(1);
+  }
+
+  @Test
+  void getAllocationLength() {
+    var struct = structType()
+        .int8()
+        .struct()
+          .int8()
+          .int16()
+          .end()
+        .build();
+
+    assertThat(struct.getAllocationLength()).isEqualTo(4);
+  }
+
+  @Test
+  void getAllocationLength_array() {
+    var struct = structType()
+        .int8()
+        .struct()
+          .lengthField(0)
+          .int8()
+          .int16()
+          .end()
+        .build();
+
+    assertThat(struct.getAllocationLength()).isEqualTo(1);
+  }
+
+  @Test
+  void getAllocationLength_array_with_constant_length() {
+    var struct = structType()
+        .int8()
+        .struct()
+          .lengthExpression(constant(5))
+          .int8()
+          .int16()
+          .end()
+        .build();
+
+    assertThat(struct.getAllocationLength()).isEqualTo(16);
+  }
+
+  @Test
+  void getAllocationLength_array_with_constant_length_field() {
+    var struct = structType()
+        .primitive().constant((byte) 5).int8()
+        .struct()
+          .lengthField(0)
+          .int8()
+          .int16()
+          .end()
+        .build();
+
+    assertThat(struct.getAllocationLength()).isEqualTo(16);
+  }
+
+  @Test
+  void getByteLength() {
+    var type = structType()
+        .int16()
+        .int16Array(0)
+        .build();
+
+    var struct = struct()
+        .int8()
+        .int8Array(0)
+        .int8()
+        .type(type)
+        .fromBytes(ba().int8(3).int8(1, 2, 3).int8(4)
+            .int16(3).int16(3, 2, 4))
+        .build();
+
+    assertThat(struct.getByteLength()).isEqualTo(13);
+  }
+
+  @Test
+  void getByteLength_array_with_length_field() {
+    var struct = struct()
+        .int8()
+        .structArray(0)
+          .int16()
+          .boolArray(0)
+          .end()
+        .build();
+
+    assertThat(struct.getByteLength()).isEqualTo(1);
+  }
+
+  @Test
+  void isFixedLength_true() {
+    var struct = struct()
+        .int8()
+        .int16()
+        .build();
+
+    assertThat(struct.isFixedLength()).isTrue();
+  }
+
+  @Test
+  void isFixedLength_false() {
+    var struct = struct()
+        .int8()
+        .int8Array(0)
+        .build();
+
+    assertThat(struct.isFixedLength()).isFalse();
+  }
 
   @Test
   void AllTypes() {

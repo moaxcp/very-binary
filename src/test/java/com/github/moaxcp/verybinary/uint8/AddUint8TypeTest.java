@@ -93,8 +93,8 @@ public class AddUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint8Type at position 0 is constant index: 5 value: 3 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint8Type at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -192,7 +192,7 @@ public class AddUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Uint8Type at position 0 is constant index: 3 value: 3 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint8Type at position 0 is constant length: 5 index: 3");
   }
 }

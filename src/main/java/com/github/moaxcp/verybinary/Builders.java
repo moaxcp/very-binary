@@ -9,6 +9,10 @@ public class Builders {
     return new StructBuilder();
   }
 
+  public static Struct struct(StructType type) {
+    return new Struct(type);
+  }
+
   public static StructTypeStructTypeBuilder structType() {
     return new StructTypeStructTypeBuilder();
   }

@@ -16,9 +16,17 @@ public final class StructType extends ValueType<StructType, Struct> {
     this.fields = fields;
   }
 
+  List<Type<?>> getFields() {
+    return fields;
+  }
+
   @Override
   public StructType copy(int position) {
     return new StructType(position, this.constantValue, this.lengthExpression, byteLengthExpression, new ArrayList<>(fields));
+  }
+
+  public StructType copyForArrayElement() {
+    return new StructType(0, this.constantValue, null, null, fields);
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -48,7 +56,8 @@ public final class StructType extends ValueType<StructType, Struct> {
       return getByteLength(pointer, 0);
     }
     long byteLength = 0;
-    for (long i = 0; i < getArrayLength(pointer); i++) {
+    long arrayLength = getArrayLength(pointer);
+    for (long i = 0; i < arrayLength; i++) {
       byteLength += getByteLength(pointer, i);
     }
     return byteLength;
@@ -65,8 +74,9 @@ public final class StructType extends ValueType<StructType, Struct> {
       return byteLength;
     }
     long byteLength = 0;
-    var type = this.copy(0);
+    var type = this.copyForArrayElement();
     var struct = new Struct(getOffset(pointer, index), type, pointer.getByteArray());
+    struct.removeListener();
     for (int j = 0; j < fields.size(); j++) {
       var field = fields.get(j);
       byteLength += field.getByteLength(struct);
@@ -158,6 +168,7 @@ public final class StructType extends ValueType<StructType, Struct> {
         pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
         notifyValueChange(SET_VALUE, pointer, index, old, value);
       }
+      old.removeListener();
     } else {
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
     }
@@ -182,22 +193,17 @@ public final class StructType extends ValueType<StructType, Struct> {
     if (isArray()) {
       var length = getArrayLength(pointer);
       for (long $ = 0; $ < length; $++) {
-        for (int i = 0; i < fields.size(); i++) {
-          var type = fields.get(i);
-          if (type instanceof StructType structType) {
-            new Struct(false, type.getOffset(pointer), structType, pointer.getByteArray());
-          } else {
-            fields.get(i).allocate(pointer);
-          }
+        //must have pointer with correct offset, position, and no length
+        var type = copyForArrayElement();
+        var struct = new Struct(true, getOffset(pointer, $), type, pointer.getByteArray());
+        struct.removeListener();
+        for (int i = 0; i < type.fields.size(); i++) {
+          type.getType(i).allocate(struct);
         }
       }
-    }
-    for (int i = 0; i < fields.size(); i++) {
-      var type = fields.get(i);
-      if (type instanceof StructType structType) {
-        new Struct(false, type.getOffset(pointer), structType, pointer.getByteArray());
-      } else {
-        fields.get(i).allocate(pointer);
+    } else {
+      for (int i = 0; i < fields.size(); i++) {
+        getType(i).allocate(pointer);
       }
     }
   }
@@ -207,9 +213,11 @@ public final class StructType extends ValueType<StructType, Struct> {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        var struct = new Struct(false, getOffset(pointer, index), this, pointer.getByteArray());
+        var type = copyForArrayElement();
+        var struct = new Struct(true, getOffset(pointer, index), type, pointer.getByteArray());
+        struct.removeListener();
         for (int i = 0; i < fields.size(); i++) {
-          struct.getType(i).allocate(pointer);
+          type.getType(i).allocate(struct);
         }
       });
     });
@@ -220,10 +228,12 @@ public final class StructType extends ValueType<StructType, Struct> {
     callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
+        var type = copyForArrayElement();
         for (long i = 0; i < length; i++) {
-          var struct = new Struct(false, getOffset(pointer, index + i), this, pointer.getByteArray());
+          var struct = new Struct(true, getOffset(pointer, index + i), type, pointer.getByteArray());
+          struct.removeListener();
           for (int j = 0; j < fields.size(); j++) {
-            struct.getType(j).allocate(pointer);
+            type.getType(j).allocate(struct);
           }
         }
       });

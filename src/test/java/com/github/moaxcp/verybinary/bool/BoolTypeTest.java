@@ -126,7 +126,7 @@ public class BoolTypeTest {
   }
 
   @Test
-  void getByteLength_array_with_length_field() {
+  void getByteLength_array_constant_length_field() {
     var struct = struct()
         .primitive().constant((short) 5).int8()
         .boolArray(0)

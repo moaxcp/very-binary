@@ -6,6 +6,7 @@ import com.github.moaxcp.verybinary.Type;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
@@ -67,7 +68,7 @@ public class StructTypeTest {
         .struct()
           .lengthField(0)
           .int8()
-          .int16()
+          .primitive().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
@@ -81,11 +82,11 @@ public class StructTypeTest {
         .struct()
           .lengthExpression(constant(5))
           .int8()
-          .int16()
+          .primitive().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(16);
+    assertThat(struct.getAllocationLength()).isEqualTo(56);
   }
 
   @Test
@@ -95,11 +96,11 @@ public class StructTypeTest {
         .struct()
           .lengthField(0)
           .int8()
-          .int16()
+          .primitive().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(16);
+    assertThat(struct.getAllocationLength()).isEqualTo(56);
   }
 
   @Test
@@ -113,7 +114,7 @@ public class StructTypeTest {
         .int8()
         .int8Array(0)
         .int8()
-        .type(type)
+        .struct(type)
         .fromBytes(ba().int8(3).int8(1, 2, 3).int8(4)
             .int16(3).int16(3, 2, 4))
         .build();
@@ -126,7 +127,7 @@ public class StructTypeTest {
     var struct = struct()
         .int8()
         .structArray(0)
-          .int16()
+          .primitive().constant(5).int16()
           .boolArray(0)
           .end()
         .build();
@@ -135,10 +136,96 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_true() {
+  void getByteLength_array_constant_length() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
     var struct = struct()
         .int8()
+        .structArray(constant(2), inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
+        .build();
+
+    assertThat(struct.getByteLength()).isEqualTo(13);
+  }
+
+  @Test
+  void getByteLength_array_with_constant_length_field() {
+    var inner = structType()
         .int16()
+        .boolArray(0)
+        .build();
+
+    var struct = struct()
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
+        .build();
+
+    assertThat(struct.getByteLength()).isEqualTo(13);
+  }
+
+  @Test
+  void getByteLength_position() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
+    var struct = struct()
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
+        .build();
+
+    assertThat(struct.getByteLength(1)).isEqualTo(12);
+  }
+
+  @Test
+  void getByteLength_position_index() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
+    var struct = struct()
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
+        .build();
+
+    assertThat(struct.getByteLength(1, 0)).isEqualTo(5);
+    assertThat(struct.getByteLength(1, 1)).isEqualTo(7);
+  }
+
+  @Test
+  void isFixedLength_true() {
+    var inner = structType()
+        .primitive().constant(3).int16()
+        .primitive().constant(true).lengthField(0).bool()
+        .build();
+
+    var struct = struct()
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, true, true)
+            .int16(3).bool(true, true, true))
         .build();
 
     assertThat(struct.isFixedLength()).isTrue();
@@ -146,12 +233,81 @@ public class StructTypeTest {
 
   @Test
   void isFixedLength_false() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
     var struct = struct()
-        .int8()
-        .int8Array(0)
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
         .build();
 
     assertThat(struct.isFixedLength()).isFalse();
+  }
+
+  @Test
+  void toString_empty() {
+    var struct = struct().build();
+    assertThat(struct.toString()).isEqualTo("{}");
+  }
+
+  @Test
+  void toString_notEmpty() {
+    var inner = structType().int8().build();
+    var innerArray = structType().int8().lengthExpression(constant(2)).build();
+    var struct = struct()
+        .int8()
+        .int8Array(constant(2))
+        .uint8()
+        .uint8Array(constant(2))
+        .int16()
+        .int16Array(constant(2))
+        .uint16()
+        .uint16Array(constant(2))
+        .int32()
+        .int32Array(constant(2))
+        .uint32()
+        .uint32Array(constant(2))
+        .int64()
+        .int64Array(constant(2))
+        .uint64()
+        .uint64Array(constant(2))
+        .float32()
+        .float32Array(constant(2))
+        .float64()
+        .float64Array(constant(2))
+        .struct(inner)
+        .struct(innerArray)
+        .build()
+        .setInt8(0, -127)
+        .setInt8(1, new int[] {-127, 128})
+        .setUint8(2, 255)
+        .setUint8(3, new int[] {0, 255})
+        .setInt16(4, -32768)
+        .setInt16(5, new int[] {-32768, 32767})
+        .setUint16(6, 65535)
+        .setUint16(7, new int[] {0, 65535})
+        .setInt32(8, -2147483648)
+        .setInt32(9, new int[] {-2147483648, 2147483647})
+        .setUint32(10, 4294967295L)
+        .setUint32(11, new long[] {0, 4294967295L})
+        .setInt64(12, -9223372036854775808L)
+        .setInt64(13, new long[] {-9223372036854775808L, 9223372036854775807L})
+        .setUint64(14, new BigInteger("18446744073709551615"))
+        .setUint64(15, List.of(BigInteger.ZERO, new BigInteger("18446744073709551615")))
+        .setFloat32(16, Float.MIN_VALUE)
+        .setFloat32(17, Float.MIN_VALUE, Float.MAX_VALUE)
+        .setFloat64(18, Double.MIN_VALUE)
+        .setFloat64(19, Double.MIN_VALUE, Double.MAX_VALUE)
+        .setStruct(20, struct(inner).setInt8(0, -127))
+        .setStruct(21, 0, struct(inner).setInt8(0, -127))
+        .setStruct(21, 1, struct(inner).setInt8(0, -127));
+    assertThat(struct.toString()).isEqualTo("{int8=-127, int8=[-127, -128], uint8=255, uint8=[0, 255], int16=-32768, int16=[-32768, 32767], uint16=65535, uint16=[0, 65535], int32=-2147483648, int32=[-2147483648, 2147483647], uint32=4294967295, uint32=[0, 4294967295], int64=-9223372036854775808, int64=[-9223372036854775808, 9223372036854775807], uint64=18446744073709551615, uint64=[0, 18446744073709551615], float32=1.4E-45, float32=[1.4E-45, 3.4028235E38], float64=4.9E-324, float64=[4.9E-324, 1.7976931348623157E308], Struct={int8=-127}, Struct=[{int8=-127}, {int8=-127}]}");
   }
 
   @Test

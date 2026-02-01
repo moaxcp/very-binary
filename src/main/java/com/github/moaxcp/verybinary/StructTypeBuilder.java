@@ -17,7 +17,13 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public Type<?> getField(int position) {
     return fields.get(position);
-  }  public SELF byteLengthExpression(Expression byteLengthExpression) {
+  }
+
+  public SELF byteLengthField(int position) {
+    return byteLengthExpression(Expression.valueOf(position));
+  }
+
+  public SELF byteLengthExpression(Expression byteLengthExpression) {
     this.byteLengthExpression = byteLengthExpression;
     return (SELF) this;
   }
@@ -25,6 +31,10 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   public SELF valueListener(ValueChangeListener listener) {
     valueChangeListeners.add(listener);
     return (SELF) this;
+  }
+
+  public SELF lengthField(int lengthPosition) {
+    return lengthExpression(Expression.valueOf(lengthPosition));
   }
 
   public SELF lengthExpression(Expression lengthExpression) {
@@ -40,7 +50,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new StructTypePadSubBuilder<>((SELF) this, fields.size());
   }
 
-  public SELF type(Type<?> type) {
+  SELF type(Type<?> type) {
     if (type instanceof PadType p && p.isAlign()) {
       var previous = fields.getLast();
       fields.add(type);
@@ -192,8 +202,41 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size());
   }
 
+  public SELF struct(StructType type) {
+    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).type(type).end();
+  }
+
   public ChildStructTypeBuilder<SELF> structArray(int lengthPosition) {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthField(lengthPosition);
+  }
+
+  public SELF structArray(StructType type) {
+    var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
+        .constant(type.getConstantValue());
+
+    for (var field : type.getFields()) {
+      builder.type(field);
+    }
+    return builder.end();
+  }
+
+  public SELF structArray(int lengthPosition, StructType type) {
+    return structArray(Expression.valueOf(lengthPosition), type);
+  }
+
+  public ChildStructTypeBuilder<SELF> structArray(Expression lengthExpression) {
+    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthExpression(lengthExpression);
+  }
+
+  public SELF structArray(Expression lengthExpression, StructType type) {
+    var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
+        .lengthExpression(lengthExpression)
+        .constant(type.getConstantValue());
+
+    for (var field : type.getFields()) {
+      builder.type(field);
+    }
+    return builder.end();
   }
 
   public SELF constant(Struct constant) {

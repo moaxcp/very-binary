@@ -118,6 +118,11 @@ public class Struct implements Pointer<Struct, StructType> {
     return ((ValueType) structType.getType(position)).getArrayLength(this);
   }
 
+  @Override
+  public void removeListener() {
+     bytes.removeListener(listener);
+  }
+
   public boolean getBool(int position) {
     return ((BoolType) structType.getType(position)).getBool(this);
   }
@@ -1446,7 +1451,7 @@ public class Struct implements Pointer<Struct, StructType> {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("Struct{");
+    builder.append("{");
     for (int i = 0; i < getPositions(); i++) {
       if (i > 0) builder.append(", ");
       Type<?> type = getType(i);
@@ -1521,9 +1526,9 @@ public class Struct implements Pointer<Struct, StructType> {
         }
       } else if (type instanceof StructType) {
         if (((StructType) type).isArray()) {
-          builder.append(getStructList(i));
+          builder.append("Struct=").append(getStructList(i));
         } else {
-          builder.append(getStruct(i));
+          builder.append("Struct=").append(getStruct(i));
         }
       } else if (type instanceof PadType padType) {
         if (padType.isAlign()) {

@@ -30,4 +30,6 @@ public interface Pointer<SELF extends Pointer<SELF, T>, T extends Type<?>> {
   ByteArray getByteArray();
 
   void setByteArray(ByteArray memory);
+
+  void removeListener();
 }

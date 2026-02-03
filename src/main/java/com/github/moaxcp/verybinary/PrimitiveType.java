@@ -138,6 +138,11 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
+  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    throw new UnsupportedOperationException("checkForConstantValue(Pointer, long, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use checkForConstantValue(Pointer, long, " + unitSize.primitive() + ") instead.");
+  }
+
+  @Override
   public void add(Pointer<?, ? extends Type<?>> pointer, T value) {
     throw new UnsupportedOperationException("add(Pointer, " + unitSize.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use add(Pointer, " + unitSize.primitive() + ") instead.");
   }

@@ -76,6 +76,12 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
+  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
+    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+    }
+  }
+
   void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, BigInteger.valueOf(value));
   }
@@ -93,12 +99,6 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
       }
     } else {
       pointer.getByteArray().setUint64(getOffset(pointer, index), value);
-    }
-  }
-
-  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 

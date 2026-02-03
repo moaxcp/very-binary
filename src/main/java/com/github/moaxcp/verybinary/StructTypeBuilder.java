@@ -8,7 +8,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   Expression byteLengthExpression;
   Expression lengthExpression;
-  Struct constant;
+  ByteArray constant;
   final List<Type<?>> fields = new ArrayList<>();
 
   public int fields() {
@@ -221,7 +221,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF structArray(int lengthPosition, StructType type) {
-    return structArray(Expression.valueOf(lengthPosition), type);
+    var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
+        .lengthField(lengthPosition)
+        .constant(type.getConstantValue());
+
+    for (var field : type.getFields()) {
+      builder.type(field);
+    }
+    return builder.end();
   }
 
   public ChildStructTypeBuilder<SELF> structArray(Expression lengthExpression) {
@@ -240,6 +247,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF constant(Struct constant) {
+    if(constant == null) {
+      return (SELF) this;
+    }
+    this.constant = constant.getByteArray();
+    return (SELF) this;
+  }
+
+  public SELF constant(ByteArray constant) {
     this.constant = constant;
     return (SELF) this;
   }

@@ -4,15 +4,18 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class StructType extends ValueType<StructType, Struct> {
 
+  private final ByteArray constantArray;
   private final List<Type<?>> fields;
 
-  StructType(int position, @Nullable Struct constant, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, List<Type<?>> fields) {
-    super(position, constant, lengthExpression, byteLengthExpression);
+  StructType(int position, @Nullable ByteArray constant, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, List<Type<?>> fields) {
+    super(position, null, lengthExpression, byteLengthExpression);
+    this.constantArray = constant;
     this.fields = fields;
   }
 
@@ -22,11 +25,11 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   public StructType copy(int position) {
-    return new StructType(position, this.constantValue, this.lengthExpression, byteLengthExpression, new ArrayList<>(fields));
+    return new StructType(position, this.constantArray, this.lengthExpression, byteLengthExpression, new ArrayList<>(fields));
   }
 
   public StructType copyForArrayElement() {
-    return new StructType(0, this.constantValue, null, null, fields);
+    return new StructType(0, this.constantArray, null, null, fields);
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -107,13 +110,42 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
-    for (int i = 0; i < fields.size(); i++) {
-      var type = fields.get(i);
-      if(!type.isFixedLength(pointer)) {
-        return false;
+    if (!isArray()) {
+      for (int i = 0; i < fields.size(); i++) {
+        var type = fields.get(i);
+        if(!type.isFixedLength(pointer)) {
+          return false;
+        }
+      }
+    } else {
+      var length = getArrayLength(pointer);
+      for (long i = 0; i < length; i++) {
+        var type = this.copyForArrayElement();
+        var struct = new Struct(getOffset(pointer, i), type, pointer.getByteArray());
+        struct.removeListener();
+        for (int j = 0; j < fields.size(); j++) {
+          if(!fields.get(j).isFixedLength(struct)) {
+            return false;
+          }
+        }
       }
     }
     return lengthExpression == null || lengthExpression.isConstant(pointer.getType());
+  }
+
+  public @Nullable Struct getConstantValue() {
+    if (constantArray == null) {
+      return null;
+    }
+    return new Struct(this, constantArray);
+  }
+
+  public boolean isConstant(Type<?> type) {
+    return constantArray != null && (lengthExpression == null || lengthExpression.isConstant(type));
+  }
+
+  public boolean isConstantValue(Type<?> type) {
+    return constantArray != null;
   }
 
   @Override
@@ -162,6 +194,7 @@ public final class StructType extends ValueType<StructType, Struct> {
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
+    checkForConstantValue(pointer, index, value);
     if (!valueChangeListeners.isEmpty()) {
       var old = new Struct(getOffset(pointer, index), this, pointer.getByteArray());
       if (!old.equals(value)) {
@@ -188,6 +221,12 @@ public final class StructType extends ValueType<StructType, Struct> {
     }
   }
 
+  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
+    if (isConstantValue(pointer.getType()) && !Objects.equals(constantArray, value.getByteArray())) {
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + new Struct(this, constantArray));
+    }
+  }
+
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isArray()) {
@@ -197,13 +236,15 @@ public final class StructType extends ValueType<StructType, Struct> {
         var type = copyForArrayElement();
         var struct = new Struct(true, getOffset(pointer, $), type, pointer.getByteArray());
         struct.removeListener();
-        for (int i = 0; i < type.fields.size(); i++) {
-          type.getType(i).allocate(struct);
-        }
+        allocate(struct);
       }
     } else {
-      for (int i = 0; i < fields.size(); i++) {
-        getType(i).allocate(pointer);
+      if (isConstant(pointer.getType())) {
+        pointer.getByteArray().addInt8(getOffset(pointer), constantArray.getAllocatedBytes());
+      } else {
+        for (int i = 0; i < fields.size(); i++) {
+          getType(i).allocate(pointer);
+        }
       }
     }
   }
@@ -213,11 +254,15 @@ public final class StructType extends ValueType<StructType, Struct> {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        var type = copyForArrayElement();
-        var struct = new Struct(true, getOffset(pointer, index), type, pointer.getByteArray());
-        struct.removeListener();
-        for (int i = 0; i < fields.size(); i++) {
-          type.getType(i).allocate(struct);
+        if (isConstantValue(pointer.getType())) {
+          pointer.getByteArray().addInt8(getOffset(pointer), constantArray.getAllocatedBytes());
+        } else {
+          var type = copyForArrayElement();
+          var struct = new Struct(true, getOffset(pointer, index), type, pointer.getByteArray());
+          struct.removeListener();
+          for (int i = 0; i < fields.size(); i++) {
+            type.getType(i).allocate(struct);
+          }
         }
       });
     });
@@ -230,10 +275,14 @@ public final class StructType extends ValueType<StructType, Struct> {
         checkIndexAllocate(pointer, index);
         var type = copyForArrayElement();
         for (long i = 0; i < length; i++) {
-          var struct = new Struct(true, getOffset(pointer, index + i), type, pointer.getByteArray());
-          struct.removeListener();
-          for (int j = 0; j < fields.size(); j++) {
-            type.getType(j).allocate(struct);
+          if (isConstantValue(pointer.getType())) {
+            pointer.getByteArray().addInt8(getOffset(pointer), constantArray.getAllocatedBytes());
+          } else {
+            var struct = new Struct(true, getOffset(pointer, index + i), type, pointer.getByteArray());
+            struct.removeListener();
+            for (int j = 0; j < fields.size(); j++) {
+              type.getType(j).allocate(struct);
+            }
           }
         }
       });
@@ -245,7 +294,7 @@ public final class StructType extends ValueType<StructType, Struct> {
     return "StructType{" +
         "fields=" + fields +
         ", lengthExpression=" + lengthExpression +
-        ", constantValue=" + constantValue +
+        ", constantValue=" + constantArray +
         ", position=" + position +
         '}';
   }

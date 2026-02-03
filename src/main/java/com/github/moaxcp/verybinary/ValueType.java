@@ -33,7 +33,7 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     this.constantValue = constantValue;
   }
 
-  public final @Nullable T getConstantValue() {
+  public @Nullable T getConstantValue() {
     return constantValue;
   }
 
@@ -85,11 +85,11 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
     return lengthExpression.evaluate(pointer);
   }
 
-  public final boolean isConstant(Type<?> type) {
+  public boolean isConstant(Type<?> type) {
     return constantValue != null && (lengthExpression == null || lengthExpression.isConstant(type));
   }
 
-  public final boolean isConstantValue(Type<?> type) {
+  public boolean isConstantValue(Type<?> type) {
     return constantValue != null;
   }
 
@@ -139,10 +139,9 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
 
   public abstract void set(Pointer<?, ? extends Type<?>> pointer, long index, List<T> values);
 
-  //todo push down to each type to avoid wrapping
-  protected void checkConstant(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    if (isConstant(pointer.getType()) && !Objects.equals(constantValue, value)) {
-      throw new UnsupportedOperationException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
+    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 
@@ -151,25 +150,21 @@ public abstract sealed class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, T... values) {
-    if (!isArray()) {
-      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
-    }
-    allocate(pointer, getArrayLength(pointer), values.length);
-    set(pointer, getArrayLength(pointer), values);
+    add(pointer, getArrayLength(pointer), values);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, List<T> values) {
-    if (!isArray()) {
-      throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
-    }
-    allocate(pointer, getArrayLength(pointer), values.size());
-    set(pointer, getArrayLength(pointer), values);
+    add(pointer, getArrayLength(pointer), values);
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     if (!isArray()) {
       throw new ArrayIndexOutOfBoundsException(getClass().getSimpleName() + " cannot add to non-array type at position " + getPosition());
     }
+    if (isFixedLength(pointer)) {
+      throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getArrayLength(pointer) + " index: " + index);
+    }
+    checkForConstantValue(pointer, index, value);
     allocate(pointer, index);
     set(pointer, index, value);
   }

@@ -132,6 +132,7 @@ public class StructTypeTest {
           .end()
         .build();
 
+    assertThat(struct.getByteLength(1)).isEqualTo(0);
     assertThat(struct.getByteLength()).isEqualTo(1);
   }
 
@@ -151,30 +152,12 @@ public class StructTypeTest {
             .int16(5).bool(true, false, true, false, true))
         .build();
 
+    assertThat(struct.getByteLength(1)).isEqualTo(12);
     assertThat(struct.getByteLength()).isEqualTo(13);
   }
 
   @Test
-  void getByteLength_array_with_constant_length_field() {
-    var inner = structType()
-        .int16()
-        .boolArray(0)
-        .build();
-
-    var struct = struct()
-        .primitive().constant(2).int8()
-        .structArray(0, inner)
-        .fromBytes(ba()
-            .int8(2)
-            .int16(3).bool(true, false, true)
-            .int16(5).bool(true, false, true, false, true))
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(13);
-  }
-
-  @Test
-  void getByteLength_position() {
+  void getByteLength_array_constant_length_field() {
     var inner = structType()
         .int16()
         .boolArray(0)
@@ -190,10 +173,11 @@ public class StructTypeTest {
         .build();
 
     assertThat(struct.getByteLength(1)).isEqualTo(12);
+    assertThat(struct.getByteLength()).isEqualTo(13);
   }
 
   @Test
-  void getByteLength_position_index() {
+  void getByteLength_array_index() {
     var inner = structType()
         .int16()
         .boolArray(0)
@@ -213,7 +197,67 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_true() {
+  void getByteLength_array_index_length() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
+    var struct = struct()
+        .primitive().constant(4).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(4)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true)
+            .int16(4).bool(true, false, true, false)
+            .int16(2).bool(true, false))
+        .build();
+
+    assertThat(struct.getByteLength(1, 0, 4)).isEqualTo(22);
+    assertThat(struct.getByteLength(1, 1, 2)).isEqualTo(13);
+  }
+
+  @Test
+  void isFixedLength_constant_length() {
+    var inner = structType()
+        .primitive().constant(3).int16()
+        .primitive().constant(true).lengthField(0).bool()
+        .build();
+
+    var struct = struct()
+        .int8()
+        .structArray(constant(2), inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, true, true)
+            .int16(3).bool(true, true, true))
+        .build();
+
+    assertThat(struct.isFixedLength()).isTrue();
+  }
+
+  @Test
+  void isFixedLength_variable_length() {
+    var inner = structType()
+        .int16()
+        .boolArray(0)
+        .build();
+
+    var struct = struct()
+        .primitive().constant(2).int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, false, true)
+            .int16(5).bool(true, false, true, false, true))
+        .build();
+
+    assertThat(struct.isFixedLength()).isFalse();
+  }
+
+  @Test
+  void isFixedLength_constant_length_field() {
     var inner = structType()
         .primitive().constant(3).int16()
         .primitive().constant(true).lengthField(0).bool()
@@ -232,22 +276,56 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_false() {
+  void setting_length_field_extends_array() {
     var inner = structType()
-        .int16()
-        .boolArray(0)
+        .primitive().int16()
+        .primitive().lengthField(0).bool()
         .build();
 
     var struct = struct()
-        .primitive().constant(2).int8()
+        .int8()
         .structArray(0, inner)
         .fromBytes(ba()
             .int8(2)
-            .int16(3).bool(true, false, true)
-            .int16(5).bool(true, false, true, false, true))
+            .int16(3).bool(true, true, true)
+            .int16(3).bool(true, true, true))
         .build();
 
-    assertThat(struct.isFixedLength()).isFalse();
+    struct.setInt8(0, 5);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5)
+        .int16(3).bool(true, true, true)
+        .int16(3).bool(true, true, true)
+        .int16(0)
+        .int16(0)
+        .int16(0));
+  }
+
+  @Test
+  void setting_length_field_extends_array_with_constant_values() {
+    var inner = structType()
+        .constant(ba().int16(3).bool(true, true, true))
+        .primitive().int16()
+        .primitive().lengthField(0).bool()
+        .build();
+
+    var struct = struct()
+        .int8()
+        .structArray(0, inner)
+        .fromBytes(ba()
+            .int8(2)
+            .int16(3).bool(true, true, true)
+            .int16(3).bool(true, true, true))
+        .build();
+
+    struct.setInt8(0, 5);
+
+    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5)
+        .int16(3).bool(true, true, true)
+        .int16(3).bool(true, true, true)
+        .int16(3).bool(true, true, true)
+        .int16(3).bool(true, true, true)
+        .int16(3).bool(true, true, true));
   }
 
   @Test

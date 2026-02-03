@@ -49,6 +49,13 @@ public interface ValueChangeListener {
         type.remove(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old - 1, length);
       }
     }
+
+    @Override
+    public String toString() {
+      return "ExtendBytesListener{" +
+          "position=" + position +
+          '}';
+    }
   }
 
   class ExtendArrayListener implements ValueChangeListener {
@@ -73,6 +80,13 @@ public interface ValueChangeListener {
         var length = old - current;
         type.remove(RESIZED_BY_LENGTH_FIELD, pointer, old - 1, length);
       }
+    }
+
+    @Override
+    public String toString() {
+      return "ExtendArrayListener{" +
+          "position=" + position +
+          '}';
     }
   }
 

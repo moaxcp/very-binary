@@ -22,3 +22,5 @@ todo:
 
 * allocation length needs to also check byteLengthExpression.
 * move constant value down to each type to prevent wrapping.
+* arrays should have constant values that are an array instead of a single value.
+* add verification for struct constant matching type.

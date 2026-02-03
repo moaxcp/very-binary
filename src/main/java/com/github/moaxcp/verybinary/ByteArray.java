@@ -1,5 +1,7 @@
 package com.github.moaxcp.verybinary;
 
+import org.jspecify.annotations.NonNull;
+
 import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
@@ -14,7 +16,7 @@ import static com.github.moaxcp.verybinary.ShiftBytes.shiftBytes;
  */
 public class ByteArray {
 
-  private byte[] bytes;
+  private byte @NonNull [] bytes;
   private int allocated;
   private final List<ByteArrayListener> listeners = new ArrayList<>();
   private final Serializer serializer;
@@ -97,6 +99,12 @@ public class ByteArray {
 
   byte[] getBytes() {
     return bytes;
+  }
+
+  byte @NonNull [] getAllocatedBytes() {
+    var newBytes = new byte[allocated];
+    System.arraycopy(bytes, 0, newBytes, 0, allocated);
+    return newBytes;
   }
 
   int getAllocated() {

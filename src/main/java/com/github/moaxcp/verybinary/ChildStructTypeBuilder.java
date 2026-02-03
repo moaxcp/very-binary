@@ -39,8 +39,13 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   public ChildStructTypeBuilder<PARENT> lengthField(int lengthFieldPosition) {
     this.lengthExpression = Expression.valueOf(lengthFieldPosition);
     this.arrayLengthListeners.add(ArrayLengthListener.lengthField(lengthFieldPosition));
-    ((ValueType<?, ?>) parent.fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(lengthFieldPosition));
+    ((ValueType<?, ?>) parent.fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(position));
     return this;
+  }
+
+  public ChildStructTypeBuilder<PARENT> structArray(int lengthPosition, StructType type) {
+    lengthField(lengthPosition);
+    return structArray(type);
   }
 
   public StructType toStructType() {

@@ -98,6 +98,7 @@
    - [ ] Update README and docs to explain abstractions, layering, and usage patterns (without code samples for this phase).
    - [ ] Describe listener semantics, unsigned behavior, and endianness configuration.
    - [ ] Correct the specification typo: clarify that uint64 is the 64-bit unsigned integer (not uint32).
+   - [x] Add data types table to README.md — refs: req: Layers of abstraction > primitive types; plan: 12. Documentation
 
 13. [ ] Phase 13 — Dependencies and sequencing checks
    - [ ] Verify Serializer layer completion before integrating ByteArray.

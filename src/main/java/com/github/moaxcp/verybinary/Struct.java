@@ -1434,13 +1434,12 @@ public class Struct implements Pointer<Struct, StructType> {
   public final boolean equals(Object o) {
     if (!(o instanceof Struct struct)) return false;
 
-    return offset == struct.offset && structType.equals(struct.structType) && getByteArray().compareBytes(getOffset(), struct.getByteArray(), struct.getOffset(), getByteLength());
+    return structType.equals(struct.structType) && getByteArray().compareBytes(getOffset(), struct.getByteArray(), struct.getOffset(), getByteLength());
   }
 
   @Override
   public int hashCode() {
-    int result = Math.toIntExact(offset);
-    result = 31 * result + structType.hashCode();
+    int result = structType.hashCode();
     var bytes = getByteArray().getInt8(getOffset(), getByteLength());
     for (int i = 0; i < bytes.length; i++) {
       result = 31 * result + bytes[i];

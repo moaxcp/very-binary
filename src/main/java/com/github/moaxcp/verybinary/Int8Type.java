@@ -54,6 +54,9 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
 
   public List<Byte> getInt8List(Pointer<?, ? extends Type<?>> pointer) {
     long length = getArrayLength(pointer);
+    if (length == 0) {
+      return List.of();
+    }
     checkIndex(pointer, length - 1);
     return pointer.getByteArray().getInt8List(getOffset(pointer), length);
   }

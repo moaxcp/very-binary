@@ -56,6 +56,19 @@ public interface ValueChangeListener {
           "position=" + position +
           '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ExtendBytesListener that = (ExtendBytesListener) o;
+      return position == that.position;
+    }
+
+    @Override
+    public int hashCode() {
+      return position;
+    }
   }
 
   class ExtendArrayListener implements ValueChangeListener {
@@ -87,6 +100,19 @@ public interface ValueChangeListener {
       return "ExtendArrayListener{" +
           "position=" + position +
           '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ExtendArrayListener that = (ExtendArrayListener) o;
+      return position == that.position;
+    }
+
+    @Override
+    public int hashCode() {
+      return position;
     }
   }
 

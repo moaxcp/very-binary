@@ -29,7 +29,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   public StructType copyForArrayElement() {
-    return new StructType(0, this.constantArray, null, null, fields);
+    return new StructType(-1, this.constantArray, null, null, fields);
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -151,7 +151,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   @Override
   public Struct get(Pointer<?, ? extends Type<?>> pointer, long index) {
     var offset = getOffset(pointer, index);
-    return new Struct(offset, this, pointer.getByteArray());
+    return new Struct(offset, this.copyForArrayElement(), pointer.getByteArray());
   }
   
   @Override

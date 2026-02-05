@@ -9,11 +9,15 @@ public class Builders {
     return new StructBuilder();
   }
 
-  public static Struct struct(StructType type) {
-    return new Struct(type);
+  public static StructBuilder struct(StructType type) {
+    return struct().from(type);
   }
 
   public static StructTypeStructTypeBuilder structType() {
     return new StructTypeStructTypeBuilder();
+  }
+
+  public static StructTypeStructTypeBuilder structType(StructType type) {
+    return new StructTypeStructTypeBuilder().from(type);
   }
 }

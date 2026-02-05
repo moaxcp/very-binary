@@ -11,6 +11,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   ByteArray constant;
   final List<Type<?>> fields = new ArrayList<>();
 
+  public SELF from(StructType structType) {
+    constant(structType.getConstantValue());
+    for (var type : structType.getFields()) {
+      fields.add(type);
+    }
+    return (SELF) this;
+  }
+
   public int fields() {
     return fields.size();
   }
@@ -203,7 +211,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF struct(StructType type) {
-    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).type(type).end();
+    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).from(type).end();
   }
 
   public ChildStructTypeBuilder<SELF> structArray(int lengthPosition) {

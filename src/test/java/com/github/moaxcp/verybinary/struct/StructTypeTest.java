@@ -382,9 +382,9 @@ public class StructTypeTest {
         .setFloat32(17, Float.MIN_VALUE, Float.MAX_VALUE)
         .setFloat64(18, Double.MIN_VALUE)
         .setFloat64(19, Double.MIN_VALUE, Double.MAX_VALUE)
-        .setStruct(20, struct(inner).setInt8(0, -127))
-        .setStruct(21, 0, struct(inner).setInt8(0, -127))
-        .setStruct(21, 1, struct(inner).setInt8(0, -127));
+        .setStruct(20, struct(inner).build().setInt8(0, -127))
+        .setStruct(21, 0, struct(inner).build().setInt8(0, -127))
+        .setStruct(21, 1, struct(inner).build().setInt8(0, -127));
     assertThat(struct.toString()).isEqualTo("{int8=-127, int8=[-127, -128], uint8=255, uint8=[0, 255], int16=-32768, int16=[-32768, 32767], uint16=65535, uint16=[0, 65535], int32=-2147483648, int32=[-2147483648, 2147483647], uint32=4294967295, uint32=[0, 4294967295], int64=-9223372036854775808, int64=[-9223372036854775808, 9223372036854775807], uint64=18446744073709551615, uint64=[0, 18446744073709551615], float32=1.4E-45, float32=[1.4E-45, 3.4028235E38], float64=4.9E-324, float64=[4.9E-324, 1.7976931348623157E308], Struct={int8=-127}, Struct=[{int8=-127}, {int8=-127}]}");
   }
 

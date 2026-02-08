@@ -214,7 +214,7 @@ public final class Int64Type extends NumberType<Int64Type, Long> {
   }
 
   @Override
-  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
@@ -224,7 +224,7 @@ public final class Int64Type extends NumberType<Int64Type, Long> {
   }
 
   @Override
-  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);

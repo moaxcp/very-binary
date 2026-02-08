@@ -79,7 +79,9 @@ public interface Expression {
 
     @Override
     public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-      var type = pointer.getType(position);
+      var type = switch (pointer) {
+        case Struct struct -> struct.getType(position);
+      };
       return switch (type) {
         case Int8Type i8 -> i8.getInt8(pointer);
         case Uint8Type u8 -> u8.getUint8(pointer);
@@ -174,15 +176,15 @@ public interface Expression {
     }
   }
 
-  static Expression constant(long value) {
+  static Constant constant(long value) {
     return new Constant(value);
   }
 
-  static Expression valueOf(int position) {
+  static ValueOf valueOf(int position) {
     return new ValueOf(position);
   }
 
-  static Expression sum(Expression... expressions) {
+  static Sum sum(Expression... expressions) {
     return new Sum(expressions);
   }
 

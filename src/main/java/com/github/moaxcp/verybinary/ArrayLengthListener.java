@@ -19,7 +19,10 @@ public interface ArrayLengthListener {
       if(reason == LengthChangeReason.RESIZED_BY_LENGTH_FIELD) {
         return;
       }
-      ((NumberType) pointer.getType(position)).setForArrayLength(pointer, current);
+      switch (pointer) {
+        case Struct struct:
+          ((NumberType) struct.getType(position)).setForArrayLength(pointer, current);
+      }
     }
 
     @Override

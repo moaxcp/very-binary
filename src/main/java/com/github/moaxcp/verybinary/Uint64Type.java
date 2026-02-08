@@ -76,7 +76,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
+  public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, BigInteger value) {
     if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
@@ -161,7 +161,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
@@ -171,7 +171,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);

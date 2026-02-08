@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, ValueType {
+public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, PadType, PrimitiveType {
   protected final int position;
   protected List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
 
@@ -15,6 +15,10 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
   }
 
   public abstract SELF copy(int position);
+
+  public List<ByteLengthListener> getByteLengthListeners() {
+    return byteLengthListeners;
+  }
 
   public final SELF addByteLengthChangeListener(ByteLengthListener listener) {
     byteLengthListeners.add(listener);
@@ -35,11 +39,15 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
   }
 
   public final long getOffset(Pointer<?, ? extends Type<?>> pointer) {
-    long offset = pointer.getOffset();
-    for (int i = 0; i < getPosition(); i++) {
-      offset += pointer.getType(i).getByteLength(pointer);
-    }
-    return offset;
+    return switch (pointer) {
+      case Struct struct -> {
+        long offset = pointer.getOffset();
+        for (int i = 0; i < getPosition(); i++) {
+          offset += struct.getType(i).getByteLength(pointer);
+        }
+        yield offset;
+      }
+    };
   }
 
   public long getAllocationLength() {
@@ -58,7 +66,7 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits PadType, Valu
     byteLengthListeners.forEach(b -> b.byteLengthChanged(reason, pointer, previousLength, currentLength));
   }
 
-  protected void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
+  public void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
     if (byteLengthListeners.isEmpty()) {
       runnable.run();
       return;

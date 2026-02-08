@@ -23,7 +23,12 @@ public interface ByteLengthListener {
       if (reason != LengthChangeReason.ALIGN) {
         return;
       }
-      ((PadType) pointer.getType(alignPosition)).reAlign(pointer, previous, current);
+      switch (pointer) {
+        case Struct struct -> {
+          ((PadType) struct.getType(alignPosition)).reAlign(pointer, previous, current);
+        }
+      }
+
     }
 
     @Override
@@ -59,7 +64,11 @@ public interface ByteLengthListener {
       if(reason == LengthChangeReason.RESIZED_BY_BYTE_LENGTH_FIELD) {
         return;
       }
-      ((NumberType) pointer.getType(position)).setForByteLength(pointer, current);
+      switch (pointer) {
+        case Struct struct -> {
+          ((NumberType) struct.getType(position)).setForByteLength(pointer, current);
+        }
+      }
     }
 
     @Override

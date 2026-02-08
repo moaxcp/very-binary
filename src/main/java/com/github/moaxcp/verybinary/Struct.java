@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import static com.github.moaxcp.verybinary.Util.mapIntsToBytes;
 import static com.github.moaxcp.verybinary.Util.mapIntsToShorts;
 
-public class Struct implements Pointer<Struct, StructType> {
+public final class Struct implements ComplexPointer<Struct, StructType> {
   private boolean allocated = false;
   private long offset;
   private StructType structType;
@@ -51,7 +51,6 @@ public class Struct implements Pointer<Struct, StructType> {
     bytes.addListener(listener);
   }
 
-  @Override
   public Struct copy() {
     return new Struct(this);
   }
@@ -72,7 +71,6 @@ public class Struct implements Pointer<Struct, StructType> {
     return structType;
   }
 
-  @Override
   public <V extends Type<?>> V getType(int position) {
     return structType.getType(position);
   }
@@ -98,22 +96,18 @@ public class Struct implements Pointer<Struct, StructType> {
     return structType.getByteLength(this);
   }
 
-  @Override
   public long getByteLength(int position) {
     return structType.getFieldByteLength(this, position);
   }
 
-  @Override
   public long getByteLength(int position, long index) {
      return structType.getFieldByteLength(this, position, index);
   }
 
-  @Override
   public long getByteLength(int position, long index, long length) {
      return structType.getFieldByteLength(this, position, index, length);
   }
 
-  @Override
   public long getArrayLength(int position) {
     return ((ValueType) structType.getType(position)).getArrayLength(this);
   }
@@ -1431,7 +1425,7 @@ public class Struct implements Pointer<Struct, StructType> {
   }
 
   @Override
-  public final boolean equals(Object o) {
+  public boolean equals(Object o) {
     if (!(o instanceof Struct struct)) return false;
 
     return structType.equals(struct.structType) && getByteArray().compareBytes(getOffset(), struct.getByteArray(), struct.getOffset(), getByteLength());

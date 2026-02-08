@@ -8,15 +8,64 @@ import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-public final class StructType extends ValueType<StructType, Struct> {
-
+public final class StructType extends ComplexType<StructType> implements ValueType<StructType, Struct> {
+  @Nullable
+  protected final Expression lengthExpression;
+  @Nullable
+  protected final Expression byteLengthExpression;
+  protected final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
+  protected final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   private final ByteArray constantArray;
   private final List<Type<?>> fields;
 
   StructType(int position, @Nullable ByteArray constant, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, List<Type<?>> fields) {
-    super(position, null, lengthExpression, byteLengthExpression);
+    super(position);
+    this.lengthExpression = lengthExpression;
+    this.byteLengthExpression = byteLengthExpression;
     this.constantArray = constant;
     this.fields = fields;
+  }
+
+  public @Nullable Struct getConstantValue() {
+    if (constantArray == null) {
+      return null;
+    }
+    return new Struct(this, constantArray);
+  }
+
+  @Override
+  public @Nullable Expression getLengthExpression() {
+    return lengthExpression;
+  }
+
+  @Override
+  public @Nullable Expression getByteLengthExpression() {
+    return byteLengthExpression;
+  }
+
+  @Override
+  public List<ArrayLengthListener> getArrayLengthListeners() {
+    return arrayLengthListeners;
+  }
+
+  @Override
+  public List<ValueChangeListener> getValueChangeListeners() {
+    return valueChangeListeners;
+  }
+
+  public StructType addArrayLengthChangeListeners(List<ArrayLengthListener> arrayLengthChange) {
+    arrayLengthListeners.addAll(arrayLengthChange);
+    return this;
+  }
+
+  public StructType addValueChangeListeners(List<ValueChangeListener> valueChangeListeners) {
+    this.valueChangeListeners.addAll(valueChangeListeners);
+    return this;
+  }
+
+  public StructType addValueChangeListener(ValueChangeListener listener) {
+    this.valueChangeListeners.add(listener);
+    return this;
   }
 
   List<Type<?>> getFields() {
@@ -45,8 +94,9 @@ public final class StructType extends ValueType<StructType, Struct> {
       } else {
         return lengthExpression.defaultValue(parent) * allocationLength;
       }
+    } else {
+      return allocationLength;
     }
-    return allocationLength;
   }
 
   public int getPositions() {
@@ -133,13 +183,6 @@ public final class StructType extends ValueType<StructType, Struct> {
     return lengthExpression == null || lengthExpression.isConstant(pointer.getType());
   }
 
-  public @Nullable Struct getConstantValue() {
-    if (constantArray == null) {
-      return null;
-    }
-    return new Struct(this, constantArray);
-  }
-
   public boolean isConstant(Type<?> type) {
     return constantArray != null && (lengthExpression == null || lengthExpression.isConstant(type));
   }
@@ -221,7 +264,7 @@ public final class StructType extends ValueType<StructType, Struct> {
     }
   }
 
-  protected void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
+  public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
     if (isConstantValue(pointer.getType()) && !Objects.equals(constantArray, value.getByteArray())) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + new Struct(this, constantArray));
     }
@@ -250,7 +293,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
     callWithArrayLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
@@ -269,7 +312,7 @@ public final class StructType extends ValueType<StructType, Struct> {
   }
 
   @Override
-  void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithArrayLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);

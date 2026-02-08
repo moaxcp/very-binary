@@ -38,15 +38,19 @@ public interface ValueChangeListener {
       if (reason != SET_VALUE) {
         return;
       }
-      var current = ((Number) newValue).longValue();
-      var old = ((Number) oldValue).longValue();
-      ValueType<?, ?> type = pointer.getType(position);
-      if (current > old) {
-        var length = current - old;
-        type.allocate(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old, length);
-      } else {
-        var length = old - current;
-        type.remove(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old - 1, length);
+      switch (pointer) {
+        case Struct struct -> {
+          var current = ((Number) newValue).longValue();
+          var old = ((Number) oldValue).longValue();
+          ValueType<?, ?> type = struct.getType(position);
+          if (current > old) {
+            var length = current - old;
+            type.allocate(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old, length);
+          } else {
+            var length = old - current;
+            type.remove(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old - 1, length);
+          }
+        }
       }
     }
 
@@ -83,15 +87,19 @@ public interface ValueChangeListener {
       if (reason != SET_VALUE) {
         return;
       }
-      var current = ((Number) newValue).longValue();
-      var old = ((Number) oldValue).longValue();
-      ValueType<?, ?> type = pointer.getType(position);
-      if (current > old) {
-        var length = current - old;
-        type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old, length);
-      } else {
-        var length = old - current;
-        type.remove(RESIZED_BY_LENGTH_FIELD, pointer, old - 1, length);
+      switch (pointer) {
+        case Struct struct -> {
+          var current = ((Number) newValue).longValue();
+          var old = ((Number) oldValue).longValue();
+          ValueType<?, ?> type = struct.getType(position);
+          if (current > old) {
+            var length = current - old;
+            type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old, length);
+          } else {
+            var length = old - current;
+            type.remove(RESIZED_BY_LENGTH_FIELD, pointer, old - 1, length);
+          }
+        }
       }
     }
 

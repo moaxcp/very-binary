@@ -51,15 +51,21 @@ public final class PadType extends Type<PadType> {
 
   @Override
   public long getByteLength(Pointer<?, ? extends Type<?>> pointer) {
-    if (!align) {
-      return length;
-    }
-    return length - pointer.getByteLength(position - 1) % length;
+    return switch (pointer) {
+      case Struct struct -> {
+        if (!align) {
+          yield length;
+        }
+        yield length - struct.getByteLength(position - 1) % length;
+      }
+    };
   }
 
   @Override
   public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
-    return !align || pointer.getType(position - 1).isFixedLength(pointer);
+    return switch (pointer) {
+      case Struct struct -> !align || struct.getType(position - 1).isFixedLength(pointer);
+    };
   }
 
   @Override

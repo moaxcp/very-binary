@@ -34,7 +34,7 @@ public interface ValueChangeListener {
     }
 
     @Override
-    public void valueChanged(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Object oldValue, Object newValue) {
+    public void valueChanged(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Object oldValue, Object newValue) {
       if (reason != SET_VALUE) {
         return;
       }
@@ -42,7 +42,7 @@ public interface ValueChangeListener {
         case Struct struct -> {
           var current = ((Number) newValue).longValue();
           var old = ((Number) oldValue).longValue();
-          ValueType<?, ?> type = struct.getType(position);
+          ArrayValueType<?, ?> type = struct.getType(position);
           if (current > old) {
             var length = current - old;
             type.allocate(RESIZED_BY_BYTE_LENGTH_FIELD, pointer, old, length);
@@ -83,7 +83,7 @@ public interface ValueChangeListener {
     }
 
     @Override
-    public void valueChanged(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Object oldValue, Object newValue) {
+    public void valueChanged(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Object oldValue, Object newValue) {
       if (reason != SET_VALUE) {
         return;
       }
@@ -91,7 +91,7 @@ public interface ValueChangeListener {
         case Struct struct -> {
           var current = ((Number) newValue).longValue();
           var old = ((Number) oldValue).longValue();
-          ValueType<?, ?> type = struct.getType(position);
+          ArrayValueType<?, ?> type = struct.getType(position);
           if (current > old) {
             var length = current - old;
             type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old, length);
@@ -124,5 +124,5 @@ public interface ValueChangeListener {
     }
   }
 
-  void valueChanged(ValueChangeListener.ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Object oldValue, Object newValue);
+  void valueChanged(ValueChangeListener.ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Object oldValue, Object newValue);
 }

@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.bool;
 
-import com.github.moaxcp.verybinary.BoolType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -82,8 +81,6 @@ public class RemoveBoolTypeTest {
     struct.addBool(1, true);
     struct.addBool(1, false);
     struct.remove(1, 0);
-
-    assertThat(((BoolType) struct.getType(1)).getBool(struct, 0)).isFalse();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(false));
   }

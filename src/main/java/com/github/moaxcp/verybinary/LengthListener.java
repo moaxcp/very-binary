@@ -1,13 +1,13 @@
 package com.github.moaxcp.verybinary;
 
 @FunctionalInterface
-public interface ArrayLengthListener {
+public interface LengthListener {
 
-  static ArrayLengthListener lengthField(int position) {
+  static LengthListener lengthField(int position) {
     return new SetLengthFieldListener(position);
   }
 
-  class SetLengthFieldListener implements ArrayLengthListener {
+  class SetLengthFieldListener implements LengthListener {
     private final int position;
 
     public SetLengthFieldListener(int position) {

@@ -20,5 +20,7 @@ public sealed interface Pointer<SELF extends Pointer<SELF, TYPE>, TYPE extends T
 
   void setByteArray(ByteArray memory);
 
-  void removeListener();
+  void removeByteArrayListener();
+
+  long getParentOffset();
 }

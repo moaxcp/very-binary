@@ -7,7 +7,7 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   private final PARENT parent;
   private int position;
   final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
-  final List<ArrayLengthListener> arrayLengthListeners = new ArrayList<>();
+  final List<LengthListener> lengthListeners = new ArrayList<>();
 
   ChildStructTypeBuilder(PARENT structTypeBuilder, int position) {
     this.parent = structTypeBuilder;
@@ -24,8 +24,8 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
     return this;
   }
 
-  public ChildStructTypeBuilder<PARENT> arrayLengthListener(ArrayLengthListener listener) {
-    arrayLengthListeners.add(listener);
+  public ChildStructTypeBuilder<PARENT> arrayLengthListener(LengthListener listener) {
+    lengthListeners.add(listener);
     return this;
   }
 
@@ -38,7 +38,7 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
 
   public ChildStructTypeBuilder<PARENT> lengthField(int lengthFieldPosition) {
     this.lengthExpression = Expression.valueOf(lengthFieldPosition);
-    this.arrayLengthListeners.add(ArrayLengthListener.lengthField(lengthFieldPosition));
+    this.lengthListeners.add(LengthListener.lengthField(lengthFieldPosition));
     ((ValueType<?, ?>) parent.fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(position));
     return this;
   }
@@ -51,7 +51,7 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   public StructType toStructType() {
     var type = new StructType(position, constant, lengthExpression, byteLengthExpression, fields);
     type.addByteLengthChangeListeners(byteLengthListeners);
-    type.addArrayLengthChangeListeners(arrayLengthListeners);
+    type.addArrayLengthChangeListeners(lengthListeners);
     type.addValueChangeListeners(valueChangeListeners);
     return type;
   }

@@ -21,7 +21,7 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
 
   public StructTypePrimitiveSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
     primitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
-    primitiveBuilder.arrayLengthListener(ArrayLengthListener.lengthField(lengthFieldPosition));
+    primitiveBuilder.arrayLengthListener(LengthListener.lengthField(lengthFieldPosition));
     ((ValueType<?, ?>) structTypeBuilder.getField(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(structTypeBuilder.fields()));
     return this;
   }
@@ -43,8 +43,8 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
     return this;
   }
 
-  public StructTypePrimitiveSubBuilder<PARENT> arrayLengthListener(ArrayLengthListener arrayLengthListener) {
-    primitiveBuilder.arrayLengthListener(arrayLengthListener);
+  public StructTypePrimitiveSubBuilder<PARENT> arrayLengthListener(LengthListener lengthListener) {
+    primitiveBuilder.arrayLengthListener(lengthListener);
     return this;
   }
 

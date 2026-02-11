@@ -2,20 +2,20 @@ package com.github.moaxcp.verybinary;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static com.github.moaxcp.verybinary.Util.mapIntsToBytes;
 import static com.github.moaxcp.verybinary.Util.mapIntsToShorts;
 
 public final class Struct implements ComplexPointer<Struct, StructType> {
   private boolean allocated = false;
+  private long parentOffset = -1;
   private long offset;
   private StructType structType;
   private ByteArray bytes;
   private ByteArrayListener listener;
 
    public Struct(Struct struct) {
-    this(struct.allocated, struct.offset, struct.structType, struct.bytes.copy());
+    this(struct.allocated, struct.parentOffset, struct.offset, struct.structType, struct.bytes.copy());
    }
 
   public Struct(StructType structType) {
@@ -23,19 +23,20 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct(StructType structType, ByteArray bytes) {
-    this(true, 0, structType, bytes);
+    this(true, -1, 0, structType, bytes);
   }
 
   public Struct(int offset, StructType structType) {
-    this(false, offset, structType, new ByteArray());
+    this(false, -1, offset, structType, new ByteArray());
   }
 
   public Struct(long offset, StructType structType, ByteArray bytes) {
-    this(true, offset, structType, bytes);
+    this(true, -1, offset, structType, bytes);
   }
 
-  public Struct(boolean allocated, long offset, StructType structType, ByteArray bytes) {
+  public Struct(boolean allocated, long parentOffset, long offset, StructType structType, ByteArray bytes) {
      this.allocated = allocated;
+     this.parentOffset = parentOffset;
     this.offset = offset;
     this.structType = structType;
     this.bytes = bytes;
@@ -97,7 +98,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long getByteLength(int position) {
-    return structType.getFieldByteLength(this, position);
+    return structType.getType(position).getByteLength(this);
   }
 
   public long getByteLength(int position, long index) {
@@ -109,12 +110,17 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long getArrayLength(int position) {
-    return ((ValueType) structType.getType(position)).getArrayLength(this);
+    return ((ArrayValueType) structType.getType(position)).getLength(this);
   }
 
   @Override
-  public void removeListener() {
+  public void removeByteArrayListener() {
      bytes.removeListener(listener);
+  }
+
+  @Override
+  public long getParentOffset() {
+    return parentOffset;
   }
 
   public boolean getBool(int position) {
@@ -127,52 +133,52 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public boolean getBool(int position, long index) {
-    return ((BoolType) structType.getType(position)).getBool(this, index);
+    return ((BoolArrayType) structType.getType(position)).getBool(this, index);
   }
 
   public Struct setBool(int position, long index, boolean b) {
-    ((BoolType) structType.getType(position)).set(this, index, b);
+    ((BoolArrayType) structType.getType(position)).set(this, index, b);
     return this;
   }
   
   public boolean[] getBoolArray(int position) {
-    return ((BoolType) structType.getType(position)).getBoolArray(this);
+    return ((BoolArrayType) structType.getType(position)).getBoolArray(this);
   }
 
   public Struct setBool(int position, boolean... values) {
-    ((BoolType) structType.getType(position)).set(this, values);
+    ((BoolArrayType) structType.getType(position)).set(this, values);
     return this;
   }
   
   public boolean[] getBoolArray(int position, long index, long length) {
-    return ((BoolType) structType.getType(position)).getBoolArray(this, index, length);
+    return ((BoolArrayType) structType.getType(position)).getBoolArray(this, index, length);
   }
   
   public Struct setBool(int position, long index, boolean... values) {
-    ((BoolType) structType.getType(position)).set(this, index, values);
+    ((BoolArrayType) structType.getType(position)).set(this, index, values);
     return this;
   }
   
   public List<Boolean> getBoolList(int position) {
-    return ((BoolType) structType.getType(position)).getBoolList(this);
+    return ((BoolArrayType) structType.getType(position)).getBoolList(this);
   }
   
   public Struct setBool(int position, List<Boolean> values) {
-    ((BoolType) structType.getType(position)).set(this, values);
+    ((BoolArrayType) structType.getType(position)).set(this, values);
     return this;
   }
   
   public List<Boolean> getBoolList(int position, long index, long length) {
-    return ((BoolType) structType.getType(position)).getBoolList(this, index, length);
+    return ((BoolArrayType) structType.getType(position)).getBoolList(this, index, length);
   }
   
   public Struct setBool(int position, long index, List<Boolean> values) {
-    ((BoolType) structType.getType(position)).set(this, index, values);
+    ((BoolArrayType) structType.getType(position)).set(this, index, values);
     return this;
   }
 
   public Struct addBool(int position, boolean b) {
-    ((BoolType) structType.getType(position)).add(this, b);
+    ((BoolArrayType) structType.getType(position)).add(this, b);
     return this;
   }
 
@@ -181,7 +187,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addBool(int position, long index, boolean b) {
-    ((BoolType) structType.getType(position)).add(this, index, b);
+    ((BoolArrayType) structType.getType(position)).add(this, index, b);
     return this;
   }
 
@@ -190,7 +196,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addBool(int position, boolean... values) {
-     ((BoolType) structType.getType(position)).add(this, values);
+     ((BoolArrayType) structType.getType(position)).add(this, values);
      return this;
   }
 
@@ -199,7 +205,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addBool(int position, long index, boolean... values) {
-     ((BoolType) structType.getType(position)).add(this, index, values);
+     ((BoolArrayType) structType.getType(position)).add(this, index, values);
      return this;
   }
 
@@ -208,7 +214,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addBool(int position, List<Boolean> values) {
-     ((BoolType) structType.getType(position)).add(this, values);
+     ((BoolArrayType) structType.getType(position)).add(this, values);
      return this;
   }
 
@@ -217,7 +223,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addBool(int position, long index, List<Boolean> values) {
-     ((BoolType) structType.getType(position)).add(this, index, values);
+     ((BoolArrayType) structType.getType(position)).add(this, index, values);
      return this;
   }
 
@@ -1350,7 +1356,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct setStruct(int position, List<Struct> structs) {
-    ((StructType) structType.getType(position)).set(this, structs);
+    ((StructListType) structType.getType(position)).set(this, structs);
      return this;
   }
 
@@ -1364,7 +1370,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addStruct(int position, Struct struct) {
-    ((StructType) structType.getType(position)).add(this, struct);
+    ((StructListType) structType.getType(position)).add(this, struct);
      return this;
   }
 
@@ -1373,7 +1379,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addStruct(int position, List<Struct> structs) {
-    ((StructType) structType.getType(position)).add(this, structs);
+    ((StructListType) structType.getType(position)).add(this, structs);
     return this;
   }
 
@@ -1382,7 +1388,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addStruct(int position, long index, Struct struct) {
-    ((StructType) structType.getType(position)).add(this, index, struct);
+    ((StructListType) structType.getType(position)).add(this, index, struct);
     return this;
   }
 
@@ -1391,7 +1397,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addStruct(int position, long index, List<Struct> structs) {
-    ((StructType) structType.getType(position)).add(this, index, structs);
+    ((StructListType) structType.getType(position)).add(this, index, structs);
     return this;
   }
 
@@ -1404,7 +1410,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public void remove(int position, long index) {
-     if (structType.getType(position) instanceof ValueType<?, ?> valueType) {
+     if (structType.getType(position) instanceof ArrayValueType<?, ?> valueType) {
+       valueType.remove(this, index);
+     } else if (structType.getType(position) instanceof ListValueType<?, ?> valueType) {
        valueType.remove(this, index);
      } else {
        throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
@@ -1412,16 +1420,13 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public void remove(int position, long index, long length) {
-     if (structType.getType(position) instanceof ValueType<?, ?> valueType) {
+     if (structType.getType(position) instanceof ArrayValueType<?, ?> valueType) {
+       valueType.remove(this, index, length);
+     } else if(structType.getType(position) instanceof ListValueType<?, ?> valueType) {
        valueType.remove(this, index, length);
      } else {
        throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
      }
-  }
-
-  public Struct with(Consumer<Struct> consumer) {
-     consumer.accept(this);
-     return this;
   }
 
   @Override
@@ -1452,77 +1457,29 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
         builder.append(primitiveType.getUnitSize().label()).append("=");
       }
       if (type instanceof BoolType) {
-        if (((BoolType) type).isArray()) {
-          builder.append(getBoolList(i));
-        } else {
-          builder.append(getBool(i));
-        }
+        builder.append(getBool(i));
       } else if (type instanceof Int8Type) {
-        if (((Int8Type) type).isArray()) {
-          builder.append(getInt8List(i));
-        } else {
-          builder.append(getInt8(i));
-        }
+        builder.append(getInt8(i));
       } else if (type instanceof Uint8Type) {
-        if (((Uint8Type) type).isArray()) {
-          builder.append(getUint8List(i));
-        } else {
-          builder.append(getUint8(i));
-        }
+        builder.append(getUint8(i));
       } else if (type instanceof Int16Type) {
-        if (((Int16Type) type).isArray()) {
-          builder.append(getInt16List(i));
-        } else {
-          builder.append(getInt16(i));
-        }
+        builder.append(getInt16(i));
       } else if (type instanceof Uint16Type) {
-        if (((Uint16Type) type).isArray()) {
-          builder.append(getUint16List(i));
-        } else {
-          builder.append(getUint16(i));
-        }
+        builder.append(getUint16(i));
       } else if (type instanceof Int32Type) {
-        if (((Int32Type) type).isArray()) {
-          builder.append(getInt32List(i));
-        } else {
-          builder.append(getInt32(i));
-        }
+        builder.append(getInt32(i));
       } else if (type instanceof Uint32Type) {
-        if (((Uint32Type) type).isArray()) {
-          builder.append(getUint32List(i));
-        } else {
-          builder.append(getUint32(i));
-        }
+        builder.append(getUint32(i));
       } else if (type instanceof Int64Type) {
-        if (((Int64Type) type).isArray()) {
-          builder.append(getInt64List(i));
-        } else {
-          builder.append(getInt64(i));
-        }
+        builder.append(getInt64(i));
       } else if (type instanceof Uint64Type) {
-        if (((Uint64Type) type).isArray()) {
-          builder.append(getUint64List(i));
-        } else {
-          builder.append(getUint64(i));
-        }
+        builder.append(getUint64(i));
       } else if (type instanceof Float32Type) {
-        if (((Float32Type) type).isArray()) {
-          builder.append(getFloat32List(i));
-        } else {
-          builder.append(getFloat32(i));
-        }
+        builder.append(getFloat32(i));
       } else if (type instanceof Float64Type) {
-        if (((Float64Type) type).isArray()) {
-          builder.append(getFloat64List(i));
-        } else {
-          builder.append(getFloat64(i));
-        }
+        builder.append(getFloat64(i));
       } else if (type instanceof StructType) {
-        if (((StructType) type).isArray()) {
-          builder.append("Struct=").append(getStructList(i));
-        } else {
-          builder.append("Struct=").append(getStruct(i));
-        }
+        builder.append("Struct=").append(getStruct(i));
       } else if (type instanceof PadType padType) {
         if (padType.isAlign()) {
           builder.append("align=").append(padType.getByteLength(this));

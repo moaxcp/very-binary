@@ -1,20 +1,12 @@
 package com.github.moaxcp.verybinary;
 
-import org.jspecify.annotations.Nullable;
+public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T extends Number> extends PrimitiveType<SELF, T> permits Float32Type, Float64Type, Int16Type, Int32Type, Int64Type, Int8Type, Uint16Type, Uint32Type, Uint64Type, Uint8Type {
 
-public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T extends Number> extends PrimitiveType<SELF, T> permits Int8Type, Uint8Type, Int16Type, Uint16Type, Int32Type, Uint32Type, Int64Type, Uint64Type, Float32Type, Float64Type {
-
-  public NumberType(int position, Primitive size) {
-    super(position, size);
+  NumberType(int position, Primitive unitSize) {
+    super(position, unitSize);
   }
 
-  NumberType(int position, Primitive unitSize, T constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
-    super(position, unitSize, constantValue, lengthExpression, byteLengthExpression);
-  }
-
-  public long defaultValue() {
-    return constantValue != null ? constantValue.longValue() : 0;
-  }
+  public abstract long defaultArrayLengthValue();
 
   abstract void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value);
 

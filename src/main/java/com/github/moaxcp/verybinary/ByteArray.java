@@ -1243,10 +1243,11 @@ public class ByteArray {
     return this;
   }
 
-  private ByteArray shiftBytesFor(long index, long size) {
+  public ByteArray shiftBytesFor(long index, long size) {
     if (bytes.length >= allocated + size) {
       if (size > 0) {
         System.arraycopy(bytes, Math.toIntExact(index), bytes, Math.toIntExact(index + size), Math.toIntExact(allocated - index));
+        Arrays.fill(bytes, Math.toIntExact(index), Math.toIntExact(index + size), (byte) 0);
       } else {
         System.arraycopy(bytes, Math.toIntExact(index - size), bytes, Math.toIntExact(index), Math.toIntExact(allocated - (index - size)));
       }

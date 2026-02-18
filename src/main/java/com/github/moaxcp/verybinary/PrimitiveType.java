@@ -8,16 +8,17 @@ import java.util.Objects;
 
 public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, T> extends Type<SELF> implements ValueType<SELF, T> permits BoolType, NumberType {
 
-  @Nullable
-  private final Expression byteLengthExpression;
   private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
-  private final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   private Primitive unitSize;
 
-  PrimitiveType(int position, @Nullable Expression byteLengthExpression, Primitive unitSize) {
+  PrimitiveType(int position, Primitive unitSize) {
     super(position);
-    this.byteLengthExpression = byteLengthExpression;
     this.unitSize = unitSize;
+  }
+
+  @Override
+  public @Nullable Expression getByteLengthExpression() {
+    return null;
   }
 
   @Override
@@ -25,18 +26,9 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
     throw new UnsupportedOperationException("getConstantValue not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "ConstantValue(Pointer) instead.");
   }
 
-  public @Nullable Expression getByteLengthExpression() {
-    return byteLengthExpression;
-  }
-
   @Override
   public List<ValueChangeListener> getValueChangeListeners() {
     return valueChangeListeners;
-  }
-
-  @Override
-  public List<ByteLengthListener> getByteLengthListeners() {
-    return byteLengthListeners;
   }
 
   public final Primitive getUnitSize() {

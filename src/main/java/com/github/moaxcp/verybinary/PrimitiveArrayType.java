@@ -5,7 +5,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-sealed abstract class PrimitiveArrayType<SELF extends PrimitiveArrayType<SELF, T>, T> extends Type<SELF> implements ArrayValueType<SELF, T> permits BoolArrayType {
+sealed abstract class PrimitiveArrayType<SELF extends PrimitiveArrayType<SELF, T>, T> extends Type<SELF> implements ArrayValueType<SELF, T> permits BoolArrayType, Float32ArrayType, Float64ArrayType, Int16ArrayType, Int32ArrayType, Int64ArrayType, Int8ArrayType, Uint16ArrayType, Uint32ArrayType, Uint8ArrayType {
   @Nullable
   private final Expression lengthExpression;
   @Nullable
@@ -28,6 +28,11 @@ sealed abstract class PrimitiveArrayType<SELF extends PrimitiveArrayType<SELF, T
   @Override
   public T @Nullable [] getConstantValue() {
     throw new UnsupportedOperationException("getConstantValue not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "ConstantValue(Pointer) instead.");
+  }
+
+  @Override
+  public long getConstantValueSize() {
+    return unitSize.size();
   }
 
   public final @Nullable Expression getByteLengthExpression() {

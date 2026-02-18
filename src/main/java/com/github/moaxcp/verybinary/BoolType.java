@@ -17,8 +17,8 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   private final boolean constantValueSet;
   private final boolean constantValue;
 
-  public BoolType(int position, @Nullable Boolean constantValue, @Nullable Expression byteLengthExpression) {
-    super(position, byteLengthExpression, BOOL);
+  public BoolType(int position, @Nullable Boolean constantValue) {
+    super(position, BOOL);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : false;
   }

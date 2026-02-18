@@ -8,104 +8,104 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.moaxcp.verybinary.Primitive.BOOL;
-import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
+import static com.github.moaxcp.verybinary.Primitive.FLOAT32;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
-public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boolean> {
-  private final boolean @Nullable [] constantValue;
+public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType, Float> {
 
-  public BoolArrayType(int position, boolean @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
-    super(position, BOOL, lengthExpression, byteLengthExpression);
+  private final float @Nullable [] constantValue;
+
+  public Float32ArrayType(int position, float @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
+    super(position, FLOAT32, lengthExpression, byteLengthExpression);
     this.constantValue = constantValue;
   }
 
-  public BoolArrayType copy(int position) {
-    return new BoolArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
+  @Override
+  public Float32ArrayType copy(int position) {
+    return new Float32ArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
   }
 
-  public boolean @Nullable [] getConstantBoolValue() {
-    return constantValue;
-  }
-
-  public boolean[] getBool(Pointer<?, ? extends Type<?>> pointer) {
+  public float[] getFloat32(Pointer<?, ? extends Type<?>> pointer) {
     long length = getLength(pointer);
     checkIndex(pointer, length - 1);
-    return pointer.getByteArray().getBool(getOffset(pointer), length);
+    return pointer.getByteArray().getFloat32(getOffset(pointer), length);
   }
 
-  public boolean getBool(Pointer<?, ? extends Type<?>> pointer, long index) {
+  public float getFloat32(Pointer<?, ? extends Type<?>> pointer, long index) {
     checkIndex(pointer, index);
-    return pointer.getByteArray().getBool(getOffset(pointer, index));
+    return pointer.getByteArray().getFloat32(getOffset(pointer, index));
   }
 
-  public boolean[] getBool(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  public float[] getFloat32(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
-    return pointer.getByteArray().getBool(getOffset(pointer, index), length);
+    return pointer.getByteArray().getFloat32(getOffset(pointer, index), length);
   }
 
-  public List<Boolean> getBoolList(Pointer<?, ? extends Type<?>> pointer) {
-    var length = getLength(pointer);
+  public List<Float> getFloat32List(Pointer<?, ? extends Type<?>> pointer) {
+    long length = getLength(pointer);
     checkIndex(pointer, length - 1);
-    return pointer.getByteArray().getBoolList(getOffset(pointer, 0), length);
+    return pointer.getByteArray().getFloat32List(getOffset(pointer), length);
   }
 
-  public List<Boolean> getBoolList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  public List<Float> getFloat32List(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
-    return pointer.getByteArray().getBoolList(getOffset(pointer, index), length);
+    return pointer.getByteArray().getFloat32List(getOffset(pointer, index), length);
   }
 
+  public void set(Pointer<?, ? extends Type<?>> pointer, float value) {
+    checkForConstantValue(pointer, 0, value);
+    setUnchecked(SET_VALUE, pointer, 0, value);
+  }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, boolean[] values) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, float[] values) {
     checkArrayRange(pointer, 0, values.length);
     checkForConstantValues(pointer, 0, values);
     setUnchecked(SET_VALUE, pointer, 0, values);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, List<Boolean> values) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, List<Float> values) {
     checkArrayRange(pointer, 0, values.size());
     checkForConstantValues(pointer, 0, values);
-    setUnchecked(SET_VALUE, pointer, 0, values);
+    setUnchecked(SET_BY_ARRAY_LENGTH, pointer, 0, values);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     checkIndex(pointer, index);
     checkForConstantValue(pointer, index, value);
     setUnchecked(SET_VALUE, pointer, index, value);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
     checkArrayRange(pointer, index, index + values.length);
     checkForConstantValues(pointer, index, values);
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
-    checkArrayRange(pointer, index, index + values.size() - 1);
+  public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
+    checkArrayRange(pointer, index, index + values.size());
     checkForConstantValues(pointer, index, values);
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
-    if (pointer.getByteArray().getBool(getOffset(pointer, index)) == value) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, float value) {
+    if (pointer.getByteArray().getFloat32(getOffset(pointer, index)) == value) {
       return;
     }
     if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getBool(getOffset(pointer), getLength(pointer));
+      var old = pointer.getByteArray().getFloat32(getOffset(pointer, index), getLength(pointer));
       var newValue = Arrays.copyOf(old, old.length);
       newValue[Math.toIntExact(index)] = value;
-      pointer.getByteArray().setBool(getOffset(pointer, index), value);
+      pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
       notifyValueChange(reason, pointer, old, newValue);
     } else {
-      pointer.getByteArray().setBool(getOffset(pointer, index), value);
+      pointer.getByteArray().setFloat32(getOffset(pointer, index), value);
     }
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
     if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getBool(getOffset(pointer), getLength(pointer));
-      var newValue = new boolean[old.length + values.length];
+      var old = pointer.getByteArray().getFloat32(getOffset(pointer), getLength(pointer));
+      var newValue = new float[old.length + values.length];
       if (index == 0) {
         System.arraycopy(values, 0, newValue, 0, values.length);
         System.arraycopy(old, 0, newValue, values.length, old.length);
@@ -118,37 +118,37 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
         System.arraycopy(old, (int) index, newValue, (int) index + values.length, old.length - (int) index);
       }
       if (!Arrays.equals(old, newValue)) {
-        pointer.getByteArray().setBool(getOffset(pointer, index), values);
+        pointer.getByteArray().setFloat32(getOffset(pointer, index), values);
         notifyValueChange(reason, pointer, old, newValue);
       }
     } else {
-      pointer.getByteArray().setBool(getOffset(pointer, index), values);
+      pointer.getByteArray().setFloat32(getOffset(pointer, index), values);
     }
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
+  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
     if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getBoolList(getOffset(pointer), getLength(pointer));
-      var newValue = new ArrayList<Boolean>(values.size());
+      var old = pointer.getByteArray().getFloat32List(getOffset(pointer), getLength(pointer));
+      var newValue = new ArrayList<Float>(values.size());
       newValue.addAll(old.subList(0, Math.toIntExact(index)));
       newValue.addAll(values);
       newValue.addAll(old.subList(Math.toIntExact(index), old.size()));
-      pointer.getByteArray().setBool(getOffset(pointer, index), values);
+      pointer.getByteArray().setFloat32(getOffset(pointer, index), values);
       if (!old.equals(newValue)) {
         notifyValueChange(reason, pointer, old, newValue);
       }
     } else {
-      pointer.getByteArray().setBool(getOffset(pointer, index), values);
+      pointer.getByteArray().setFloat32(getOffset(pointer, index), values);
     }
   }
 
-  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
+  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue[Math.toIntExact(index)]);
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 
-  private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
+  private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
     if (isConstantValue(pointer.getType())) {
       if (constantValue.length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(constantValue));
@@ -161,8 +161,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
     }
   }
 
-  @Override
-  public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
+  public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
     if (isConstantValue(pointer.getType())) {
       if (constantValue.length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(constantValue));
@@ -175,20 +174,19 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
     }
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, boolean value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, float value) {
     add(pointer, getLength(pointer), value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, boolean[] values) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, float[] values) {
     add(pointer, getLength(pointer), values);
   }
 
-  @Override
-  public void add(Pointer<?, ? extends Type<?>> pointer, List<Boolean> values) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, List<Float> values) {
     add(pointer, getLength(pointer), values);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (isFixedLength(pointer)) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
@@ -197,32 +195,32 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
     setUnchecked(SET_VALUE, pointer, index, value);
   }
 
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
     if (isFixedLength(pointer)) {
-      throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
+      throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
     allocate(pointer, index, values.length);
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  @Override
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
+  public void add(Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
     if (isFixedLength(pointer)) {
-      throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
+      throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValues(pointer, index, values);
     allocate(pointer, index, values.size());
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isConstantValue(pointer.getType())) {
-      pointer.getByteArray().addBool(getOffset(pointer), constantValue);
+      pointer.getByteArray().addFloat32(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
-      pointer.getByteArray().shiftBytesFor(getOffset(pointer), length);
+      for (int i = 0; i < length; i++) {
+        pointer.getByteArray().addFloat32(getOffset(pointer, i), 0);
+      }
     }
   }
 
@@ -234,7 +232,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
     callWithLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), getUnitSize().size());
+        pointer.getByteArray().addFloat32(getOffset(pointer, index), 0);
       });
     });
   }
@@ -247,7 +245,8 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
     callWithLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), length * getUnitSize().size());
+        var values = new float[Math.toIntExact(length)];
+        pointer.getByteArray().addFloat32(getOffset(pointer, index), values);
       });
     });
   }

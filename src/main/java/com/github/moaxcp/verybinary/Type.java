@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, PadType, PrimitiveArrayType, PrimitiveType, StructListType {
+public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, PadType, PrimitiveArrayType, PrimitiveType, StructListType, Uint64ListType {
   protected final int position;
   protected List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
 

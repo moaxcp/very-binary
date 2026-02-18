@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary;
 import java.util.List;
 import java.util.Objects;
 
-sealed interface ListValueType<SELF extends ValueType<SELF, List<T>>, T> extends IndexedValueType<SELF, List<T>> permits StructListType {
+sealed interface ListValueType<SELF extends ValueType<SELF, List<T>>, T> extends IndexedValueType<SELF, List<T>> permits StructListType, Uint64ListType {
 
   default long getConstantValueSize(Pointer<?, ? extends Type<?>> pointer) {
     return getConstantValue().size();

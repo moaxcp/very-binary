@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 
-sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits ArrayValueType, IndexedValueType, ListValueType, PrimitiveType, StructType {
+sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits IndexedValueType, PrimitiveType, StructType {
   int getPosition();
 
   @Nullable T getConstantValue();

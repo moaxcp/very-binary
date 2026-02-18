@@ -74,7 +74,7 @@ public interface Expression {
 
     @Override
     public long defaultValue(Type<?> parent) {
-      return ((NumberType<?, ?>) parent.getType(position)).defaultValue();
+      return ((NumberType<?, ?>) parent.getType(position)).defaultArrayLengthValue();
     }
 
     @Override

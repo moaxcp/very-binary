@@ -51,6 +51,11 @@ public final class StructListType extends Type<StructListType> implements ListVa
   }
 
   @Override
+  public long getConstantValueSize() {
+    return constantValue.size();
+  }
+
+  @Override
   public @Nullable List<Struct> getConstantValue() {
     return constantValue;
   }
@@ -159,10 +164,10 @@ public final class StructListType extends Type<StructListType> implements ListVa
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
     checkForConstantValue(pointer, index, value);
     if (!valueChangeListeners.isEmpty()) {
-      var old = new Struct(getOffset(pointer, index), this, pointer.getByteArray());
+      var old = new Struct(pointer.getParentOffset(), getOffset(pointer, index), structType, pointer.getByteArray());
       if (!old.equals(value)) {
         pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index), value.getByteArray(), value.getOffset(), value.getByteLength());
-        notifyValueChange(SET_VALUE, pointer, index, old, value);
+        notifyValueChange(SET_VALUE, pointer, old, value);
       }
       old.removeByteArrayListener();
     } else {
@@ -184,21 +189,50 @@ public final class StructListType extends Type<StructListType> implements ListVa
       var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, $), structType, pointer.getByteArray());
       struct.removeByteArrayListener();
       if (structType.isConstant(null)) {
-        struct.getByteArray().addInt8(getOffset(pointer), structType.constantArray.getAllocatedBytes());
+        struct.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
       } else {
-        for (int i = 0; i < fields.size(); i++) {
-          getType(i).allocate(pointer);
+        for (int i = 0; i < structType.getFields().size(); i++) {
+          structType.getType(i).allocate(pointer);
         }
       }
+    }
   }
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-
+    callWithLengthChange(reason, pointer, 1, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        if (isConstantValue(pointer.getType())) {
+          pointer.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
+        } else {
+          var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, index), structType, pointer.getByteArray());
+          struct.removeByteArrayListener();
+          for (int i = 0; i < structType.getFields().size(); i++) {
+            structType.getType(i).allocate(struct);
+          }
+        }
+      });
+    });
   }
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-
+    callWithLengthChange(reason, pointer, length, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
+        checkIndexAllocate(pointer, index);
+        for (long i = 0; i < length; i++) {
+          if (isConstantValue(pointer.getType())) {
+            pointer.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
+          } else {
+            var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, index + i), structType, pointer.getByteArray());
+            struct.removeByteArrayListener();
+            for (int j = 0; j < structType.getFields().size(); j++) {
+              structType.getType(j).allocate(struct);
+            }
+          }
+        }
+      });
+    });
   }
 }

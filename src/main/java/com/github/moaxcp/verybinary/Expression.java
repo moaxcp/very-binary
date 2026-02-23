@@ -64,7 +64,7 @@ public interface Expression {
 
     @Override
     public boolean isConstant(Type<?> parent) {
-      return parent.getType(position) instanceof NumberType<?, ?> v && v.isConstant(parent);
+      return parent.getType(position) instanceof NumberType<?, ?> v && v.isConstant();
     }
 
     @Override
@@ -102,6 +102,7 @@ public interface Expression {
         case BoolType ignored -> throw new IllegalArgumentException("cannot evaluate boolean type");
         case StructType ignored -> throw new IllegalArgumentException("cannot evaluate struct type");
         case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
+        case IndexedValueType ignored -> throw new IllegalArgumentException("cannot evaluate indexed value type");
         case null -> throw new IllegalArgumentException("cannot evaluate null type");
       };
     }

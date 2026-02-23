@@ -25,7 +25,12 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
 
   @Override
   public BoolType copy(int position) {
-    return new BoolType(position, constantValueSet ? constantValue : null, getByteLengthExpression());
+    return new BoolType(position, constantValueSet ? constantValue : null);
+  }
+
+  @Override
+  public boolean isConstant() {
+    return constantValueSet;
   }
 
   public boolean getBool(Pointer<?, ? extends Type<?>> pointer) {
@@ -48,7 +53,7 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, boolean value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+    if (isConstant() && !Objects.equals(constantValue, value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
     }
   }

@@ -17,14 +17,25 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
   public BoolArrayType(int position, boolean @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position, BOOL, lengthExpression, byteLengthExpression);
     this.constantValue = constantValue;
+    checkConstant();
   }
 
   public BoolArrayType copy(int position) {
     return new BoolArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
   }
 
+  @Override
+  public boolean isConstant() {
+    return constantValue != null;
+  }
+
   public boolean @Nullable [] getConstantBoolValue() {
     return constantValue;
+  }
+
+  @Override
+  public long getConstantValueSize() {
+    return constantValue != null ? constantValue.length : 0;
   }
 
   public boolean[] getBool(Pointer<?, ? extends Type<?>> pointer) {
@@ -143,13 +154,13 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
+    if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue[Math.toIntExact(index)]);
     }
   }
 
   private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(constantValue));
       }
@@ -163,7 +174,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
 
   @Override
   public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(constantValue));
       }
@@ -218,7 +229,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       pointer.getByteArray().addBool(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
@@ -228,7 +239,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, 1, () -> {
@@ -241,7 +252,7 @@ public final class BoolArrayType extends PrimitiveArrayType<BoolArrayType, Boole
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, length, () -> {

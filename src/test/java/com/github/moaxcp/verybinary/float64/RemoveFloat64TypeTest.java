@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float64;
 
-import com.github.moaxcp.verybinary.Float64Type;
+import com.github.moaxcp.verybinary.Float64ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -68,7 +68,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type cannot remove from non-array type at position 0");
+        .hasMessage("Float64ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -82,7 +82,7 @@ public class RemoveFloat64TypeTest {
     struct.addFloat64(1, 2.0d);
     struct.remove(1, 0);
 
-    assertThat(((Float64Type) struct.getType(1)).getFloat64(struct, 0)).isEqualTo(2.0d);
+    assertThat(((Float64ArrayType) struct.getType(1)).getFloat64(struct, 0)).isEqualTo(2.0d);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(1).float64(2));
   }
@@ -111,7 +111,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: -1 length: 2");
+        .hasMessage("Float64ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -124,7 +124,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: 2 length: 2");
+        .hasMessage("Float64ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -136,7 +136,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type cannot remove from non-array type at position 0");
+        .hasMessage("Float64ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -147,7 +147,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Float64Type at position 0");
+        .hasMessage("Cannot remove fixed length array Float64ArrayType at position 0");
   }
 
   @Test
@@ -158,6 +158,6 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Float64Type at position 0 index: 2");
+        .hasMessage("Cannot remove element from fixed length array Float64ArrayType at position 0 index: 2");
   }
 }

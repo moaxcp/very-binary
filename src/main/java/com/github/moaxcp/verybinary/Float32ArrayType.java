@@ -18,11 +18,22 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
   public Float32ArrayType(int position, float @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position, FLOAT32, lengthExpression, byteLengthExpression);
     this.constantValue = constantValue;
+    checkConstant();
   }
 
   @Override
   public Float32ArrayType copy(int position) {
     return new Float32ArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
+  }
+
+  @Override
+  public boolean isConstant() {
+    return constantValue != null;
+  }
+
+  @Override
+  public long getConstantValueSize() {
+    return constantValue != null ? constantValue.length : 0;
   }
 
   public float[] getFloat32(Pointer<?, ? extends Type<?>> pointer) {
@@ -143,13 +154,13 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
+    if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 
   private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(constantValue));
       }
@@ -162,7 +173,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
   }
 
   public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(constantValue));
       }
@@ -214,7 +225,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       pointer.getByteArray().addFloat32(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
@@ -226,7 +237,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, 1, () -> {
@@ -239,7 +250,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, length, () -> {

@@ -29,6 +29,11 @@ public final class Uint64ListType extends Type<Uint64ListType> implements ListVa
     this.lengthExpression = lengthExpression;
     this.byteLengthExpression = byteLengthExpression;
     unitSize = UINT64;
+    if (lengthExpression == null && byteLengthExpression == null && !isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot both be null unless there is a constantValue");
+    } else if ((lengthExpression != null || byteLengthExpression != null) && isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot be set when value is constant.");
+    }
   }
 
   @Override
@@ -37,13 +42,19 @@ public final class Uint64ListType extends Type<Uint64ListType> implements ListVa
   }
 
   @Override
+  public boolean isConstant(@Nullable Type<?> parent) {
+    return ListValueType.super.isConstant(parent);
+  }
+
+  @Nullable
+  @Override
   public List<BigInteger> getConstantValue() {
     return constantValue;
   }
 
   @Override
   public long getConstantValueSize() {
-    return unitSize.size() * (constantValue != null ? constantValue.size() : 0);
+    return constantValue != null ? constantValue.size() : 0;
   }
 
   public @Nullable Expression getByteLengthExpression() {
@@ -185,7 +196,7 @@ public final class Uint64ListType extends Type<Uint64ListType> implements ListVa
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       pointer.getByteArray().addUint64(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
@@ -195,7 +206,7 @@ public final class Uint64ListType extends Type<Uint64ListType> implements ListVa
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + constantValue);
     }
     callWithLengthChange(reason, pointer, 1, () -> {
@@ -208,7 +219,7 @@ public final class Uint64ListType extends Type<Uint64ListType> implements ListVa
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + constantValue);
     }
     callWithLengthChange(reason, pointer, 1, () -> {

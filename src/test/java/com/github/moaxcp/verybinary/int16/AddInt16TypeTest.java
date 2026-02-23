@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.int16;
 
+import com.github.moaxcp.verybinary.Int16ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,9 +17,9 @@ public class AddInt16TypeTest {
         .int16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Int16Type) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
+    assertThatThrownBy(() -> ((Int16ArrayType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Short) not supported for Int16Type. Use add(Pointer, short) instead.");
+        .hasMessage("add(Pointer, Short) not supported for Int16ArrayType. Use add(Pointer, short) instead.");
   }
 
   @Test
@@ -28,9 +29,9 @@ public class AddInt16TypeTest {
         .int16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Int16Type) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
+    assertThatThrownBy(() -> ((Int16ArrayType) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Short) not supported for Int16Type. Use add(Pointer, long, short) instead.");
+        .hasMessage("add(Pointer, long, Short) not supported for Int16ArrayType. Use add(Pointer, long, short) instead.");
   }
 
   @Test
@@ -93,7 +94,7 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(0, (short) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int16Type at position 0 is constant length: 5 index: 5");
+        .hasMessage("Int16ArrayType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -104,7 +105,7 @@ public class AddInt16TypeTest {
         .build();
     assertThatThrownBy(() -> struct.addInt16(0, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -131,7 +132,7 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(1, -1, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type at position 1 index: -1 new length: 3");
+        .hasMessage("Int16ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -144,7 +145,7 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(1, 3, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type at position 1 index: 3 new length: 3");
+        .hasMessage("Int16ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -169,7 +170,7 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(0, 0, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type cannot add to non-array type at position 0 index: 0 length: 1");
+        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
   }
 
   @Test
@@ -181,7 +182,7 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(0, 1, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -192,6 +193,6 @@ public class AddInt16TypeTest {
 
     assertThatThrownBy(() -> struct.addInt16(0, 3, (short) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int16Type at position 0 is constant length: 5 index: 3");
+        .hasMessage("Int16ArrayType at position 0 is constant length: 5 index: 3");
   }
 }

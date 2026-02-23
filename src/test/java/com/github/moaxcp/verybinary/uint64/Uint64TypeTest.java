@@ -7,27 +7,15 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
+import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
 import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.UINT64;
 import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
-import static com.github.moaxcp.verybinary.Uint64Type.uint64Type;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint64TypeTest {
-
-  @Test
-  void constructor() {
-    var type = uint64Type();
-    assertThat(type.getPosition()).isEqualTo(-1);
-  }
-
-  @Test
-  void constructorPosition() {
-    var type = uint64Type(15);
-    assertThat(type.getPosition()).isEqualTo(15);
-  }
 
   @Test
   void constructorEverything() {
@@ -44,7 +32,11 @@ public class Uint64TypeTest {
 
   @Test
   void copy() {
-    var type = uint64Type();
+    var type = structType()
+        .uint64()
+        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64()
+        .align(2)
+        .build();
     var copy = type.copy(15);
     assertThat(copy.getPosition()).isEqualTo(15);
   }

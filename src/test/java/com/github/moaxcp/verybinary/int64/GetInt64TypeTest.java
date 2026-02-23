@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.int64;
 
+import com.github.moaxcp.verybinary.Int64ArrayType;
 import com.github.moaxcp.verybinary.Int64Type;
 import org.junit.jupiter.api.Test;
 
@@ -104,7 +105,7 @@ public class GetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.getInt64(0, 1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type at position 0 index: 1 length: 1");
+        .hasMessage("Int64ArrayType at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -114,9 +115,9 @@ public class GetInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int64Type) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Int64ArrayType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Int64Type. Use getInt64(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Int64ArrayType. Use getInt64(Pointer, long) instead.");
   }
 
   @Test
@@ -140,7 +141,7 @@ public class GetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.getInt64(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type at position 1 index: -1 length: 0");
+        .hasMessage("Int64ArrayType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -153,7 +154,7 @@ public class GetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.getInt64(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type at position 1 index: 2 length: 2");
+        .hasMessage("Int64ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test

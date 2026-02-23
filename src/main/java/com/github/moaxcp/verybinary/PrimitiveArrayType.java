@@ -17,22 +17,27 @@ sealed abstract class PrimitiveArrayType<SELF extends PrimitiveArrayType<SELF, T
 
   public PrimitiveArrayType(int position, Primitive unitSize, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position);
-    if (lengthExpression == null && byteLengthExpression == null) {
-      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot both be null");
-    }
     this.lengthExpression = lengthExpression;
     this.byteLengthExpression = byteLengthExpression;
     this.unitSize = unitSize;
   }
 
-  @Override
-  public T @Nullable [] getConstantValue() {
-    throw new UnsupportedOperationException("getConstantValue not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "ConstantValue(Pointer) instead.");
+  protected void checkConstant() {
+    if (lengthExpression == null && byteLengthExpression == null && !isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot both be null unless there is a constantValue");
+    } else if ((lengthExpression != null || byteLengthExpression != null) && isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot be set when value is constant.");
+    }
   }
 
   @Override
-  public long getConstantValueSize() {
-    return unitSize.size();
+  public boolean isConstant(Type<?> parent) {
+    return ArrayValueType.super.isConstant(parent);
+  }
+
+  @Override
+  public T @Nullable [] getConstantValue() {
+    throw new UnsupportedOperationException("getConstantValue not supported for " + getClass().getSimpleName() + ". Use get" + unitSize.title() + "ConstantValue(Pointer) instead.");
   }
 
   public final @Nullable Expression getByteLengthExpression() {

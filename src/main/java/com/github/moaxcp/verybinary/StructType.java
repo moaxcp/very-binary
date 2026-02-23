@@ -9,36 +9,29 @@ import java.util.Objects;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class StructType extends ComplexType<StructType> implements ValueType<StructType, Struct> {
-  @Nullable
-  private final Expression byteLengthExpression;
+
   private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
-  private final ByteArray constantArray;
+  @Nullable
+  private final Struct constantValue;
   private final List<Type<?>> fields;
 
-  StructType(int position, @Nullable ByteArray constant, @Nullable Expression byteLengthExpression, List<Type<?>> fields) {
+  StructType(int position, List<Type<?>> fields) {
     super(position);
-    this.byteLengthExpression = byteLengthExpression;
-    this.constantArray = constant;
     this.fields = fields;
-  }
-
-  public @Nullable Struct getConstantValue() {
-    if (constantArray == null) {
-      return null;
+    if (fields.stream().allMatch(t -> t.isConstant(this))) {
+      constantValue = new Struct(this);
+    } else {
+      constantValue = null;
     }
-    var struct = new Struct(this, constantArray);
-    //constant value has its own array and should not move.
-    struct.removeByteArrayListener();
-    return struct;
-  }
-
-  ByteArray getConstantArray() {
-    return constantArray;
   }
 
   @Override
-  public @Nullable Expression getByteLengthExpression() {
-    return byteLengthExpression;
+  public boolean isConstant(@Nullable Type<?> parent) {
+    return ValueType.super.isConstant(parent);
+  }
+
+  public @Nullable Struct getConstantValue() {
+    return constantValue;
   }
 
   @Override
@@ -62,7 +55,7 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
 
   @Override
   public StructType copy(int position) {
-    return new StructType(position, this.constantArray, byteLengthExpression, new ArrayList<>(fields));
+    return new StructType(position, new ArrayList<>(fields));
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -120,24 +113,16 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
     }
   }
 
-  public boolean isConstant(Type<?> type) {
-    return constantArray != null;
-  }
-
-  public boolean isConstantValue(Type<?> type) {
-    return constantArray != null;
-  }
-
   public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantArray, value.getByteArray())) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + new Struct(this, constantArray));
+    if (this.isConstant(pointer.getType()) && !Objects.equals(constantValue.getByteArray(), value.getByteArray())) {
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
     }
   }
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isConstant(pointer.getType())) {
-      pointer.getByteArray().addInt8(getOffset(pointer), constantArray.getAllocatedBytes());
+      pointer.getByteArray().addInt8(getOffset(pointer), constantValue.getByteArray().getAllocatedBytes());
     } else {
       for (int i = 0; i < fields.size(); i++) {
         getType(i).allocate(pointer);
@@ -149,7 +134,7 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
   public String toString() {
     return "StructType{" +
         "fields=" + fields +
-        ", constantValue=" + constantArray +
+        ", constantValue=" + constantValue +
         ", position=" + position +
         '}';
   }

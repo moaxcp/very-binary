@@ -49,3 +49,9 @@ todo:
 * There no implementation for large ByteArrays. Even with an implementation much of the design for arrays will not.
   * arrays would need a collection type that can be larger than a java array.
 * Add tests for 0 length getters. They should return an empty array or List.
+* fix isConstant/isConstantValue/isFixedLength with array/list types.
+  * Constants are now a list or array instead of a single repeated value. This means a length expression is not required because the constant value defines the length.
+  * if and indexed type is constant then it shouldn't even have a length expression.
+  * fixed length should check if there is a constant
+* Struct and StructList types should not have constants instead each member should be constant. isConstant should check each field
+* isFixedLength does not need a pointer. It needs the parent type which is used in pad and length expression.

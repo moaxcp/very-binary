@@ -17,8 +17,8 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
-  public @Nullable Expression getByteLengthExpression() {
-    return null;
+  public boolean isConstant(@Nullable Type<?> parent) {
+    return ValueType.super.isConstant(parent);
   }
 
   @Override

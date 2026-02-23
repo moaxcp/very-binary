@@ -66,6 +66,7 @@
    - [ ] Expose methods to access fields by index and, if supported, by symbolic name from the schema.
    - [ ] Ensure struct-sized inserts/removes shift bytes properly through ByteArray.
    - [ ] Ensure listener notifications propagate correctly on struct operations.
+   - [x] Update StructList to look like BoolList but working with Structs — refs: req: ByteArray; plan: 4.8. Struct
 
 9. [ ] Phase 9 — Builders and ergonomics
    - [ ] Provide builder classes for StructType creation, including sub-builders for primitive fields and pad entries.

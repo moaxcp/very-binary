@@ -33,6 +33,11 @@ public final class PadType extends Type<PadType> {
   }
 
   @Override
+  public boolean isConstant(Type<?> parent) {
+    return !align || parent.getType(position - 1).isConstant(parent);
+  }
+
+  @Override
   public long getAllocationLength(Type<?> parent) {
     if (!align) {
       return length;
@@ -63,8 +68,10 @@ public final class PadType extends Type<PadType> {
 
   @Override
   public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
-    return switch (pointer) {
-      case Struct struct -> !align || struct.getType(position - 1).isFixedLength(pointer);
+    var type = pointer.getType();
+    return switch (type) {
+      case ComplexType<?> complex -> !align || complex.getType(position - 1).isFixedLength(pointer);
+      default -> throw new IllegalArgumentException("Cannot pad " + type);
     };
   }
 

@@ -118,7 +118,7 @@ public class GetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.getUint64(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: -1 length: 0");
+        .hasMessage("Uint64ArrayType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -131,7 +131,7 @@ public class GetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.getUint64(1, 1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: 1 length: 1");
+        .hasMessage("Uint64ArrayType at position 1 index: 1 length: 1");
   }
 
   @Test

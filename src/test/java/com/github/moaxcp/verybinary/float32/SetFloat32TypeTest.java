@@ -64,7 +64,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32Type at position 0 is constant index: 0 value: 2.0 constant: 3.0");
+        .hasMessage("Float32ArrayType at position 0 is constant index: 0 value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(1, -1, 2.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 1 index: -1 length: 1");
+        .hasMessage("Float32ArrayType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -108,7 +108,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(1, 2, 2.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 1 index: 2 length: 1");
+        .hasMessage("Float32ArrayType at position 1 index: 2 length: 1");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 1, 2.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 0 index: 1 length: 1");
+        .hasMessage("Float32ArrayType at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -169,7 +169,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32Type at position 1 is constant index: 1 value: 2.0 constant: 3.0");
+        .hasMessage("Float32ArrayType at position 1 is constant index: 1 value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -180,7 +180,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 2.0f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32Type at position 0 is constant index: 2 value: 2.0 constant: 3.0");
+        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -263,7 +263,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, -1, 2.0f, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 0 length: 5 start: -1 end: 1");
+        .hasMessage("Float32ArrayType at position 0 length: 5 start: -1 end: 1");
   }
 
   @Test
@@ -274,7 +274,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 5, 2.0f, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("Float32ArrayType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
@@ -285,7 +285,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 3.5f, 4.5f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32Type at position 0 is constant index: 2 value: 3.5 constant: 5.0");
+        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 3.5 constant: 5.0");
   }
 
   @Test

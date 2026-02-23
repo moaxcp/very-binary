@@ -18,11 +18,22 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
   public Int16ArrayType(int position, short @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position, INT16, lengthExpression, byteLengthExpression);
     this.constantValue = constantValue;
+    checkConstant();
   }
 
   @Override
   public Int16ArrayType copy(int position) {
     return new Int16ArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
+  }
+
+  @Override
+  public boolean isConstant() {
+    return constantValue != null;
+  }
+
+  @Override
+  public long getConstantValueSize() {
+    return constantValue != null ? constantValue.length : 0;
   }
 
   public short[] getInt16(Pointer<?, ? extends Type<?>> pointer) {
@@ -137,13 +148,13 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
+    if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue[Math.toIntExact(index)]);
     }
   }
 
   private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(constantValue));
       }
@@ -156,7 +167,7 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
   }
 
   public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(constantValue));
       }
@@ -208,7 +219,7 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       pointer.getByteArray().addInt16(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
@@ -218,7 +229,7 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, 1, () -> {
@@ -231,7 +242,7 @@ public final class Int16ArrayType extends PrimitiveArrayType<Int16ArrayType, Sho
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, length, () -> {

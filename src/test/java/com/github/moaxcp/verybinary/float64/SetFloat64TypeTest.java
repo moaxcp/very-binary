@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.float64;
 
+import com.github.moaxcp.verybinary.Float64ArrayType;
 import com.github.moaxcp.verybinary.Float64Type;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +75,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 0 value: 2.0 constant: 3.0");
+        .hasMessage("Float64ArrayType at position 0 is constant index: 0 value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -84,9 +85,9 @@ public class SetFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float64Type) struct.getType(1)).set(struct, 0, Double.valueOf(2.0d)))
+    assertThatThrownBy(() -> ((Float64ArrayType) struct.getType(1)).set(struct, 0, Double.valueOf(2.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Double) not supported for Float64Type. Use set(Pointer, long, double) instead.");
+        .hasMessage("set(Pointer, long, Double) not supported for Float64ArrayType. Use set(Pointer, long, double) instead.");
   }
 
   @Test
@@ -116,7 +117,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(1, -1, 2.0d))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: -1 length: 2");
+        .hasMessage("Float64ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -130,7 +131,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(1, 2, 2.0d))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: 2 length: 2");
+        .hasMessage("Float64ArrayType at position 1 index: 2 length: 2");
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(2).float64(2).float64(3).float64(4));
   }
@@ -167,7 +168,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(0, 1, 2.0d))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 0 index: 1 length: 1");
+        .hasMessage("Float64ArrayType at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -178,7 +179,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64Type at position 0 is constant index: 2 value: 2.0 constant: 3.0");
+        .hasMessage("Float64ArrayType at position 0 is constant index: 2 value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -191,7 +192,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64Type at position 1 is constant index: 1 value: 2.0 constant: 3.0");
+        .hasMessage("Float64ArrayType at position 1 is constant index: 1 value: 2.0 constant: 3.0");
   }
 
   @Test

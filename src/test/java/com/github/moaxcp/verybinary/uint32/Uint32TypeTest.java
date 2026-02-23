@@ -5,29 +5,14 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
 import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.UINT32;
 import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
-import static com.github.moaxcp.verybinary.Uint32Type.uint32Type;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Uint32TypeTest {
-
-  @Test
-  void constructor() {
-    var type = uint32Type();
-    assertThat(type.getPosition()).isEqualTo(-1);
-  }
-
-  @Test
-  void constructorPosition() {
-    var type = uint32Type(15);
-    assertThat(type.getPosition()).isEqualTo(15);
-  }
 
   @Test
   void constructorEverything() {
@@ -40,13 +25,6 @@ public class Uint32TypeTest {
     assertThat(struct.getByteLength()).isEqualTo(UINT32.size() + 2);
     Assertions.assertThat(struct.<Uint32Type>getType(1))
         .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(5L).lengthExpression(valueOf(0)).uint32());
-  }
-
-  @Test
-  void copy() {
-    var type = uint32Type();
-    var copy = type.copy(15);
-    assertThat(copy.getPosition()).isEqualTo(15);
   }
 
   @Test

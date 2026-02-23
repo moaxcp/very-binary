@@ -10,6 +10,8 @@ public sealed interface IndexedValueType<SELF extends ValueType<SELF, IT>,IT> ex
 
   @Nullable Expression getLengthExpression();
 
+  @Nullable Expression getByteLengthExpression();
+
   List<LengthListener> getLengthListeners();
 
   default SELF addLengthChangeListeners(List<LengthListener> lengthChange) {
@@ -41,6 +43,8 @@ public sealed interface IndexedValueType<SELF extends ValueType<SELF, IT>,IT> ex
     }
     if (getByteLengthExpression() != null) {
       return getByteLengthExpression().evaluate(pointer);
+    } else if (isConstant()) {
+      return getConstantValueSize();
     }
     throw new IllegalStateException("lengthExpression and byteLengthExpression are both null");
   }
@@ -50,8 +54,8 @@ public sealed interface IndexedValueType<SELF extends ValueType<SELF, IT>,IT> ex
   long getConstantValueSize();
 
   default long getAllocationLength(@Nullable Type<?> parent) {
-    if (isConstantValue(parent)) {
-      return getConstantValueSize();
+    if (this.isConstant()) {
+      return getElementAllocationLength();
     }
     if (getLengthExpression() != null) {
       if (getLengthExpression().isConstant(parent)) {
@@ -78,13 +82,11 @@ public sealed interface IndexedValueType<SELF extends ValueType<SELF, IT>,IT> ex
 
   @Override
   default boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
+    if (isConstant()) {
+      return true;
+    }
     var expression = getLengthExpression() != null ? getLengthExpression() : getByteLengthExpression();
-    assert expression != null;
     return expression.isConstant(pointer.getType());
-  }
-
-  default boolean isConstant(Type<?> type) {
-    return getConstantValue() != null && (getLengthExpression() == null || getLengthExpression().isConstant(type));
   }
 
   default void checkIndex(Pointer<?, ? extends Type<?>> pointer, long index) {

@@ -35,8 +35,8 @@ public class ByteArray {
     return new ByteArray();
   }
 
-  public static ByteArray ba(int size) {
-    return new ByteArray(size);
+  public static ByteArray ba(long size) {
+    return new ByteArray((int) size);
   }
 
   public static ByteArray ba(byte[] bytes) {

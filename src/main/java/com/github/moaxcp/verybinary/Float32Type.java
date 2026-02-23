@@ -25,6 +25,11 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
   }
 
   @Override
+  public boolean isConstant() {
+    return constantValueSet;
+  }
+
+  @Override
   public long defaultArrayLengthValue() {
     return constantValueSet ? (long) constantValue : 0;
   }
@@ -59,7 +64,7 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, float value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+    if (isConstant() && !Objects.equals(constantValue, value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
     }
   }

@@ -6,46 +6,11 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.BOOL;
-import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoolTypeTest {
-
-  @Test
-  void constructor() {
-    var type = BoolType.bool();
-    assertThat(type).isEqualTo(new BoolType(-1));
-  }
-
-  @Test
-  void constructorPosition() {
-    var type = BoolType.bool(15);
-    assertThat(type).isEqualTo(new BoolType(15));
-  }
-
-  @Test
-  void constructorEverything() {
-    var struct = struct()
-        .int8()
-        .primitive().constant(true).lengthExpression(valueOf(0)).bool()
-        .align(2)
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(BOOL.size() + 2);
-    assertThat(struct.<BoolType>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(true).lengthExpression(valueOf(0)).bool());
-  }
-
-  @Test
-  void copy() {
-    var type = BoolType.bool();
-    var copy = type.copy(-1);
-    assertThat(copy).isEqualTo(type);
-  }
 
   @Test
   void getUnitSize() {

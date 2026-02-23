@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float32;
 
-import com.github.moaxcp.verybinary.Float32Type;
+import com.github.moaxcp.verybinary.Float32ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -17,9 +17,9 @@ public class AddFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float32Type) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
+    assertThatThrownBy(() -> ((Float32ArrayType) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Float) not supported for Float32Type. Use add(Pointer, float) instead.");
+        .hasMessage("add(Pointer, Float) not supported for Float32ArrayType. Use add(Pointer, float) instead.");
   }
 
   @Test
@@ -29,9 +29,9 @@ public class AddFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float32Type) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
+    assertThatThrownBy(() -> ((Float32ArrayType) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Float) not supported for Float32Type. Use add(Pointer, long, float) instead.");
+        .hasMessage("add(Pointer, long, Float) not supported for Float32ArrayType. Use add(Pointer, long, float) instead.");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(0, 5.0f))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float32Type at position 0 is constant length: 3 index: 3");
+        .hasMessage("Float32ArrayType at position 0 is constant length: 3 index: 3");
   }
 
   @Test
@@ -105,7 +105,7 @@ public class AddFloat32TypeTest {
         .build();
     assertThatThrownBy(() -> struct.addFloat32(0, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -132,7 +132,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(1, -1, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 1 index: -1 new length: 3");
+        .hasMessage("Float32ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(1, 3, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type at position 1 index: 3 new length: 3");
+        .hasMessage("Float32ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -170,7 +170,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(0, 0, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type cannot add to non-array type at position 0 index: 0 length: 1");
+        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
   }
 
   @Test
@@ -182,7 +182,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(0, 1, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -193,6 +193,6 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(0, 2, 4.0f))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float32Type at position 0 is constant length: 3 index: 2");
+        .hasMessage("Float32ArrayType at position 0 is constant length: 3 index: 2");
   }
 }

@@ -68,7 +68,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType cannot remove from non-array type at position 0");
+        .hasMessage("BoolArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -109,7 +109,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 1 index: -1 length: 2");
+        .hasMessage("BoolArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -122,7 +122,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 1 index: 2 length: 2");
+        .hasMessage("BoolArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -134,7 +134,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType cannot remove from non-array type at position 0");
+        .hasMessage("BoolArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array BoolType at position 0");
+        .hasMessage("Cannot remove fixed length array BoolArrayType at position 0");
   }
 
   @Test
@@ -156,7 +156,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array BoolType at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array BoolArrayType at position 0 index: 3");
   }
 
   @Test
@@ -183,7 +183,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 1 length: 4 start: 2 end: 0");
+        .hasMessage("BoolArrayType at position 1 length: 4 start: 2 end: 0");
   }
 
   @Test
@@ -197,7 +197,7 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2, 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolType at position 1 length: 4 start: 2 end: 6");
+        .hasMessage("BoolArrayType at position 1 length: 4 start: 2 end: 6");
   }
 
   @Test
@@ -208,6 +208,6 @@ public class RemoveBoolTypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 2, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array BoolType at position 0 index: 2");
+        .hasMessage("Cannot remove element from fixed length array BoolArrayType at position 0 index: 2");
   }
 }

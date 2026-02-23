@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int8;
 
-import com.github.moaxcp.verybinary.Int8Type;
+import com.github.moaxcp.verybinary.Int8ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -17,9 +17,9 @@ public class AddInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).add(struct, Byte.valueOf((byte) 1)))
+    assertThatThrownBy(() -> ((Int8ArrayType) struct.getType(1)).add(struct, Byte.valueOf((byte) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Byte) not supported for Int8Type. Use add(Pointer, byte) instead.");
+        .hasMessage("add(Pointer, Byte) not supported for Int8ArrayType. Use add(Pointer, byte) instead.");
   }
 
   @Test
@@ -29,9 +29,9 @@ public class AddInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).add(struct, 0, Byte.valueOf((byte) 1)))
+    assertThatThrownBy(() -> ((Int8ArrayType) struct.getType(1)).add(struct, 0, Byte.valueOf((byte) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Byte) not supported for Int8Type. Use add(Pointer, long, byte) instead.");
+        .hasMessage("add(Pointer, long, Byte) not supported for Int8ArrayType. Use add(Pointer, long, byte) instead.");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int8Type at position 0 is constant length: 5 index: 5");
+        .hasMessage("Int8ArrayType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -105,7 +105,7 @@ public class AddInt8TypeTest {
         .build();
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int8ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -132,7 +132,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> struct.addInt8(1, -1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 new length: 3");
+        .hasMessage("Int8ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> struct.addInt8(1, 3, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 3 new length: 3");
+        .hasMessage("Int8ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -182,7 +182,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> struct.addInt8(0, 1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int8ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -193,6 +193,6 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int8Type at position 0 is constant length: 5 index: 3");
+        .hasMessage("Int8ArrayType at position 0 is constant length: 5 index: 3");
   }
 }

@@ -1,14 +1,17 @@
 package com.github.moaxcp.verybinary;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
+  final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   Expression byteLengthExpression;
   Expression lengthExpression;
-  ByteArray constant;
+  @Nullable Object constant;
   final List<Type<?>> fields = new ArrayList<>();
 
   public SELF from(StructType structType) {
@@ -27,12 +30,15 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return fields.get(position);
   }
 
-  public SELF byteLengthField(int position) {
-    return byteLengthExpression(Expression.valueOf(position));
+  public SELF addByteLengthListeners(ByteLengthListener... listeners) {
+    for(ByteLengthListener listener : listeners) {
+      byteLengthListeners.add(listener);
+    }
+    return (SELF) this;
   }
 
-  public SELF byteLengthExpression(Expression byteLengthExpression) {
-    this.byteLengthExpression = byteLengthExpression;
+  public SELF addByteLengthChangeListener(ByteLengthListener listener) {
+    byteLengthListeners.add(listener);
     return (SELF) this;
   }
 
@@ -41,12 +47,18 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
-  public SELF lengthField(int lengthPosition) {
-    return lengthExpression(Expression.valueOf(lengthPosition));
-  }
-
+  /**
+   * StructList can be top level with a length constant but not a field.
+   * @param lengthExpression
+   * @return
+   */
   public SELF lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
+    return (SELF) this;
+  }
+
+  public SELF byteLengthExpression(Expression byteLengthExpression) {
+    this.byteLengthExpression = byteLengthExpression;
     return (SELF) this;
   }
 
@@ -267,9 +279,15 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
+  public StructListType toStructListType() {
+    return new StructListType(-1, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
+        .addByteLengthChangeListeners(byteLengthListeners)
+        .addValueChangeListeners(valueChangeListeners);
+  }
+
   public StructType toStructType() {
-    var type = new StructType(-1, constant, lengthExpression, byteLengthExpression, fields);
-    type.addValueChangeListeners(valueChangeListeners);
-    return type;
+    return new StructType(-1, fields)
+        .addByteLengthChangeListeners(byteLengthListeners)
+        .addValueChangeListeners(valueChangeListeners);
   }
 }

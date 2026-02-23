@@ -64,7 +64,7 @@ public class SetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.setUint64(0, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64Type at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Uint64ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class SetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.setUint64(1, -1, BigInteger.valueOf(5)))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: -1 length: 1");
+        .hasMessage("Uint64ArrayType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -108,7 +108,7 @@ public class SetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.setUint64(1, 2, BigInteger.valueOf(5)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: 2 length: 1");
+        .hasMessage("Uint64ArrayType at position 1 index: 2 length: 1");
 
     assertThat(struct.getUint64(0)).isEqualTo(BigInteger.ONE);
     assertThat(struct.getUint64(1, 0)).isEqualTo(BigInteger.valueOf(2));
@@ -158,7 +158,7 @@ public class SetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.setUint64(0, 3, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64Type at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Uint64ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
@@ -171,7 +171,7 @@ public class SetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.setUint64(1, 1, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64Type at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Uint64ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

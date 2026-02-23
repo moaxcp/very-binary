@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int16;
 
-import com.github.moaxcp.verybinary.Int16Type;
+import com.github.moaxcp.verybinary.Int16ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -68,7 +68,7 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type cannot remove from non-array type at position 0");
+        .hasMessage("Int16ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -82,7 +82,7 @@ public class RemoveInt16TypeTest {
     struct.addInt16(1, (short) 2);
     struct.remove(1, 0);
 
-    assertThat(((Int16Type) struct.getType(1)).getInt16(struct, 0)).isEqualTo((short) 2);
+    assertThat(((Int16ArrayType) struct.getType(1)).getInt16(struct, 0)).isEqualTo((short) 2);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int16(1, 2));
   }
@@ -111,7 +111,7 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type at position 1 index: -1 length: 2");
+        .hasMessage("Int16ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -124,7 +124,7 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type at position 1 index: 2 length: 2");
+        .hasMessage("Int16ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -136,7 +136,7 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16Type cannot remove from non-array type at position 0");
+        .hasMessage("Int16ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -147,7 +147,7 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Int16Type at position 0");
+        .hasMessage("Cannot remove fixed length array Int16ArrayType at position 0");
   }
 
   @Test
@@ -158,6 +158,6 @@ public class RemoveInt16TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Int16Type at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Int16ArrayType at position 0 index: 3");
   }
 }

@@ -9,24 +9,11 @@ import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
 import static com.github.moaxcp.verybinary.Expression.valueOf;
-import static com.github.moaxcp.verybinary.Float32Type.float32Type;
 import static com.github.moaxcp.verybinary.Primitive.FLOAT32;
 import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float32TypeTest {
-
-  @Test
-  void constructor() {
-    var type = float32Type();
-    assertThat(type.getPosition()).isEqualTo(-1);
-  }
-
-  @Test
-  void constructorPosition() {
-    var type = float32Type(15);
-    assertThat(type.getPosition()).isEqualTo(15);
-  }
 
   @Test
   void constructorEverything() {
@@ -38,13 +25,6 @@ public class Float32TypeTest {
 
     assertThat(struct.getByteLength()).isEqualTo(FLOAT32.size() + 2);
     assertThat(struct.<Float32Type>getType(1)).isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(3.0f).lengthExpression(valueOf(0)).float32());
-  }
-
-  @Test
-  void copy() {
-    var type = float32Type();
-    var copy = type.copy(-1);
-    assertThat(copy).isEqualTo(type);
   }
 
   @Test

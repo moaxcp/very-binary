@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.uint32;
 
-import com.github.moaxcp.verybinary.Uint32Type;
+import com.github.moaxcp.verybinary.Uint32ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -69,7 +69,7 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint32ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -83,7 +83,7 @@ public class RemoveUint32TypeTest {
     struct.addUint32(1, 2L);
     struct.remove(1, 0);
 
-    assertThat(((Uint32Type) struct.getType(1)).getUint32(struct, 0)).isEqualTo(2L);
+    assertThat(((Uint32ArrayType) struct.getType(1)).getUint32(struct, 0)).isEqualTo(2L);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint32(1, 2));
   }
@@ -112,7 +112,7 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type at position 1 index: -1 length: 2");
+        .hasMessage("Uint32ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -125,7 +125,7 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint32ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -137,7 +137,7 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint32ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -148,7 +148,7 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint32Type at position 0");
+        .hasMessage("Cannot remove fixed length array Uint32ArrayType at position 0");
   }
 
   @Test
@@ -159,6 +159,6 @@ public class RemoveUint32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Uint32Type at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint32ArrayType at position 0 index: 3");
   }
 }

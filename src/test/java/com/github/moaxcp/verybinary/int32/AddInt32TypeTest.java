@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int32;
 
-import com.github.moaxcp.verybinary.Int32Type;
+import com.github.moaxcp.verybinary.Int32ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -17,9 +17,9 @@ public class AddInt32TypeTest {
         .int32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int32Type) struct.getType(1)).add(struct, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Int32ArrayType) struct.getType(1)).add(struct, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Integer) not supported for Int32Type. Use add(Pointer, int) instead.");
+        .hasMessage("add(Pointer, Integer) not supported for Int32ArrayType. Use add(Pointer, int) instead.");
   }
 
   @Test
@@ -29,9 +29,9 @@ public class AddInt32TypeTest {
         .int32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int32Type) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Int32ArrayType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Integer) not supported for Int32Type. Use add(Pointer, long, int) instead.");
+        .hasMessage("add(Pointer, long, Integer) not supported for Int32ArrayType. Use add(Pointer, long, int) instead.");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int32Type at position 0 is constant length: 5 index: 5");
+        .hasMessage("Int32ArrayType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -105,7 +105,7 @@ public class AddInt32TypeTest {
         .build();
     assertThatThrownBy(() -> struct.addInt32(0, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -132,7 +132,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(1, -1, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32Type at position 1 index: -1 new length: 3");
+        .hasMessage("Int32ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(1, 3, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32Type at position 1 index: 3 new length: 3");
+        .hasMessage("Int32ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -170,7 +170,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 0, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32Type cannot add to non-array type at position 0 index: 0 length: 1");
+        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
   }
 
   @Test
@@ -182,7 +182,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 1, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -193,6 +193,6 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 3, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int32Type at position 0 is constant length: 5 index: 3");
+        .hasMessage("Int32ArrayType at position 0 is constant length: 5 index: 3");
   }
 }

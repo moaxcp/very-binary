@@ -24,6 +24,11 @@ public final class Int32Type extends NumberType<Int32Type, Integer> {
   }
 
   @Override
+  public boolean isConstant() {
+    return constantValueSet;
+  }
+
+  @Override
   public long defaultArrayLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
@@ -56,7 +61,7 @@ public final class Int32Type extends NumberType<Int32Type, Integer> {
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, int value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+    if (isConstant() && !Objects.equals(constantValue, value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
     }
   }

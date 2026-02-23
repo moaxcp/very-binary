@@ -11,13 +11,13 @@ sealed interface ArrayValueType<SELF extends ValueType<SELF, T[]>, T> extends In
   }
 
   default void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(getConstantValue()[Math.toIntExact(index)], value)) {
+    if (this.isConstant() && !Objects.equals(getConstantValue()[Math.toIntExact(index)], value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + getConstantValue());
     }
   }
 
   default void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, T[] values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (getConstantValue().length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(getConstantValue()));
       }
@@ -30,7 +30,7 @@ sealed interface ArrayValueType<SELF extends ValueType<SELF, T[]>, T> extends In
   }
 
   default void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<T> values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (getConstantValue().length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(getConstantValue()));
       }

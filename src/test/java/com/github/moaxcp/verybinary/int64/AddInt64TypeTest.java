@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.int64;
 
+import com.github.moaxcp.verybinary.Int64ArrayType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,9 +17,9 @@ public class AddInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Int64Type) struct.getType(1)).add(struct, Long.valueOf(1L)))
+    assertThatThrownBy(() -> ((Int64ArrayType) struct.getType(1)).add(struct, Long.valueOf(1L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Long) not supported for Int64Type. Use add(Pointer, long) instead.");
+        .hasMessage("add(Pointer, Long) not supported for Int64ArrayType. Use add(Pointer, long) instead.");
   }
 
   @Test
@@ -28,9 +29,9 @@ public class AddInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Int64Type) struct.getType(1)).add(struct, 0, Long.valueOf(1L)))
+    assertThatThrownBy(() -> ((Int64ArrayType) struct.getType(1)).add(struct, 0, Long.valueOf(1L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Long) not supported for Int64Type. Use add(Pointer, long, long) instead.");
+        .hasMessage("add(Pointer, long, Long) not supported for Int64ArrayType. Use add(Pointer, long, long) instead.");
   }
 
   @Test
@@ -93,7 +94,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int64Type at position 0 is constant length: 5 index: 5");
+        .hasMessage("Int64ArrayType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -104,7 +105,7 @@ public class AddInt64TypeTest {
         .build();
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -131,7 +132,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(1, -1, 3L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type at position 1 index: -1 new length: 3");
+        .hasMessage("Int64ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -144,7 +145,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(1, 3, 3L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type at position 1 index: 3 new length: 3");
+        .hasMessage("Int64ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -169,7 +170,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(0, 0, 3L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type cannot add to non-array type at position 0 index: 0 length: 1");
+        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
   }
 
   @Test
@@ -181,7 +182,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(0, 1, 3L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -192,6 +193,6 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> struct.addInt64(0, 3, 3L))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int64Type at position 0 is constant length: 5 index: 3");
+        .hasMessage("Int64ArrayType at position 0 is constant length: 5 index: 3");
   }
 }

@@ -24,6 +24,11 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
+  public @Nullable BigInteger getConstantValue() {
+    return constantValue;
+  }
+
+  @Override
   public long defaultArrayLengthValue() {
     return constantValue != null ? constantValue.longValue() : 0;
   }
@@ -38,7 +43,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue, value)) {
+    if (isConstant() && !Objects.equals(constantValue, value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
     }
   }

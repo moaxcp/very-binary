@@ -13,8 +13,6 @@ sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits IndexedVa
 
   @Nullable T getConstantValue();
 
-  @Nullable Expression getByteLengthExpression();
-
   List<ByteLengthListener> getByteLengthListeners();
 
   List<ValueChangeListener> getValueChangeListeners();
@@ -39,11 +37,16 @@ sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits IndexedVa
 
   long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 
-  default boolean isConstant(Type<?> type) {
-    return getConstantValue() != null;
+  /**
+   * Should always call {@link #isConstant()} since all ValueTypes know their constant value
+   * @param parent
+   * @return
+   */
+  default boolean isConstant(@Nullable Type<?> parent) {
+    return isConstant();
   }
 
-  default boolean isConstantValue(Type<?> type) {
+  default boolean isConstant() {
     return getConstantValue() != null;
   }
 

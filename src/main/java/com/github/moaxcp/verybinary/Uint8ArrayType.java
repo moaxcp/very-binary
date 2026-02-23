@@ -18,11 +18,22 @@ public final class Uint8ArrayType extends PrimitiveArrayType<Uint8ArrayType, Sho
   public Uint8ArrayType(int position, short @Nullable [] constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression) {
     super(position, UINT8, lengthExpression, byteLengthExpression);
     this.constantValue = constantValue;
+    checkConstant();
   }
 
   @Override
   public Uint8ArrayType copy(int position) {
     return new Uint8ArrayType(position, constantValue, getLengthExpression(), getByteLengthExpression());
+  }
+
+  @Override
+  public boolean isConstant() {
+    return constantValue != null;
+  }
+
+  @Override
+  public long getConstantValueSize() {
+    return constantValue != null ? constantValue.length : 0;
   }
 
   public short[] getUint8(Pointer<?, ? extends Type<?>> pointer) {
@@ -137,13 +148,13 @@ public final class Uint8ArrayType extends PrimitiveArrayType<Uint8ArrayType, Sho
   }
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
-    if (isConstantValue(pointer.getType()) && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
+    if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
       throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue[Math.toIntExact(index)]);
     }
   }
 
   private void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.length) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + Arrays.toString(values) + " constant: " + Arrays.toString(constantValue));
       }
@@ -156,13 +167,13 @@ public final class Uint8ArrayType extends PrimitiveArrayType<Uint8ArrayType, Sho
   }
 
   public void checkForConstantValues(Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       if (constantValue.length != values.size()) {
         throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values + " constant: " + Arrays.toString(constantValue));
       }
       for (var i = 0; i < values.size(); i++) {
         if (!Objects.equals(constantValue[i], values.get(i))) {
-          throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+          throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + values.get(i) + " constant: " + constantValue[i]);
         }
       }
     }
@@ -208,7 +219,7 @@ public final class Uint8ArrayType extends PrimitiveArrayType<Uint8ArrayType, Sho
   }
 
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       pointer.getByteArray().addUint8(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
@@ -228,7 +239,7 @@ public final class Uint8ArrayType extends PrimitiveArrayType<Uint8ArrayType, Sho
 
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isConstantValue(pointer.getType())) {
+    if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element in constantValue " + Arrays.toString(constantValue));
     }
     callWithLengthChange(reason, pointer, length, () -> {

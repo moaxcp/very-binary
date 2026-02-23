@@ -6,7 +6,6 @@ import java.util.List;
 public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends StructTypeBuilder<ChildStructTypeBuilder<PARENT>> {
   private final PARENT parent;
   private int position;
-  final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   final List<LengthListener> lengthListeners = new ArrayList<>();
 
   ChildStructTypeBuilder(PARENT structTypeBuilder, int position) {
@@ -48,16 +47,19 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
     return structArray(type);
   }
 
-  public StructType toStructType() {
-    var type = new StructType(position, constant, lengthExpression, byteLengthExpression, fields);
-    type.addByteLengthChangeListeners(byteLengthListeners);
-    type.addArrayLengthChangeListeners(lengthListeners);
-    type.addValueChangeListeners(valueChangeListeners);
-    return type;
+  public StructListType toStructListType() {
+    return new StructListType(-1, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
+        .addByteLengthChangeListeners(byteLengthListeners)
+        .addValueChangeListeners(valueChangeListeners)
+        .addLengthChangeListeners(lengthListeners);
   }
 
   public PARENT end() {
-    parent.type(toStructType());
+    if (lengthExpression != null || byteLengthExpression != null) {
+      parent.type(toStructListType());
+    } else {
+      parent.type(toStructType());
+    }
     return parent;
   }
 }

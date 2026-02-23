@@ -68,7 +68,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint8ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -109,7 +109,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8Type at position 1 index: -1 length: 2");
+        .hasMessage("Uint8ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -122,7 +122,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint8ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -134,7 +134,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint8ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -145,7 +145,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint8Type at position 0");
+        .hasMessage("Cannot remove fixed length array Uint8ArrayType at position 0");
   }
 
   @Test
@@ -156,6 +156,6 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Uint8Type at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint8ArrayType at position 0 index: 3");
   }
 }

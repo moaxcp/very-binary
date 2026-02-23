@@ -29,6 +29,6 @@ public class StructBuilder extends StructTypeBuilder<StructBuilder> {
   }
 
   public Struct build() {
-    return new Struct(allocated, offset, super.toStructType(), bytes);
+    return new Struct(allocated, -1, offset, super.toStructType(), bytes);
   }
 }

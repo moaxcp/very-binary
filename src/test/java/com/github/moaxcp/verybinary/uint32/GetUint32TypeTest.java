@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.uint32;
 
+import com.github.moaxcp.verybinary.Uint32ArrayType;
 import com.github.moaxcp.verybinary.Uint32Type;
 import org.junit.jupiter.api.Test;
 
@@ -115,9 +116,9 @@ public class GetUint32TypeTest {
         .uint32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Uint32Type) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Uint32ArrayType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Uint32Type. Use getUint32(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Uint32ArrayType. Use getUint32(Pointer, long) instead.");
   }
 
   @Test
@@ -141,7 +142,7 @@ public class GetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.getUint32(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type at position 1 index: -1 length: 0");
+        .hasMessage("Uint32ArrayType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -154,7 +155,7 @@ public class GetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.getUint32(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint32ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test

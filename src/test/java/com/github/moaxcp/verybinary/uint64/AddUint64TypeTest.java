@@ -71,7 +71,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint64Type at position 0 is constant length: 5 index: 5");
+        .hasMessage("Uint64ArrayType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -109,7 +109,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(1, -1, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: -1 new length: 3");
+        .hasMessage("Uint64ArrayType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -122,7 +122,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(1, 3, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: 3 new length: 3");
+        .hasMessage("Uint64ArrayType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -159,7 +159,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(0, 1, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .hasMessage("Uint64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -170,6 +170,6 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(0, 3, BigInteger.valueOf(3)))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint64Type at position 0 is constant length: 5 index: 3");
+        .hasMessage("Uint64ArrayType at position 0 is constant length: 5 index: 3");
   }
 }

@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.float64;
 
+import com.github.moaxcp.verybinary.Float64ArrayType;
 import com.github.moaxcp.verybinary.Float64Type;
 import org.junit.jupiter.api.Test;
 
@@ -104,7 +105,7 @@ public class GetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat64(0, 1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 0 index: 1 length: 1");
+        .hasMessage("Float64ArrayType at position 0 index: 1 length: 1");
   }
 
   @Test
@@ -114,9 +115,9 @@ public class GetFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float64Type) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Float64ArrayType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Float64Type. Use getFloat64(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Float64ArrayType. Use getFloat64(Pointer, long) instead.");
   }
 
   @Test
@@ -140,7 +141,7 @@ public class GetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat64(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: -1 length: 0");
+        .hasMessage("Float64ArrayType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -153,7 +154,7 @@ public class GetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat64(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64Type at position 1 index: 2 length: 2");
+        .hasMessage("Float64ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test

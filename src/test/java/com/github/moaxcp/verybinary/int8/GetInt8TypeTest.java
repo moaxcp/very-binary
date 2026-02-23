@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary.int8;
 
+import com.github.moaxcp.verybinary.Int8ArrayType;
 import com.github.moaxcp.verybinary.Int8Type;
 import org.junit.jupiter.api.Test;
 
@@ -114,9 +115,9 @@ public class GetInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8Type) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Int8ArrayType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Int8Type. Use getInt8(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Int8ArrayType. Use getInt8(Pointer, long) instead.");
   }
 
   @Test
@@ -140,7 +141,7 @@ public class GetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.getInt8(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: -1 length: 0");
+        .hasMessage("Int8ArrayType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -153,7 +154,7 @@ public class GetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.getInt8(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 1 index: 2 length: 2");
+        .hasMessage("Int8ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test

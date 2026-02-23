@@ -1,15 +1,18 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.array.StructList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.moaxcp.verybinary.Builders.structType;
+import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class StructListType extends Type<StructListType> implements ListValueType<StructListType, Struct> {
   @Nullable
-  private final List<Struct> constantValue;
+  private final StructList constantValue;
   @Nullable
   private final Expression lengthExpression;
   @Nullable
@@ -19,7 +22,16 @@ public final class StructListType extends Type<StructListType> implements ListVa
   private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   private final StructType structType;
 
-  public StructListType(int position, @Nullable List<Struct> constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, StructType structType) {
+  /**
+   * constantValue is ByteArray containing the list of structs. StructType does not need to be constant because the array
+   * will always be used.
+   * @param position
+   * @param constantValue
+   * @param lengthExpression
+   * @param byteLengthExpression
+   * @param structType
+   */
+  public StructListType(int position, @Nullable ByteArray constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, StructType structType) {
     super(position);
     if (structType.getPosition() != 0) {
       throw new IllegalArgumentException("Struct type must have position 0");
@@ -39,20 +51,34 @@ public final class StructListType extends Type<StructListType> implements ListVa
         listener.byteLengthChanged(reason, parent, length - change, length);
       }
     });
-    this.constantValue = constantValue;
+    var pointer = new Struct(structType().type(this).build(), constantValue);
+    this.constantValue = new StructList(pointer, this, 0, getLength(pointer));
     this.lengthExpression = lengthExpression;
     this.byteLengthExpression = byteLengthExpression;
     this.structType = structType;
+    if (structType.isConstant()) {
+      throw new IllegalArgumentException("structType cannot be constant");
+    }
+    if (lengthExpression == null && byteLengthExpression == null && !isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot both be null unless there is a constantValue");
+    } else if ((lengthExpression != null || byteLengthExpression != null) && isConstant()) {
+      throw new IllegalArgumentException("lengthExpression and byteLengthExpression cannot be set when value is constant.");
+    }
   }
 
   @Override
   public StructListType copy(int position) {
-    return new StructListType(position, constantValue, lengthExpression, byteLengthExpression, structType);
+    return new StructListType(position, constantValue.getPointer().getByteArray(), lengthExpression, byteLengthExpression, structType);
+  }
+
+  @Override
+  public boolean isConstant(@Nullable Type<?> parent) {
+    return ListValueType.super.isConstant(parent);
   }
 
   @Override
   public long getConstantValueSize() {
-    return constantValue.size();
+    return constantValue != null ? constantValue.size() : 0;
   }
 
   @Override
@@ -122,27 +148,12 @@ public final class StructListType extends Type<StructListType> implements ListVa
 
   @Override
   public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
-    var length = getLength(pointer);
-    for (long i = 0; i < length; i++) {
-      var struct = new Struct(getOffset(pointer, i), structType, pointer.getByteArray());
-      struct.removeByteArrayListener();
-      for (int j = 0; j < structType.getFields().size(); j++) {
-        if(!structType.getFields().get(j).isFixedLength(struct)) {
-          return false;
-        }
-      }
-    }
-    return lengthExpression == null || lengthExpression.isConstant(pointer.getType());
+    return structType.isFixedLength(pointer) && (lengthExpression == null || lengthExpression.isConstant(pointer.getType()));
   }
 
   @Override
-  public List<Struct> get(Pointer<?, ? extends Type<?>> pointer) {
-    var length = getLength(pointer);
-    var result = new ArrayList<Struct>();
-    for (long i = 0; i < length; i++) {
-      result.add(get(pointer, i));
-    }
-    return result;
+  public StructList get(Pointer<?, ? extends Type<?>> pointer) {
+    return new StructList(pointer, this, 0, getLength(pointer));
   }
 
   @Override
@@ -153,11 +164,8 @@ public final class StructListType extends Type<StructListType> implements ListVa
 
   @Override
   public List<Struct> get(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    var result = new ArrayList<Struct>();
-    for (long i = 0; i < length; i++) {
-      result.add(get(pointer, index + i));
-    }
-    return result;
+    checkArrayRange(pointer, index, index + length);
+    return new StructList(pointer, this, index, length);
   }
 
   @Override
@@ -184,13 +192,13 @@ public final class StructListType extends Type<StructListType> implements ListVa
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    var length = getLength(pointer);
-    for (long $ = 0; $ < length; $++) {
-      var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, $), structType, pointer.getByteArray());
-      struct.removeByteArrayListener();
-      if (structType.isConstant(null)) {
-        struct.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
-      } else {
+    if (this.isConstant()) {
+      pointer.getByteArray().addInt8(getOffset(pointer), getConstantValueBytes());
+    } else {
+      var length = getLength(pointer);
+      for (long $ = 0; $ < length; $++) {
+        var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, $), structType, pointer.getByteArray());
+        struct.removeByteArrayListener();
         for (int i = 0; i < structType.getFields().size(); i++) {
           structType.getType(i).allocate(pointer);
         }
@@ -203,8 +211,8 @@ public final class StructListType extends Type<StructListType> implements ListVa
     callWithLengthChange(reason, pointer, 1, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        if (isConstantValue(pointer.getType())) {
-          pointer.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
+        if (this.isConstant()) {
+          pointer.getByteArray().addInt8(getOffset(pointer), getConstantValueBytes());
         } else {
           var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, index), structType, pointer.getByteArray());
           struct.removeByteArrayListener();
@@ -216,14 +224,26 @@ public final class StructListType extends Type<StructListType> implements ListVa
     });
   }
 
+  private byte[] getConstantValueBytes() {
+    long length = 0;
+    for (var s : constantValue) {
+      length += s.getByteLength();
+    }
+    var bytes = ba(length);
+    for (var s : constantValue) {
+      bytes.int8(s.getByteArray().getAllocatedBytes());
+    }
+    return bytes.getBytes();
+  }
+
   @Override
   public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     callWithLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
         for (long i = 0; i < length; i++) {
-          if (isConstantValue(pointer.getType())) {
-            pointer.getByteArray().addInt8(getOffset(pointer), structType.getConstantArray().getAllocatedBytes());
+          if (this.isConstant()) {
+            pointer.getByteArray().addInt8(getOffset(pointer), getConstantValueBytes());
           } else {
             var struct = new Struct(true, pointer.getOffset(), getOffset(pointer, index + i), structType, pointer.getByteArray());
             struct.removeByteArrayListener();

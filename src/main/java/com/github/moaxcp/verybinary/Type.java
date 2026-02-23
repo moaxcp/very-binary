@@ -16,6 +16,12 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, 
 
   public abstract SELF copy(int position);
 
+  /**
+   * true if the value or bytes are always constant.
+   * @return
+   */
+  public abstract boolean isConstant(@Nullable Type<?> parent);
+
   public List<ByteLengthListener> getByteLengthListeners() {
     return byteLengthListeners;
   }

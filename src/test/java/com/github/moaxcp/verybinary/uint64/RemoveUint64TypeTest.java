@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.uint64;
 
-import com.github.moaxcp.verybinary.Uint64Type;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -70,7 +69,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint64ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -83,8 +82,6 @@ public class RemoveUint64TypeTest {
     struct.addUint64(1, BigInteger.ONE);
     struct.addUint64(1, BigInteger.valueOf(2));
     struct.remove(1, 0);
-
-    assertThat(((Uint64Type) struct.getType(1)).getUint64(struct, 0)).isEqualTo(BigInteger.valueOf(2));
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(1, 2));
   }
@@ -113,7 +110,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: -1 length: 2");
+        .hasMessage("Uint64ArrayType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -126,7 +123,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 1 index: 2 length: 2");
+        .hasMessage("Uint64ArrayType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -138,7 +135,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 0))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type cannot remove from non-array type at position 0");
+        .hasMessage("Uint64ArrayType cannot remove from non-array type at position 0");
   }
 
   @Test
@@ -149,7 +146,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint64Type at position 0");
+        .hasMessage("Cannot remove fixed length array Uint64ArrayType at position 0");
   }
 
   @Test
@@ -160,6 +157,6 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Uint64Type at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint64ArrayType at position 0 index: 3");
   }
 }

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -75,7 +74,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.setInt64(0, 2L))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Int64Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
@@ -157,26 +156,14 @@ public class SetInt64TypeTest {
         .int64()
         .build();
 
-    struct.setInt64(0, 0, 2L);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int64(2));
-  }
-
-  @Test
-  void setInt64Array_index_1_not_array() {
-    var struct = struct()
-        .int64()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt64(0, 1, 2L))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setInt64(0, 0, 2L))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setInt64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
@@ -188,7 +175,7 @@ public class SetInt64TypeTest {
   void setInt64Array_constant_value() {
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthField(0).int64()
+        .primitive().constant(new long[]{5, 5}).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 
@@ -201,7 +188,7 @@ public class SetInt64TypeTest {
   void setInt64Array_constant_value_same() {
     var struct = struct()
         .int64()
-        .primitive().constant(5L).lengthField(0).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 

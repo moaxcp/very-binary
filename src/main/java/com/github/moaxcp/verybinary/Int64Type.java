@@ -24,13 +24,17 @@ public final class Int64Type extends NumberType<Int64Type, Long> {
     return new Int64Type(position, constantValueSet ? constantValue : null);
   }
 
+  public long getInt64ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
   public boolean isConstant() {
     return constantValueSet;
   }
 
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
 

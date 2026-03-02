@@ -6,7 +6,7 @@ public abstract sealed class NumberType<SELF extends NumberType<SELF, T>, T exte
     super(position, unitSize);
   }
 
-  public abstract long defaultArrayLengthValue();
+  public abstract long defaultLengthValue();
 
   abstract void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value);
 

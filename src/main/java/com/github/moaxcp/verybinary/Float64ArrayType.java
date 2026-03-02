@@ -151,7 +151,7 @@ public final class Float64ArrayType extends PrimitiveArrayType<Float64ArrayType,
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, double value) {
     if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + Arrays.toString(constantValue));
     }
   }
 

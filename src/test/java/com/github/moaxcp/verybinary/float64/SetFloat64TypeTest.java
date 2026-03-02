@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -75,7 +74,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64ArrayType at position 0 is constant index: 0 value: 2.0 constant: 3.0");
+        .hasMessage("Float64Type at position 0 is constant value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -155,51 +154,39 @@ public class SetFloat64TypeTest {
         .float64()
         .build();
 
-    struct.setFloat64(0, 0, 2.0d);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().float64(2));
-  }
-
-  @Test
-  void setFloat64Array_index_1_not_array() {
-    var struct = struct()
-        .float64()
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat64(0, 1, 2.0d))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setFloat64(0, 0, 2.0d))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setFloat64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64ArrayType at position 0 is constant index: 2 value: 2.0 constant: 3.0");
+        .hasMessage("Float64ArrayType at position 0 is constant index: 2 value: 2.0 constant: [3.0, 3.0, 3.0]");
   }
 
   @Test
   void setFloat64Array_constant_value() {
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthField(0).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64ArrayType at position 1 is constant index: 1 value: 2.0 constant: 3.0");
+        .hasMessage("Float64ArrayType at position 1 is constant index: 1 value: 2.0 constant: [3.0, 3.0, 3.0]");
   }
 
   @Test
   void setFloat64Array_constant_value_same() {
     var struct = struct()
         .float64()
-        .primitive().constant(3.0d).lengthField(0).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 

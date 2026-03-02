@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddInt8TypeTest {
   @Test
   void addInt8Array_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
@@ -104,8 +103,7 @@ public class AddInt8TypeTest {
         .fromBytes(ba().int8(1))
         .build();
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddInt8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, 0, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addInt8_with_index_1_not_array() {
-    var struct = struct()
-        .int8()
-        .fromBytes(ba().int8(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt8(0, 1, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addInt8Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))

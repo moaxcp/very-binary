@@ -29,8 +29,12 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
     return constantValueSet;
   }
 
+  public short getInt16ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? (long) constantValue : 0;
   }
 

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddInt64TypeTest {
   @Test
   void addInt64Array_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
@@ -104,8 +103,7 @@ public class AddInt64TypeTest {
         .fromBytes(ba().int64(1))
         .build();
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 0, 3L))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addInt64_with_index_1_not_array() {
-    var struct = struct()
-        .int64()
-        .fromBytes(ba().int64(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt64(0, 1, 3L))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addInt64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3, 3L))

@@ -64,7 +64,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant index: 0 value: 2.0 constant: 3.0");
+        .hasMessage("Float32Type at position 0 is constant value: 2.0 constant: 3.0");
   }
 
   @Test
@@ -130,27 +130,15 @@ public class SetFloat32TypeTest {
         .float32()
         .build();
 
-    struct.setFloat32(0, 0, 2.0f);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().float32(2));
-  }
-
-  @Test
-  void setFloat32_index_1_not_array() {
-    var struct = struct()
-        .float32()
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat32(0, 1, 2.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setFloat32(0, 0, 2.0f))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setFloat32_index_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(3.0f).lengthField(0).float32()
+        .primitive().constant(new float[]{3, 3, 3}).float32()
         .fromBytes(ba().int8(1).float32(3, 3))
         .build();
 
@@ -163,24 +151,24 @@ public class SetFloat32TypeTest {
   void setFloat32_index_constant_value_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(3.0f).lengthField(0).float32()
+        .primitive().constant(new float[]{3, 3, 3}).float32()
         .fromBytes(ba().int8(2).float32(3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 1 is constant index: 1 value: 2.0 constant: 3.0");
+        .hasMessage("Float32ArrayType at position 1 is constant index: 1 value: 2.0 constant: [3.0, 3.0, 3.0]");
   }
 
   @Test
   void setFloat32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 2.0f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 2.0 constant: 3.0");
+        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 2.0 constant: [3.0, 3.0, 3.0]");
   }
 
   @Test
@@ -280,12 +268,12 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).float32()
+        .primitive().constant(new float[]{5, 5, 5, 5, 5}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 3.5f, 4.5f))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 3.5 constant: 5.0");
+        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: [3.5, 4.5] constant: [5.0, 5.0, 5.0, 5.0, 5.0]");
   }
 
   @Test

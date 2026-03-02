@@ -33,9 +33,6 @@ public final class StructListType extends Type<StructListType> implements ListVa
    */
   public StructListType(int position, @Nullable ByteArray constantValue, @Nullable Expression lengthExpression, @Nullable Expression byteLengthExpression, StructType structType) {
     super(position);
-    if (structType.getPosition() != 0) {
-      throw new IllegalArgumentException("Struct type must have position 0");
-    }
     structType.addByteLengthChangeListener((reason, pointer, previous, current) -> {
       if (getByteLengthListeners().isEmpty()) {
         return;
@@ -51,8 +48,12 @@ public final class StructListType extends Type<StructListType> implements ListVa
         listener.byteLengthChanged(reason, parent, length - change, length);
       }
     });
-    var pointer = new Struct(structType().type(this).build(), constantValue);
-    this.constantValue = new StructList(pointer, this, 0, getLength(pointer));
+    if (constantValue != null) {
+      var pointer = new Struct(structType().type(this).build(), constantValue);
+      this.constantValue = new StructList(pointer, this, 0, getLength(pointer));
+    } else {
+      this.constantValue = null;
+    }
     this.lengthExpression = lengthExpression;
     this.byteLengthExpression = byteLengthExpression;
     this.structType = structType;

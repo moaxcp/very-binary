@@ -82,19 +82,8 @@ public class GetFloat32TypeTest {
         .fromBytes(ba().float32(0))
         .build();
 
-    assertThat(struct.getFloat32(0, 0)).isEqualTo(0.0f);
-  }
-
-  @Test
-  void getFloat32_index_1_not_array() {
-    var struct = struct()
-        .float32()
-        .fromBytes(ba().float32(2))
-        .build();
-
-    assertThatThrownBy(() -> struct.getFloat32(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getFloat32(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -150,7 +139,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32_index_constant() {
     var struct = struct()
-        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThat(struct.getFloat32(0, 2)).isEqualTo(3.0f);

@@ -111,7 +111,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, false))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 0 is constant index: 0 value: false constant: true");
+        .hasMessage("BoolType at position 0 is constant value: false constant: true");
   }
 
   @Test
@@ -181,27 +181,15 @@ public class SetBoolTypeTest {
         .bool()
         .build();
 
-    struct.setBool(0, 0, true);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().bool(true));
-  }
-
-  @Test
-  void setBool_index_1_not_array() {
-    var struct = struct()
-        .bool()
-        .build();
-
-    assertThatThrownBy(() -> struct.setBool(0, 1, true))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setBool(0, 0, true))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setBool_index_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(true).lengthField(0).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .fromBytes(ba().int8(2).bool(true, true))
         .build();
 
@@ -214,7 +202,7 @@ public class SetBoolTypeTest {
   void setBool_index_constant_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(true).lengthField(0).bool()
+        .primitive().constant(new boolean[]{true, true}).bool()
         .fromBytes(new byte[] {2, 1, 1})
         .build();
 
@@ -226,7 +214,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 3, false))
@@ -327,11 +315,11 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_constant() {
     var struct = struct()
-        .primitive().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 1, false, false))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 0 is constant index: 1 value: false constant: true");
+        .hasMessage("BoolArrayType at position 0 is constant index: 1 value: [false, false] constant: [true, true, true, true, true]");
   }
 }

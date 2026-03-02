@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -74,7 +73,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Uint8Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
@@ -156,26 +155,14 @@ public class SetUint8TypeTest {
         .uint8()
         .build();
 
-    struct.setUint8(0, 0, (byte) 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint8(2));
-  }
-
-  @Test
-  void setUint8Array_index_1_not_array() {
-    var struct = struct()
-        .uint8()
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint8(0, 1, (byte) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setUint8(0, 0, (byte) 2))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setUint8Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
@@ -187,7 +174,7 @@ public class SetUint8TypeTest {
   void setUint8Array_constant_value() {
     var struct = struct()
         .uint8()
-        .primitive().constant((short) 5).lengthField(0).uint8()
+        .primitive().constant(new short[]{5, 5}).uint8()
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 
@@ -200,7 +187,7 @@ public class SetUint8TypeTest {
   void setUint8Array_constant_value_same() {
     var struct = struct()
         .uint8()
-        .primitive().constant((short) 5).lengthField(0).uint8()
+        .primitive().constant(new short[]{5, 5}).uint8()
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 

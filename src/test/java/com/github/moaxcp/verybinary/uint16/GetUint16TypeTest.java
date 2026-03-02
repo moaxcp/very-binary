@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,19 +92,8 @@ public class GetUint16TypeTest {
         .fromBytes(ba().uint16(1))
         .build();
 
-    assertThat(struct.getUint16(0, 0)).isEqualTo(1);
-  }
-
-  @Test
-  void getUint16_index_1_not_array() {
-    var struct = struct()
-        .uint16()
-        .fromBytes(ba().uint16(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.getUint16(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint16Type at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getUint16(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -173,7 +161,7 @@ public class GetUint16TypeTest {
   @Test
   void getUint16Array_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).uint16()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThat(struct.getUint16(0, 3)).isEqualTo(5);

@@ -41,7 +41,7 @@ public class GetBoolTypeTest {
         .build();
     assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).get(struct))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getArray(Pointer) not supported for BoolArrayType. Use getBoolArray(Pointer) instead.");
+        .hasMessage("get(Pointer) not supported for BoolArrayType. Use getBool(Pointer) instead.");
   }
 
   @Test
@@ -148,19 +148,8 @@ public class GetBoolTypeTest {
         .fromBytes(new byte[] {1})
         .build();
 
-    assertThat(struct.getBool(0, 0)).isTrue();
-  }
-
-  @Test
-  void getBool_index_1_not_array() {
-    var struct = struct()
-        .bool()
-        .fromBytes(new byte[] {1})
-        .build();
-
-    assertThatThrownBy(() -> struct.getBool(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getBool(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -216,7 +205,7 @@ public class GetBoolTypeTest {
   @Test
   void getBool_index_constant() {
     var struct = struct()
-        .primitive().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThat(struct.getBool(0, 3)).isTrue();

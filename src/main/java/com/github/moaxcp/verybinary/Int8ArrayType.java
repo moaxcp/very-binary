@@ -153,7 +153,7 @@ public final class Int8ArrayType extends PrimitiveArrayType<Int8ArrayType, Byte>
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, byte value) {
     if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + Arrays.toString(constantValue));
     }
   }
 

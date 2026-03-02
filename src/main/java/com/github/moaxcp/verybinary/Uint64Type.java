@@ -29,7 +29,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
   }
 
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValue != null ? constantValue.longValue() : 0;
   }
 

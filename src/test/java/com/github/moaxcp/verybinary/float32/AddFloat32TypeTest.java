@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddFloat32TypeTest {
   @Test
   void addFloat32Array_constant() {
     var struct = struct()
-        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 5.0f))
@@ -104,8 +103,7 @@ public class AddFloat32TypeTest {
         .fromBytes(ba())
         .build();
     assertThatThrownBy(() -> struct.addFloat32(0, 3.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,8 +167,7 @@ public class AddFloat32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 0, 3.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -181,14 +178,13 @@ public class AddFloat32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 1, 3.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addFloat32Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(3.0f).lengthExpression(constant(3)).float32()
+        .primitive().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 2, 4.0f))

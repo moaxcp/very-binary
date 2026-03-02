@@ -50,7 +50,7 @@ public class AllocateFloat32TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .primitive().constant(3.0f).float32()
-        .primitive().constant(2.0f).lengthField(0).float32()
+        .primitive().constant(new float[]{2, 2, 2}).float32()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float32(3, 2, 2, 2));

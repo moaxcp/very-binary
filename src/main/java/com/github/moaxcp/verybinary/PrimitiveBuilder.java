@@ -105,7 +105,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> int8() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof byte[]) {
       return new Int8ArrayType(position, getConstantValue(byte[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -116,7 +116,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> uint8() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof short[]) {
       return new Uint8ArrayType(position, getConstantValue(short[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -127,7 +127,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> int16() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof short[]) {
       return new Int16ArrayType(position, getConstantValue(short[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -138,7 +138,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> uint16() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof int[]) {
       return new Uint16ArrayType(position, getConstantValue(int[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -149,7 +149,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> int32() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof int[]) {
       return new Int32ArrayType(position, getConstantValue(int[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -160,7 +160,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> uint32() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof long[]) {
       return new Uint32ArrayType(position, getConstantValue(long[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -171,7 +171,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> int64() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof long[]) {
       return new Int64ArrayType(position, getConstantValue(long[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -182,7 +182,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> uint64() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof List) {
       return new Uint64ListType(position, getConstantValue(List.class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -193,7 +193,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> float32() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof float[]) {
       return new Float32ArrayType(position, getConstantValue(float[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)
@@ -204,7 +204,7 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> float64() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof double[]) {
       return new Float64ArrayType(position, getConstantValue(double[].class), lengthExpression, byteLengthExpression)
           .addLengthChangeListeners(lengthListeners)
           .addByteLengthChangeListeners(byteLengthListeners)

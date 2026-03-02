@@ -49,7 +49,7 @@ public class AllocateInt8TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .primitive().constant((byte) 5).int8()
-        .primitive().constant((byte) 6).lengthField(0).int8()
+        .primitive().constant(new byte[]{6, 6, 6, 6, 6}).int8()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5, 6, 6, 6, 6, 6));

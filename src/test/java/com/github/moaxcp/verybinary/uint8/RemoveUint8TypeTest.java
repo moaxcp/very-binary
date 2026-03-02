@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -67,8 +66,8 @@ public class RemoveUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Cannot remove element from fixed length Uint8Type at position 0");
   }
 
   @Test
@@ -133,25 +132,25 @@ public class RemoveUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
   }
 
   @Test
   void removeUint8Array_fixed_length() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint8ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Uint8ArrayType at position 0");
   }
 
   @Test
   void removeUint8Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

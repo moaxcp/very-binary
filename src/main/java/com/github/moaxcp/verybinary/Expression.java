@@ -69,12 +69,24 @@ public interface Expression {
 
     @Override
     public long constantValue(Type<?> parent) {
-      return ((NumberType<?, ?>) parent.getType(position)).getConstantValue().longValue();
+      return switch (parent.getType(position)) {
+        case Int8Type t -> t.getInt8ConstantValue();
+        case Int16Type t -> t.getInt16ConstantValue();
+        case Int32Type t -> t.getInt32ConstantValue();
+        case Int64Type t -> t.getInt64ConstantValue();
+        case Uint8Type t -> t.getUint8ConstantValue();
+        case Uint16Type t -> t.getUint16ConstantValue();
+        case Uint32Type t -> t.getUint32ConstantValue();
+        case Uint64Type t -> t.getConstantValue().longValue();
+        case Float32Type t -> (long) t.getFloat32ConstantValue();
+        case Float64Type t -> (long) t.getFloat64ConstantValue();
+        default -> throw new IllegalArgumentException("cannot evaluate " + parent + parent.getClass().getSimpleName());
+      };
     }
 
     @Override
     public long defaultValue(Type<?> parent) {
-      return ((NumberType<?, ?>) parent.getType(position)).defaultArrayLengthValue();
+      return ((NumberType<?, ?>) parent.getType(position)).defaultLengthValue();
     }
 
     @Override

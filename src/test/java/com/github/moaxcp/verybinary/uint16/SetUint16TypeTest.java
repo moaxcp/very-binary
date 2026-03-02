@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -75,7 +74,7 @@ public class SetUint16TypeTest {
 
     assertThatThrownBy(() -> struct.setUint16(0, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint16ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Uint16Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
@@ -157,26 +156,14 @@ public class SetUint16TypeTest {
         .uint16()
         .build();
 
-    struct.setUint16(0, 0, 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint16(2));
-  }
-
-  @Test
-  void setUint16Array_index_1_not_array() {
-    var struct = struct()
-        .uint16()
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint16(0, 1, 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint16Type at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setUint16(0, 0, 2))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setUint16Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).uint16()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.setUint16(0, 3, 2))
@@ -188,7 +175,7 @@ public class SetUint16TypeTest {
   void setUint16Array_constant_value() {
     var struct = struct()
         .uint16()
-        .primitive().constant(5).lengthField(0).uint16()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .fromBytes(ba().uint16(2, 5, 5))
         .build();
 
@@ -201,7 +188,7 @@ public class SetUint16TypeTest {
   void setUint16Array_constant_value_same() {
     var struct = struct()
         .uint16()
-        .primitive().constant(5).lengthField(0).uint16()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .fromBytes(ba().uint16(2, 5, 5))
         .build();
 

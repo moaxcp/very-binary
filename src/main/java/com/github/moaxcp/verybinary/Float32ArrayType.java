@@ -155,7 +155,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
     if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + Arrays.toString(constantValue));
     }
   }
 
@@ -229,9 +229,7 @@ public final class Float32ArrayType extends PrimitiveArrayType<Float32ArrayType,
       pointer.getByteArray().addFloat32(getOffset(pointer), constantValue);
     } else {
       long length = getByteLength(pointer);
-      for (int i = 0; i < length; i++) {
-        pointer.getByteArray().addFloat32(getOffset(pointer, i), 0);
-      }
+      pointer.getByteArray().shiftBytesFor(getOffset(pointer), length);
     }
   }
 

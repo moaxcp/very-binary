@@ -49,7 +49,7 @@ public class AllocateInt16TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .primitive().constant((short) 5).int16()
-        .primitive().constant((short) 6).lengthField(0).int16()
+        .primitive().constant(new short[]{6, 6, 6, 6, 6}).int16()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int16(5, 6, 6, 6, 6, 6));

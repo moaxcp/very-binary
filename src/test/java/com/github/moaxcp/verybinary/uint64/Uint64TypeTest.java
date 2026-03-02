@@ -1,40 +1,23 @@
 package com.github.moaxcp.verybinary.uint64;
 
-import com.github.moaxcp.verybinary.Uint64Type;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.UINT64;
-import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint64TypeTest {
 
   @Test
-  void constructorEverything() {
-    var struct = struct()
-        .uint64()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64()
-        .align(2)
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(UINT64.size() + 2);
-    Assertions.assertThat(struct.<Uint64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64());
-  }
-
-  @Test
   void copy() {
     var type = structType()
         .uint64()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(valueOf(0)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
         .align(2)
         .build();
     var copy = type.copy(15);

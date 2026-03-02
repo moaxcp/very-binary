@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,19 +92,8 @@ public class GetInt8TypeTest {
         .fromBytes(ba().int8(1))
         .build();
 
-    assertThat(struct.getInt8(0, 0)).isEqualTo((byte) 1);
-  }
-
-  @Test
-  void getInt8_index_1_not_array() {
-    var struct = struct()
-        .int8()
-        .fromBytes(ba().int8(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.getInt8(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8Type at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getInt8(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -173,7 +161,7 @@ public class GetInt8TypeTest {
   @Test
   void getInt8Array_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).lengthExpression(constant(5)).int8()
+        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThat(struct.getInt8(0, 3)).isEqualTo((byte) 5);

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddInt32TypeTest {
   @Test
   void addInt32Array_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3))
@@ -104,8 +103,7 @@ public class AddInt32TypeTest {
         .fromBytes(ba().int32(1))
         .build();
     assertThatThrownBy(() -> struct.addInt32(0, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddInt32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 0, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addInt32_with_index_1_not_array() {
-    var struct = struct()
-        .int32()
-        .fromBytes(ba().int32(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt32(0, 1, 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addInt32Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3, 3))

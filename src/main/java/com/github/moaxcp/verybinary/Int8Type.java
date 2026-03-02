@@ -29,8 +29,12 @@ public final class Int8Type extends NumberType<Int8Type, Byte> {
     return constantValueSet;
   }
 
+  public byte getInt8ConstantValue() {
+    return constantValue;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? (long) constantValue : 0;
   }
 

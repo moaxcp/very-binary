@@ -29,8 +29,12 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
     return constantValueSet;
   }
 
+  public long getUint32ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
 

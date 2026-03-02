@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,19 +92,8 @@ public class GetFloat64TypeTest {
         .fromBytes(ba().float64(0))
         .build();
 
-    assertThat(struct.getFloat64(0, 0)).isEqualTo(0.0d);
-  }
-
-  @Test
-  void getFloat64_index_1_not_array() {
-    var struct = struct()
-        .float64()
-        .fromBytes(ba().float64(2))
-        .build();
-
-    assertThatThrownBy(() -> struct.getFloat64(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getFloat64(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -173,7 +161,7 @@ public class GetFloat64TypeTest {
   @Test
   void getFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThat(struct.getFloat64(0, 2)).isEqualTo(3.0d);

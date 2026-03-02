@@ -24,13 +24,17 @@ public final class Uint16Type extends NumberType<Uint16Type, Integer> {
     return new Uint16Type(position, constantValue);
   }
 
+  public int getUint16ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
   public boolean isConstant() {
     return constantValueSet;
   }
 
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
 

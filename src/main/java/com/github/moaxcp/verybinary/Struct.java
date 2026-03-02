@@ -1419,7 +1419,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
      } else if (structType.getType(position) instanceof ListValueType<?, ?> valueType) {
        valueType.remove(this, index);
      } else {
-       throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
+       throw new IllegalArgumentException("Field at postion " + position + " is not a ArrayValueType or ListValueType");
      }
   }
 

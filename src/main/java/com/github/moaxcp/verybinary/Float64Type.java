@@ -28,8 +28,12 @@ public final class Float64Type extends NumberType<Float64Type, Double> {
     return constantValueSet;
   }
 
+  public double getFloat64ConstantValue() {
+    return constantValueSet ? constantValue : 0.0d;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? (long) constantValue : 0L;
   }
 

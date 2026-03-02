@@ -6,26 +6,11 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.FLOAT32;
-import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float32TypeTest {
-
-  @Test
-  void constructorEverything() {
-    var struct = struct()
-        .float32()
-        .primitive().constant(3.0f).lengthExpression(valueOf(0)).float32()
-        .align(2)
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(FLOAT32.size() + 2);
-    assertThat(struct.<Float32Type>getType(1)).isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(3.0f).lengthExpression(valueOf(0)).float32());
-  }
 
   @Test
   void getUnitSize() {
@@ -184,40 +169,5 @@ public class Float32TypeTest {
 
     struct.setInt8(0, 5);
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).float32(0, 0, 0, 0, 0));
-  }
-
-  @Test
-  void setting_length_field_extends_array_with_constant_values() {
-    var struct = struct()
-        .int8()
-        .primitive().lengthField(0).constant(5f).float32()
-        .build();
-
-    struct.setInt8(0, 5);
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).float32(5, 5, 5, 5, 5));
-  }
-
-  @Test
-  void setting_byte_length_field_extends_array() {
-    var struct = struct()
-        .int8()
-        .primitive().byteLengthField(0).float32()
-        .build();
-
-    struct.setInt8(0, 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).float32(0, 0, 0, 0, 0));
-  }
-
-  @Test
-  void setting_byte_length_field_extends_array_with_constant_values() {
-    var struct = struct()
-        .int8()
-        .primitive().byteLengthField(0).constant(5f).float32()
-        .build();
-
-    struct.setInt8(0, 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).float32(5, 5, 5, 5, 5));
   }
 }

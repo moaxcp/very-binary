@@ -1,31 +1,13 @@
 package com.github.moaxcp.verybinary.int16;
 
-import com.github.moaxcp.verybinary.Int16Type;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.INT16;
-import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Int16TypeTest {
-
-  @Test
-  void constructorEverything() {
-    var struct = struct()
-        .int16()
-        .primitive().constant((short) 5).lengthExpression(valueOf(0)).int16()
-        .align(2)
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(INT16.size() + 2);
-    Assertions.assertThat(struct.<Int16Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant((short) 5).lengthExpression(valueOf(0)).int16());
-  }
 
   @Test
   void getByteLength() {

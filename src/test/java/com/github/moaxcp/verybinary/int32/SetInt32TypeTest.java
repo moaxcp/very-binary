@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -75,7 +74,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(0, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int32ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Int32Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
@@ -153,51 +152,39 @@ public class SetInt32TypeTest {
         .int32()
         .build();
 
-    struct.setInt32(0, 0, 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int32(2));
-  }
-
-  @Test
-  void setInt32Array_index_1_not_array() {
-    var struct = struct()
-        .int32()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt32(0, 1, 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setInt32(0, 0, 2))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setInt32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(5).lengthExpression(constant(5)).int32()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 3, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int32ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Int32ArrayType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
   void setInt32Array_constant_value() {
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthField(0).int32()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .fromBytes(ba().int32(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int32ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Int32ArrayType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
   void setInt32Array_constant_value_same() {
     var struct = struct()
         .int32()
-        .primitive().constant(5).lengthField(0).int32()
+        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .fromBytes(ba().int32(2, 5, 5))
         .build();
 

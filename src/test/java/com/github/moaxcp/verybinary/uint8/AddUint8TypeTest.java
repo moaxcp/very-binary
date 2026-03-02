@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddUint8TypeTest {
   @Test
   void addUint8Array_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
@@ -104,8 +103,7 @@ public class AddUint8TypeTest {
         .fromBytes(ba().uint8(1))
         .build();
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 0, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addUint8_with_index_1_not_array() {
-    var struct = struct()
-        .uint8()
-        .fromBytes(ba().uint8(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addUint8(0, 1, (byte) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addUint8Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).uint8()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))

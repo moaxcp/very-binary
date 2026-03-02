@@ -149,7 +149,7 @@ public final class Int32ArrayType extends PrimitiveArrayType<Int32ArrayType, Int
 
   private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, int value) {
     if (this.isConstant() && !Objects.equals(constantValue[Math.toIntExact(index)], value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
+      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + Arrays.toString(constantValue));
     }
   }
 

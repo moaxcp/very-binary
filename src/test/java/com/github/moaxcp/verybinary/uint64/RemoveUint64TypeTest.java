@@ -3,10 +3,10 @@ package com.github.moaxcp.verybinary.uint64;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -68,8 +68,8 @@ public class RemoveUint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Cannot remove element from fixed length Uint64Type at position 0");
   }
 
   @Test
@@ -110,7 +110,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Uint64ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -123,7 +123,7 @@ public class RemoveUint64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Uint64ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -134,29 +134,29 @@ public class RemoveUint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
   }
 
   @Test
   void removeUint64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint64ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Uint64ListType at position 0");
   }
 
   @Test
   void removeUint64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Uint64ArrayType at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint64ListType at position 0 index: 3");
   }
 }

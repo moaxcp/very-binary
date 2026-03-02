@@ -29,8 +29,12 @@ public final class Float32Type extends NumberType<Float32Type, Float> {
     return constantValueSet;
   }
 
+  public float getFloat32ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? (long) constantValue : 0;
   }
 

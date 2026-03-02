@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -75,7 +74,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.setInt16(0, (short) 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16ArrayType at position 0 is constant index: 0 value: 2 constant: 5");
+        .hasMessage("Int16Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
@@ -157,26 +156,14 @@ public class SetInt16TypeTest {
         .int16()
         .build();
 
-    struct.setInt16(0, 0, (short) 2);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int16(2));
-  }
-
-  @Test
-  void setInt16Array_index_1_not_array() {
-    var struct = struct()
-        .int16()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt16(0, 1, (short) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.setInt16(0, 0, (short) 2))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void setInt16Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, 3, (short) 2))
@@ -188,7 +175,7 @@ public class SetInt16TypeTest {
   void setInt16Array_constant_value() {
     var struct = struct()
         .int16()
-        .primitive().constant((short) 5).lengthField(0).int16()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .fromBytes(ba().int16(2, 5, 5))
         .build();
 
@@ -201,7 +188,7 @@ public class SetInt16TypeTest {
   void setInt16Array_constant_value_same() {
     var struct = struct()
         .int16()
-        .primitive().constant((short) 5).lengthField(0).int16()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .fromBytes(ba().int16(2, 5, 5))
         .build();
 

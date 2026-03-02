@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddInt16TypeTest {
   @Test
   void addInt16Array_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(0, (short) 3))
@@ -104,8 +103,7 @@ public class AddInt16TypeTest {
         .fromBytes(ba().int16(1))
         .build();
     assertThatThrownBy(() -> struct.addInt16(0, (short) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddInt16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(0, 0, (short) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addInt16_with_index_1_not_array() {
-    var struct = struct()
-        .int16()
-        .fromBytes(ba().int16(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt16(0, 1, (short) 3))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addInt16Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).lengthExpression(constant(5)).int16()
+        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .build();
 
     assertThatThrownBy(() -> struct.addInt16(0, 3, (short) 3))

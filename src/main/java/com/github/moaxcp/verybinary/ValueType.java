@@ -58,7 +58,7 @@ sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits IndexedVa
 
   default void remove(Pointer<?, ? extends Type<?>> pointer) {
     if (isFixedLength(pointer)) {
-      throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition());
+      throw new UnsupportedOperationException("Cannot remove element from fixed length " + getClass().getSimpleName() + " at position " + getPosition());
     }
     callWithByteLengthChange(DEALLOCATED, pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer)));
   }

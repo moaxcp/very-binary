@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -66,8 +65,8 @@ public class RemoveInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Cannot remove element from fixed length Int64Type at position 0");
   }
 
   @Test
@@ -132,25 +131,25 @@ public class RemoveInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
   }
 
   @Test
   void removeInt64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Int64ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Int64ArrayType at position 0");
   }
 
   @Test
   void removeInt64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

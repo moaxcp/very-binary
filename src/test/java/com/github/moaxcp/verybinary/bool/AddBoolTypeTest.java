@@ -142,12 +142,12 @@ public class AddBoolTypeTest {
   void addBool_constant_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{}).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, false))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 1 is constant index: 0 value: false constant: true");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("BoolArrayType at position 1 is constant length: 5 index: 5");
   }
 
   @Test
@@ -260,7 +260,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_index_constant() {
     var struct = struct()
-        .primitive().constant(new boolean[]{}).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
@@ -284,12 +284,12 @@ public class AddBoolTypeTest {
   void addBool_array_constant() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{}).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
-    struct.addBool(1, true, true, true, true, true);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(true, true, true, true, true));
+    assertThatThrownBy(() -> struct.addBool(1, true, true, true, true, true))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Cannot add elements to fixed length array BoolArrayType at position 1 index: 5");
   }
 
   @Test
@@ -307,7 +307,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_array_constant_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{}).lengthExpression(constant(5)).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, true, false, true, false, true))

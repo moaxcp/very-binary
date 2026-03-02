@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -94,19 +93,8 @@ public class GetUint32TypeTest {
         .fromBytes(ba().uint32(1))
         .build();
 
-    assertThat(struct.getUint32(0, 0)).isEqualTo(1L);
-  }
-
-  @Test
-  void getUint32_index_1_not_array() {
-    var struct = struct()
-        .uint32()
-        .fromBytes(ba().uint32(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.getUint32(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32Type at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getUint32(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -174,7 +162,7 @@ public class GetUint32TypeTest {
   @Test
   void getUint32Array_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThat(struct.getUint32(0, 3)).isEqualTo(5L);

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -68,8 +67,8 @@ public class RemoveUint32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(UnsupportedOperationException.class)
+        .hasMessage("Cannot remove element from fixed length Uint32Type at position 0");
   }
 
   @Test
@@ -136,25 +135,25 @@ public class RemoveUint32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32ArrayType cannot remove from non-array type at position 0");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
   }
 
   @Test
   void removeUint32Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove fixed length array Uint32ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Uint32ArrayType at position 0");
   }
 
   @Test
   void removeUint32Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).uint32()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

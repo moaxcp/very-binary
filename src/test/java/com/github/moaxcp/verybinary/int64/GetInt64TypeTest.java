@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,7 +92,8 @@ public class GetInt64TypeTest {
         .fromBytes(ba().int64(1))
         .build();
 
-    assertThat(struct.getInt64(0, 0)).isEqualTo(1L);
+    assertThatThrownBy(() -> struct.getInt64(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -104,8 +104,7 @@ public class GetInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.getInt64(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -173,7 +172,7 @@ public class GetInt64TypeTest {
   @Test
   void getInt64Array_constant() {
     var struct = struct()
-        .primitive().constant(5L).lengthExpression(constant(5)).int64()
+        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThat(struct.getInt64(0, 3)).isEqualTo(5L);

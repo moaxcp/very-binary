@@ -1,31 +1,13 @@
 package com.github.moaxcp.verybinary.int64;
 
-import com.github.moaxcp.verybinary.Int64Type;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.ByteLengthListener.align;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Expression.valueOf;
 import static com.github.moaxcp.verybinary.Primitive.INT64;
-import static com.github.moaxcp.verybinary.PrimitiveBuilder.primitive;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Int64TypeTest {
-
-  @Test
-  void constructorEverything() {
-    var struct = struct()
-        .int64()
-        .primitive().constant(5L).lengthExpression(valueOf(0)).int64()
-        .align(2)
-        .build();
-
-    assertThat(struct.getByteLength()).isEqualTo(INT64.size() + 2);
-    Assertions.assertThat(struct.<Int64Type>getType(1))
-        .isEqualTo(primitive().position(1).byteLengthListener(align(2)).constant(5L).lengthExpression(valueOf(0)).int64());
-  }
 
   @Test
   void getByteLength() {

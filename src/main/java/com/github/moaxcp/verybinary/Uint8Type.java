@@ -24,13 +24,17 @@ public final class Uint8Type extends NumberType<Uint8Type, Short> {
     return new Uint8Type(position, constantValueSet ? constantValue : null);
   }
 
+  public short getUint8ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
   public boolean isConstant() {
     return constantValueSet;
   }
 
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
 

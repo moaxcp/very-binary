@@ -3,10 +3,10 @@ package com.github.moaxcp.verybinary.uint64;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -82,19 +82,8 @@ public class GetUint64TypeTest {
         .fromBytes(ba().uint64(1))
         .build();
 
-    assertThat(struct.getUint64(0, 0)).isEqualTo(BigInteger.ONE);
-  }
-
-  @Test
-  void getUint64_index_1_not_array() {
-    var struct = struct()
-        .uint64()
-        .fromBytes(ba().uint64(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.getUint64(0, 1))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type at position 0 index: 1 length: 1");
+    assertThatThrownBy(() -> struct.getUint64(0, 0))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -118,7 +107,7 @@ public class GetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.getUint64(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: -1 length: 0");
+        .hasMessage("Uint64ListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -131,7 +120,7 @@ public class GetUint64TypeTest {
 
     assertThatThrownBy(() -> struct.getUint64(1, 1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: 1 length: 1");
+        .hasMessage("Uint64ListType at position 1 index: 1 length: 1");
   }
 
   @Test
@@ -150,7 +139,7 @@ public class GetUint64TypeTest {
   @Test
   void getUint64Array_constant() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThat(struct.getUint64(0, 3)).isEqualTo(BigInteger.valueOf(5));

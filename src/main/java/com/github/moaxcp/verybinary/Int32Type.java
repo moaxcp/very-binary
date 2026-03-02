@@ -28,8 +28,12 @@ public final class Int32Type extends NumberType<Int32Type, Integer> {
     return constantValueSet;
   }
 
+  public int getInt32ConstantValue() {
+    return constantValueSet ? constantValue : 0;
+  }
+
   @Override
-  public long defaultArrayLengthValue() {
+  public long defaultLengthValue() {
     return constantValueSet ? constantValue : 0;
   }
 

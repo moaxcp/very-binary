@@ -3,10 +3,10 @@ package com.github.moaxcp.verybinary.uint64;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -66,12 +66,12 @@ public class AddUint64TypeTest {
   @Test
   void addUint64Array_constant() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint64ArrayType at position 0 is constant length: 5 index: 5");
+        .hasMessage("Uint64ListType at position 0 is constant length: 1 index: 1");
   }
 
   @Test
@@ -81,8 +81,7 @@ public class AddUint64TypeTest {
         .fromBytes(ba().uint64(1))
         .build();
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -109,7 +108,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(1, -1, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Uint64ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -122,7 +121,7 @@ public class AddUint64TypeTest {
 
     assertThatThrownBy(() -> struct.addUint64(1, 3, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Uint64ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -146,30 +145,17 @@ public class AddUint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, 0, BigInteger.valueOf(3)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64Type cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addUint64_with_index_1_not_array() {
-    var struct = struct()
-        .uint64()
-        .fromBytes(ba().uint64(1))
-        .build();
-
-    assertThatThrownBy(() -> struct.addUint64(0, 1, BigInteger.valueOf(3)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addUint64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).lengthExpression(constant(5)).uint64()
+        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, 3, BigInteger.valueOf(3)))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint64ArrayType at position 0 is constant length: 5 index: 3");
+        .hasMessage("Uint64ListType at position 0 is constant length: 1 index: 3");
   }
 }

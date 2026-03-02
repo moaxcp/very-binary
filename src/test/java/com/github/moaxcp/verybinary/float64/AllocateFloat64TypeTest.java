@@ -47,10 +47,10 @@ public class AllocateFloat64TypeTest {
   }
 
   @Test
-  void allocate_array_length_and_array_with_constant() {
+  void allocate_array_with_constant() {
     var struct = struct()
         .primitive().constant(3.0d).float64()
-        .primitive().constant(2.0d).lengthField(0).float64()
+        .primitive().constant(new double[]{2, 2, 2}).float64()
         .build();
 
     // 3.0d then 3 elements of 2.0d

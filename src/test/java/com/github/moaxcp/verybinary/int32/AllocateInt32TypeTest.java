@@ -49,7 +49,7 @@ public class AllocateInt32TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .primitive().constant(5).int32()
-        .primitive().constant(6).lengthField(0).int32()
+        .primitive().constant(new int[]{6, 6, 6, 6, 6}).int32()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int32(5, 6, 6, 6, 6, 6));

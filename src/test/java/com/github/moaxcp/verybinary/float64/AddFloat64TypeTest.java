@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AddFloat64TypeTest {
   @Test
   void addFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
@@ -104,8 +103,7 @@ public class AddFloat64TypeTest {
         .fromBytes(ba().float64(2))
         .build();
     assertThatThrownBy(() -> struct.addFloat64(0, 3.0d))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -169,26 +167,13 @@ public class AddFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 0, 3.0d))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType cannot add to non-array type at position 0 index: 0 length: 1");
-  }
-
-  @Test
-  void addFloat64_with_index_1_not_array() {
-    var struct = struct()
-        .float64()
-        .fromBytes(ba().float64(2))
-        .build();
-
-    assertThatThrownBy(() -> struct.addFloat64(0, 1, 3.0d))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType cannot add to non-array type at position 0 index: 1 length: 1");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void addFloat64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).lengthExpression(constant(3)).float64()
+        .primitive().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))

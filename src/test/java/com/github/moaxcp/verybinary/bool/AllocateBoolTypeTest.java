@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateBoolTypeTest {
@@ -79,7 +78,7 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_array_constant() {
     var struct = struct()
-        .primitive().constant(true).lengthExpression(constant(5)).bool()
+        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().bool(true, true, true, true, true));

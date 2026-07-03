@@ -9,10 +9,10 @@
 
 ## byte[]
 
-The first layer is the java byte[]. It contains the primitive data (int8, uint8, int16, etc.) of a Struct formatted by 
+The first layer is the java byte[]. It contains the basicTypeInfo data (int8, uint8, int16, etc.) of a Struct formatted by 
 the StructType.
 
-## primitive types
+## basicTypeInfo types
 
 These include boolean, integers, and floats with specific bit depths. Integers can be signed or unsigned. Signed integers use 
 twos-complement encoding.
@@ -38,7 +38,7 @@ ensures bit pattern preservation for all floating-point values, including NaNs.
 
 # Serializer
 
-Serializers implement how each primitive type is read and written to the byte[]. Serializers include Big Endian and 
+Serializers implement how each basicTypeInfo type is read and written to the byte[]. Serializers include Big Endian and 
 Little Endian.
 
 # ByteArray
@@ -73,7 +73,7 @@ Pointer is an interface that brings together the offset in memory, ByteArray, an
 
 # Types
 
-Types are an abstraction above the primitive types. Each primitive has a Type class and StructType is for structs.
+Types are an abstraction above the basicTypeInfo types. Each basicTypeInfo has a Type class and StructType is for structs.
 Type classes define methods for manipulating the ByteArray. The offset of the pointer and the index of the field within
 the pointer determines the index to change in the ByteArray.
 

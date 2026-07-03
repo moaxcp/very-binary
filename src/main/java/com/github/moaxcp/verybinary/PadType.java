@@ -2,48 +2,32 @@ package com.github.moaxcp.verybinary;
 
 public final class PadType extends Type<PadType> {
 
-  public static PadType pad(long length) {
-    return new PadType(-1, length, false);
-  }
-
-  public static PadType pad(int position, long length) {
-    return new PadType(position, length, false);
-  }
-
-  public static PadType align(long length) {
-    return new PadType(-1, length, true);
-  }
-
-  public static PadType align(int position, long length) {
-    return new PadType(position, length, true);
-  }
-
   private final long length;
   private final boolean align;
 
-  public PadType(int position, long length, boolean align) {
-    super(position);
+  public PadType(int position, ComplexType parent, long length, boolean align) {
+    super(position, parent);
     this.length = length;
     this.align = align;
   }
 
   @Override
   public PadType copy(int position) {
-    return new PadType(position, this.length, this.align);
+    return new PadType(position, this.parent, this.length, this.align);
   }
 
   @Override
-  public boolean isConstant(Type<?> parent) {
-    return !align || parent.getType(position - 1).isConstant(parent);
+  public boolean isConstant() {
+    return !align || parent.getType(position - 1).isConstant();
   }
 
   @Override
-  public long getAllocationLength(Type<?> parent) {
+  public long getAllocationLength() {
     if (!align) {
       return length;
     }
 
-    return length - parent.getType(position - 1).getAllocationLength(parent) % length;
+    return length - parent.getType(position - 1).getAllocationLength() % length;
   }
 
   public long getPadLength() {
@@ -67,20 +51,16 @@ public final class PadType extends Type<PadType> {
   }
 
   @Override
-  public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
-    var type = pointer.getType();
-    return switch (type) {
-      case ComplexType<?> complex -> !align || complex.getType(position - 1).isFixedLength(pointer);
-      default -> throw new IllegalArgumentException("Cannot pad " + type);
+  public boolean isFixedLength() {
+    return switch (parent) {
+      case StructType structType -> !align || structType.getType(position - 1).isFixedLength();
     };
   }
 
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     var padLength = getByteLength(pointer);
-    if(!align) {
-      pointer.getByteArray().addInt8(getOffset(pointer), new byte[Math.toIntExact(padLength)]);
-    }
+    pointer.getByteArray().addInt8(getOffset(pointer), new byte[Math.toIntExact(padLength)]);
   }
 
   public void reAlign(Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {

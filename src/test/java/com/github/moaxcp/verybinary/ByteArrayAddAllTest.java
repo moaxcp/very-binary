@@ -31,34 +31,34 @@ public class ByteArrayAddAllTest {
 
     long idx = 0;
     assertThat(bytes.getBool(idx)).isTrue();
-    idx += Primitive.BOOL.size();
+    idx += BasicTypeInfo.BOOL.size();
 
     assertThat(bytes.getInt8(idx)).isEqualTo((byte) -5);
-    idx += Primitive.INT8.size();
+    idx += BasicTypeInfo.INT8.size();
 
     assertThat(bytes.getUint8(idx)).isEqualTo((short) 255);
-    idx += Primitive.UINT8.size();
+    idx += BasicTypeInfo.UINT8.size();
 
     assertThat(bytes.getInt16(idx)).isEqualTo((short) 0x1234);
-    idx += Primitive.INT16.size();
+    idx += BasicTypeInfo.INT16.size();
 
     assertThat(bytes.getUint16(idx)).isEqualTo(0xABCD);
-    idx += Primitive.UINT16.size();
+    idx += BasicTypeInfo.UINT16.size();
 
     assertThat(bytes.getInt32(idx)).isEqualTo(0x89ABCDEF);
-    idx += Primitive.INT32.size();
+    idx += BasicTypeInfo.INT32.size();
 
     assertThat(bytes.getUint32(idx)).isEqualTo(0xFFFF_FFFFL);
-    idx += Primitive.UINT32.size();
+    idx += BasicTypeInfo.UINT32.size();
 
     assertThat(bytes.getInt64(idx)).isEqualTo(0x0123456789ABCDEFL);
-    idx += Primitive.INT64.size();
+    idx += BasicTypeInfo.INT64.size();
 
     assertThat(bytes.getUint64(idx)).isEqualTo(new BigInteger("18446744073709551615"));
-    idx += Primitive.UINT64.size();
+    idx += BasicTypeInfo.UINT64.size();
 
     assertThat(bytes.getFloat32(idx)).isCloseTo(3.14f, within(1e-6f));
-    idx += Primitive.FLOAT32.size();
+    idx += BasicTypeInfo.FLOAT32.size();
 
     assertThat(bytes.getFloat64(idx)).isCloseTo(Math.E, within(1e-12));
   }
@@ -83,34 +83,34 @@ public class ByteArrayAddAllTest {
 
     long idx = 0;
     assertThat(bytes.getBool(idx)).isTrue();
-    idx += Primitive.BOOL.size();
+    idx += BasicTypeInfo.BOOL.size();
 
     assertThat(bytes.getInt8(idx)).isEqualTo((byte) 7);
-    idx += Primitive.INT8.size();
+    idx += BasicTypeInfo.INT8.size();
 
     assertThat(bytes.getUint8(idx)).isEqualTo((short) 255);
-    idx += Primitive.UINT8.size();
+    idx += BasicTypeInfo.UINT8.size();
 
     assertThat(bytes.getInt16(idx)).isEqualTo((short) -2);
-    idx += Primitive.INT16.size();
+    idx += BasicTypeInfo.INT16.size();
 
     assertThat(bytes.getUint16(idx)).isEqualTo(0x1234);
-    idx += Primitive.UINT16.size();
+    idx += BasicTypeInfo.UINT16.size();
 
     assertThat(bytes.getInt32(idx)).isEqualTo(0x7FFF_FFFE);
-    idx += Primitive.INT32.size();
+    idx += BasicTypeInfo.INT32.size();
 
     assertThat(bytes.getUint32(idx)).isEqualTo(0xFFFF_FFFFL);
-    idx += Primitive.UINT32.size();
+    idx += BasicTypeInfo.UINT32.size();
 
     assertThat(bytes.getInt64(idx)).isEqualTo(1_234_567_890_123_456_789L);
-    idx += Primitive.INT64.size();
+    idx += BasicTypeInfo.INT64.size();
 
     assertThat(bytes.getUint64(idx)).isEqualTo(new BigInteger("42"));
-    idx += Primitive.UINT64.size();
+    idx += BasicTypeInfo.UINT64.size();
 
     assertThat(bytes.getFloat32(idx)).isCloseTo(1.5f, within(1e-6f));
-    idx += Primitive.FLOAT32.size();
+    idx += BasicTypeInfo.FLOAT32.size();
 
     assertThat(bytes.getFloat64(idx)).isCloseTo(2.5, within(1e-12));
   }

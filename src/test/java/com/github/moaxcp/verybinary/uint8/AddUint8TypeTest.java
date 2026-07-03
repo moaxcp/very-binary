@@ -16,9 +16,9 @@ public class AddUint8TypeTest {
         .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ArrayType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
+    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Short) not supported for Uint8ArrayType. Use add(Pointer, short) instead.");
+        .hasMessage("add(Pointer, Short) not supported for Uint8ListType. Use add(Pointer, short) instead.");
   }
 
   @Test
@@ -28,9 +28,9 @@ public class AddUint8TypeTest {
         .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ArrayType) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
+    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Short) not supported for Uint8ArrayType. Use add(Pointer, long, short) instead.");
+        .hasMessage("add(Pointer, long, Short) not supported for Uint8ListType. Use add(Pointer, long, short) instead.");
   }
 
   @Test
@@ -93,7 +93,7 @@ public class AddUint8TypeTest {
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint8ArrayType at position 0 is constant length: 5 index: 5");
+        .hasMessage("Uint8ListType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class AddUint8TypeTest {
 
     assertThatThrownBy(() -> struct.addUint8(1, -1, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Uint8ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class AddUint8TypeTest {
 
     assertThatThrownBy(() -> struct.addUint8(1, 3, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Uint8ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -178,6 +178,6 @@ public class AddUint8TypeTest {
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint8ArrayType at position 0 is constant length: 5 index: 3");
+        .hasMessage("Uint8ListType at position 0 is constant length: 5 index: 3");
   }
 }

@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int16;
 
-import com.github.moaxcp.verybinary.Int16ArrayType;
+import com.github.moaxcp.verybinary.Int16ListType;
 import com.github.moaxcp.verybinary.Int16Type;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +84,9 @@ public class SetInt16TypeTest {
         .int16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int16ArrayType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
+    assertThatThrownBy(() -> ((Int16ListType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Short) not supported for Int16ArrayType. Use set(Pointer, long, short) instead.");
+        .hasMessage("set(Pointer, long, Short) not supported for Int16ListType. Use set(Pointer, long, short) instead.");
   }
 
   @Test
@@ -116,7 +116,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.setInt16(1, -1, (short) 5))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Int16ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.setInt16(1, 2, (short) 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Int16ListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getInt16(0)).isEqualTo((short) 1);
     assertThat(struct.getInt16(1, 0)).isEqualTo((short) 2);
@@ -168,7 +168,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.setInt16(0, 3, (short) 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Int16ListType at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
@@ -181,7 +181,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.setInt16(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Int16ListType at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

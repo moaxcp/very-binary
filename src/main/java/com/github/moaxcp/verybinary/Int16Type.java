@@ -3,25 +3,23 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
-import static com.github.moaxcp.verybinary.Primitive.INT16;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.INT16;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
-public final class Int16Type extends NumberType<Int16Type, Short> {
+public final class Int16Type extends PrimitiveType<Int16Type, Short> implements LengthType<Int16Type, Short> {
 
   private final short constantValue;
   private final boolean constantValueSet;
 
-  public Int16Type(int position, @Nullable Short constantValue) {
-    super(position, INT16);
+  public Int16Type(int position, @Nullable Short constantValue, @Nullable ComplexType parent) {
+    super(position, INT16, parent);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
-  public Int16Type copy(int position) {
-    return new Int16Type(position, constantValueSet ? constantValue : null);
+  public Int16Type copy(int position, @Nullable ComplexType parent) {
+    return new Int16Type(position, constantValueSet ? constantValue : null, parent);
   }
 
   @Override
@@ -30,12 +28,12 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
   }
 
   public short getInt16ConstantValue() {
-    return constantValueSet ? constantValue : 0;
+    return constantValue;
   }
 
   @Override
   public long defaultLengthValue() {
-    return constantValueSet ? (long) constantValue : 0;
+    return constantValue;
   }
 
   public short getInt16(Pointer<?, ? extends Type<?>> pointer) {
@@ -43,34 +41,33 @@ public final class Int16Type extends NumberType<Int16Type, Short> {
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short value) {
-    checkForConstantValue(pointer, value);
+    checkForConstantValue();
     setUnchecked(SET_VALUE, pointer, value);
   }
 
-  void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, (short) value);
   }
 
-  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_BYTE_LENGTH, pointer, (short) value);
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, short value) {
-    if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getInt16(getOffset(pointer));
-      pointer.getByteArray().setInt16(getOffset(pointer), value);
-      notifyValueChange(reason, pointer, old, value);
+    if (!valueChangeListeners.isEmpty()) {
+      var old = getInt16(pointer);
+      if (value != old) {
+        pointer.getByteArray().setInt16(getOffset(pointer), value);
+        notifyValueChange(reason, pointer, old, value);
+      }
     } else {
       pointer.getByteArray().setInt16(getOffset(pointer), value);
     }
   }
 
-  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, short value) {
-    if (isConstant() && !Objects.equals(constantValue, value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
-    }
-  }
-
+  @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     pointer.getByteArray().addInt16(getOffset(pointer), constantValueSet ? constantValue : 0);
   }

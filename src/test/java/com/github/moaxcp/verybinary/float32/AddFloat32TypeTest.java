@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float32;
 
-import com.github.moaxcp.verybinary.Float32ArrayType;
+import com.github.moaxcp.verybinary.Float32ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,7 +16,7 @@ public class AddFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float32ArrayType) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
+    assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, Float) not supported for Float32ArrayType. Use add(Pointer, float) instead.");
   }
@@ -28,7 +28,7 @@ public class AddFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float32ArrayType) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
+    assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, long, Float) not supported for Float32ArrayType. Use add(Pointer, long, float) instead.");
   }

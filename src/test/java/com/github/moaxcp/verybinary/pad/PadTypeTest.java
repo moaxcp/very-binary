@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.pad;
 
-import com.github.moaxcp.verybinary.Expression;
 import com.github.moaxcp.verybinary.PadType;
 import com.github.moaxcp.verybinary.Struct;
 import com.github.moaxcp.verybinary.StructBuilder;
@@ -17,7 +16,7 @@ import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.Expression.constant;
 import static com.github.moaxcp.verybinary.PadType.align;
 import static com.github.moaxcp.verybinary.PadType.pad;
-import static com.github.moaxcp.verybinary.Primitive.*;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -125,7 +124,7 @@ public class PadTypeTest {
             .primitive().constant((byte) 64).int8()
             .struct()
               .primitive().constant((byte) 6).int8()
-              .primitive().lengthExpression(Expression.valueOf(0)).constant((byte) 8).int8()
+              .primitive().constant(new byte[]{8, 8, 8, 8, 8, 8}).int8()
               .end()
             .align(5)
             .build(), 1 + 1 + 6 + 3)

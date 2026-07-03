@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import static com.github.moaxcp.verybinary.BigEndianSerializer.bigEndianSerializer;
-import static com.github.moaxcp.verybinary.Primitive.*;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static com.github.moaxcp.verybinary.ShiftBytes.shiftBytes;
 
 /**
@@ -36,7 +36,7 @@ public class ByteArray {
   }
 
   public static ByteArray ba(long size) {
-    return new ByteArray((int) size);
+    return new ByteArray(size);
   }
 
   public static ByteArray ba(byte[] bytes) {
@@ -48,7 +48,7 @@ public class ByteArray {
     this(bigEndianSerializer());
   }
 
-  public ByteArray(int size) {
+  public ByteArray(long size) {
     this(size, bigEndianSerializer());
   }
 
@@ -61,9 +61,9 @@ public class ByteArray {
     bytes = new byte[0];
   }
 
-  public ByteArray(int size, Serializer serializer) {
+  public ByteArray(long size, Serializer serializer) {
     this.serializer = serializer;
-    bytes = new byte[size];
+    bytes = new byte[Math.toIntExact(size)];
   }
 
   public ByteArray(byte[] bytes, Serializer serializer) {

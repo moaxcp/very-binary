@@ -2,18 +2,18 @@ Development plan for very-binary based on docs/requirements.md
 
 1. Goal overview
 - Build a small, layered binary-serialization toolkit that models C-like structs over an underlying byte array.
-- Support reading and writing primitive values with pluggable endianness, a ByteArray wrapper with long indexing and byte shifting, a type system that maps primitives and structs, and a StructType schema used by Struct instances via a Pointer abstraction.
+- Support reading and writing basicTypeInfo values with pluggable endianness, a ByteArray wrapper with long indexing and byte shifting, a type system that maps primitives and structs, and a StructType schema used by Struct instances via a Pointer abstraction.
 - Provide listener hooks for value changes and structural shifts in the underlying bytes.
 
 2. Scope and boundaries
-- In scope: primitive value support, serializers (big- and little-endian), ByteArray operations and listeners, Type layer (primitives and StructType), Pointer, Struct, and builders/utilities to define StructType schemas.
+- In scope: basicTypeInfo value support, serializers (big- and little-endian), ByteArray operations and listeners, Type layer (primitives and StructType), Pointer, Struct, and builders/utilities to define StructType schemas.
 - Out of scope (for this iteration): multi-buffer backing store for addressing beyond a single byte[], persistence or IO streams, concurrency controls, code generation, and platform-specific optimizations.
 
 3. Architecture at a glance (from lowest to highest)
 - byte[]: raw storage of primitives formatted by endianness rules.
 - Serializer: strategy for encoding/decoding primitives to/from byte[]. Need BigEndian and LittleEndian.
 - ByteArray: wrapper over byte[] that exposes typed get/set/add/remove APIs using the configured Serializer; indexes are long; manages capacity and performs shifting on insert/remove; notifies listeners about shifts and length changes.
-- Type hierarchy: per-primitive Type classes plus StructType. Types translate logical field accesses to concrete ByteArray operations (index calculations, sizes, and sequence handling).
+- Type hierarchy: per-basicTypeInfo Type classes plus StructType. Types translate logical field accesses to concrete ByteArray operations (index calculations, sizes, and sequence handling).
 - Pointer: combines ByteArray, a Type, and an offset to enable typed navigation and manipulation.
 - Struct: a specialized Pointer anchored at a StructType, representing one struct instance at an offset.
 
@@ -22,7 +22,7 @@ Development plan for very-binary based on docs/requirements.md
 - Define supported primitives and their sizes: bool (1), int8/uint8 (1), int16/uint16 (2), int32/uint32 (4), int64/uint64 (8), float32 (4), float64 (8).
 - Clarify unsigned behavior: reads return the widest Java type that can represent the full range without sign extension; writes validate bounds. Establish canonical conversions for uint32/uint64.
 - Decide canonical NaN handling for floats; preserve bit patterns on round-trip.
-- Establish constants for byte-width per primitive and shared utility for range checks.
+- Establish constants for byte-width per basicTypeInfo and shared utility for range checks.
 
 4.2. Serializer layer
 - Implement Big Endian and Little Endian serializers for all primitives, including unsigned variants, using consistent method naming.
@@ -32,7 +32,7 @@ Development plan for very-binary based on docs/requirements.md
 4.3. ByteArray core
 - Provide construction with optional initial capacity and a Serializer.
 - Use long for public indices and lengths; internally guard against exceeding the maximum addressable size of a single Java array.
-- Core APIs per primitive (pattern applies to all types):
+- Core APIs per basicTypeInfo (pattern applies to all types):
   - getX(index), getX(index, length), getXList(index, length)
   - setX(index, value), setX(index, values...), setX(index, List)
   - x(value), x(values...), x(List) — append with auto-allocation
@@ -47,7 +47,7 @@ Development plan for very-binary based on docs/requirements.md
 - Prevent re-entrant modification hazards by defining event ordering and documentation.
 
 4.5. Primitive Type classes
-- Create Type classes per primitive that:
+- Create Type classes per basicTypeInfo that:
   - Know their byte-width and alignment rules (if any padding rules apply).
   - Compute absolute byte indices from Pointer offset and field index.
   - Delegate all data access to ByteArray.
@@ -71,7 +71,7 @@ Development plan for very-binary based on docs/requirements.md
 - Introduce helper utilities to compute expressions for lengths or conditional fields if required by schemas.
 
 4.10. Testing strategy
-- Unit tests for each primitive against both endianness serializers with edge values, including unsigned boundaries.
+- Unit tests for each basicTypeInfo against both endianness serializers with edge values, including unsigned boundaries.
 - ByteArray tests for all operations: set/get, append, insert, remove, capacity growth, and listener notifications with index/length assertions.
 - Type tests to confirm offset calculus and delegation to ByteArray.
 - StructType tests for size, field offsets, and padding correctness.

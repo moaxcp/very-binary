@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.uint16;
 
-import com.github.moaxcp.verybinary.Uint16ArrayType;
+import com.github.moaxcp.verybinary.Uint16ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,9 +16,9 @@ public class AddUint16TypeTest {
         .uint16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Uint16ArrayType) struct.getType(1)).add(struct, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Integer) not supported for Uint16ArrayType. Use add(Pointer, int) instead.");
+        .hasMessage("add(Pointer, Integer) not supported for Uint16ListType. Use add(Pointer, int) instead.");
   }
 
   @Test
@@ -28,9 +28,9 @@ public class AddUint16TypeTest {
         .uint16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Uint16ArrayType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Integer) not supported for Uint16ArrayType. Use add(Pointer, long, int) instead.");
+        .hasMessage("add(Pointer, long, Integer) not supported for Uint16ListType. Use add(Pointer, long, int) instead.");
   }
 
   @Test
@@ -93,7 +93,7 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> struct.addUint16(0, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint16ArrayType at position 0 is constant length: 5 index: 5");
+        .hasMessage("Uint16ListType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> struct.addUint16(1, -1, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint16ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Uint16ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> struct.addUint16(1, 3, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint16ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Uint16ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -176,6 +176,6 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> struct.addUint16(0, 0, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Uint16ArrayType at position 0 is constant length: 5 index: 0");
+        .hasMessage("Uint16ListType at position 0 is constant length: 5 index: 0");
   }
 }

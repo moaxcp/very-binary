@@ -4,23 +4,20 @@ import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
-import java.util.Objects;
 
-import static com.github.moaxcp.verybinary.Primitive.UINT64;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT64;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
-public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
+public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implements LengthType<Uint64Type, BigInteger> {
 
-  private final @Nullable BigInteger constantValue;
-
-  public Uint64Type(int position, @Nullable BigInteger constantValue) {
-    super(position, UINT64);
+  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable ComplexType parent) {
+    super(position, UINT64, constantValue, parent);
     this.constantValue = constantValue;
   }
 
   @Override
-  public Uint64Type copy(int position) {
-    return new Uint64Type(position, constantValue);
+  public Uint64Type copy(int position, @Nullable ComplexType parent) {
+    return new Uint64Type(position, constantValue, parent);
   }
 
   @Override
@@ -33,32 +30,30 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     return constantValue != null ? constantValue.longValue() : 0;
   }
 
-  public BigInteger getUint64(Pointer<?, ? extends Type<?>> pointer) {
+  @Override
+  public BigInteger get(Pointer<?, ? extends Type<?>> pointer) {
     return pointer.getByteArray().getUint64(getOffset(pointer));
   }
 
+  @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
-    checkForConstantValue(pointer, value);
+    checkForConstantValue();
     setUnchecked(SET_VALUE, pointer, value);
   }
 
-  public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
-    if (isConstant() && !Objects.equals(constantValue, value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
-    }
-  }
-
-  void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, BigInteger.valueOf(value));
   }
 
-  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_BYTE_LENGTH, pointer, BigInteger.valueOf(value));
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
-    if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getUint64(getOffset(pointer));
+    if (!valueChangeListeners.isEmpty()) {
+      var old = get(pointer);
       if (!value.equals(old)) {
         pointer.getByteArray().setUint64(getOffset(pointer), value);
         notifyValueChange(reason, pointer, old, value);
@@ -68,6 +63,7 @@ public final class Uint64Type extends NumberType<Uint64Type, BigInteger> {
     }
   }
 
+  @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     pointer.getByteArray().addUint64(getOffset(pointer), constantValue != null ? constantValue : BigInteger.ZERO);
   }

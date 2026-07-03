@@ -91,7 +91,7 @@ public interface ValueChangeListener {
         case Struct struct -> {
           var current = ((Number) newValue).longValue();
           var old = ((Number) oldValue).longValue();
-          IndexedValueType<?, ?> type = struct.getType(position);
+          ListType<?, ?> type = struct.getType(position);
           if (current > old) {
             var length = current - old;
             type.allocate(RESIZED_BY_LENGTH_FIELD, pointer, old, length);

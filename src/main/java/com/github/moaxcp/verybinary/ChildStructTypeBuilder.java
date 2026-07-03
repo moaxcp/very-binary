@@ -48,10 +48,16 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public StructListType toStructListType() {
-    return new StructListType(-1, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
+    return new StructListType(position, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
         .addByteLengthChangeListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners)
         .addLengthChangeListeners(lengthListeners);
+  }
+
+  public StructType toStructType() {
+    return new StructType(position, fields)
+        .addByteLengthChangeListeners(byteLengthListeners)
+        .addValueChangeListeners(valueChangeListeners);
   }
 
   public PARENT end() {

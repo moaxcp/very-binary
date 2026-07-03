@@ -6,43 +6,43 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, PadType, PrimitiveArrayType, PrimitiveType, StructListType, Uint64ListType {
+public sealed abstract class Type<SELF extends Type<SELF>> permits PadType, StructListType, Uint64ListType, ValueType {
+
   protected final int position;
-  protected List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
+  @Nullable
+  protected final ComplexType parent;
+  protected final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
 
-  public Type(int position) {
+  protected Type(int position, @Nullable ComplexType parent) {
     this.position = position;
-  }
-
-  public abstract SELF copy(int position);
-
-  /**
-   * true if the value or bytes are always constant.
-   * @return
-   */
-  public abstract boolean isConstant(@Nullable Type<?> parent);
-
-  public List<ByteLengthListener> getByteLengthListeners() {
-    return byteLengthListeners;
-  }
-
-  public final SELF addByteLengthChangeListener(ByteLengthListener listener) {
-    byteLengthListeners.add(listener);
-    return (SELF) this;
-  }
-
-  public final SELF addByteLengthChangeListeners(List<ByteLengthListener> listeners) {
-    byteLengthListeners.addAll(listeners);
-    return (SELF) this;
+    this.parent = parent;
   }
 
   public final int getPosition() {
     return position;
   }
 
-  public <V extends Type<?>> V getType(int position) {
-    return null;
+  @Nullable
+  public final ComplexType getParent() {
+    return parent;
   }
+
+  public final List<ByteLengthListener> getByteLengthListeners() {
+    return byteLengthListeners;
+  }
+
+  public final SELF addByteLengthListeners(List<ByteLengthListener> listeners) {
+    byteLengthListeners.addAll(listeners);
+    return (SELF) this;
+  }
+
+  public abstract SELF copy(int position, @Nullable ComplexType parent);
+
+  /**
+   * true if the bytes for this type are always constant.
+   * @return
+   */
+  public abstract boolean isConstant();
 
   public final long getOffset(Pointer<?, ? extends Type<?>> pointer) {
     return switch (pointer) {
@@ -56,24 +56,24 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, 
     };
   }
 
-  public long getAllocationLength() {
-    return getAllocationLength(null);
-  }
-
-  public abstract long getAllocationLength(@Nullable Type<?> parent);
+  protected abstract long getAllocationLength();
 
   public abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 
-  public abstract boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer);
+  /**
+   * Returns true of the byte length of this type is constant.
+   * @return
+   */
+  public abstract boolean isFixedLength();
 
   public abstract void allocate(Pointer<?, ? extends Type<?>> pointer);
 
-  protected final void notifyByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
-    byteLengthListeners.forEach(b -> b.byteLengthChanged(reason, pointer, previousLength, currentLength));
+  public final void notifyByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long previousLength, long currentLength) {
+    getByteLengthListeners().forEach(b -> b.byteLengthChanged(reason, pointer, previousLength, currentLength));
   }
 
-  public void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
-    if (byteLengthListeners.isEmpty()) {
+  public final void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable) {
+    if (getByteLengthListeners().isEmpty()) {
       runnable.run();
       return;
     }
@@ -81,20 +81,5 @@ public abstract sealed class Type<SELF extends Type<SELF>> permits ComplexType, 
     runnable.run();
     var current = getByteLength(pointer);
     notifyByteLengthChange(reason, pointer, previous, current);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == null || getClass() != o.getClass()) return false;
-
-    Type<?> type = (Type<?>) o;
-    return position == type.position && byteLengthListeners.equals(type.byteLengthListeners);
-  }
-
-  @Override
-  public int hashCode() {
-    int result = position;
-    result = 31 * result + byteLengthListeners.hashCode();
-    return result;
   }
 }

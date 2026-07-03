@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Primitive.UINT32;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT32;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint32TypeTest {

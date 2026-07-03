@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.array.StructList;
+import com.github.moaxcp.verybinary.list.StructList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -73,12 +73,12 @@ public final class StructListType extends Type<StructListType> implements ListVa
   }
 
   @Override
-  public boolean isConstant(@Nullable Type<?> parent) {
+  public boolean isConstant(@Nullable ComplexType parent) {
     return ListValueType.super.isConstant(parent);
   }
 
   @Override
-  public long getConstantValueSize() {
+  public long getConstantValueLength() {
     return constantValue != null ? constantValue.size() : 0;
   }
 
@@ -112,7 +112,7 @@ public final class StructListType extends Type<StructListType> implements ListVa
   }
 
   @Override
-  public long getAllocationLength(@Nullable Type<?> parent) {
+  public long getAllocationLength(@Nullable ComplexType parent) {
     return ListValueType.super.getAllocationLength(parent);
   }
 

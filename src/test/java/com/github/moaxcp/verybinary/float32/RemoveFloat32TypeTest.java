@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float32;
 
-import com.github.moaxcp.verybinary.Float32ArrayType;
+import com.github.moaxcp.verybinary.Float32ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -81,7 +81,7 @@ public class RemoveFloat32TypeTest {
     struct.addFloat32(1, 2.0f);
     struct.remove(1, 0);
 
-    assertThat(((Float32ArrayType) struct.getType(1)).getFloat32(struct, 0)).isEqualTo(2.0f);
+    assertThat(((Float32ListType) struct.getType(1)).getFloat32(struct, 0)).isEqualTo(2.0f);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float32(1f).float32(2.0f));
   }

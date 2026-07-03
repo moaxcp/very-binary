@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Primitive.UINT16;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT16;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint16TypeTest {

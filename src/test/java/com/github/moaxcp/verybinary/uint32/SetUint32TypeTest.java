@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.uint32;
 
-import com.github.moaxcp.verybinary.Uint32ArrayType;
+import com.github.moaxcp.verybinary.Uint32ListType;
 import com.github.moaxcp.verybinary.Uint32Type;
 import org.junit.jupiter.api.Test;
 
@@ -85,9 +85,9 @@ public class SetUint32TypeTest {
         .uint32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Uint32ArrayType) struct.getType(1)).set(struct, 0, Long.valueOf(2)))
+    assertThatThrownBy(() -> ((Uint32ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Long) not supported for Uint32ArrayType. Use set(Pointer, long, long) instead.");
+        .hasMessage("set(Pointer, long, Long) not supported for Uint32ListType. Use set(Pointer, long, long) instead.");
   }
 
   @Test
@@ -117,7 +117,7 @@ public class SetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.setUint32(1, -1, 5L))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Uint32ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Uint32ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -131,7 +131,7 @@ public class SetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.setUint32(1, 2, 5L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint32ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Uint32ListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getUint32(0)).isEqualTo(1L);
     assertThat(struct.getUint32(1, 0)).isEqualTo(2L);
@@ -169,7 +169,7 @@ public class SetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.setUint32(0, 3, 2L))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint32ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Uint32ListType at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
@@ -182,7 +182,7 @@ public class SetUint32TypeTest {
 
     assertThatThrownBy(() -> struct.setUint32(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint32ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Uint32ListType at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

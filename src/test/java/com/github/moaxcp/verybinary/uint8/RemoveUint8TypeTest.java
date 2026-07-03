@@ -108,7 +108,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Uint8ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -121,7 +121,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Uint8ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -144,7 +144,7 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length Uint8ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Uint8ListType at position 0");
   }
 
   @Test
@@ -155,6 +155,6 @@ public class RemoveUint8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Uint8ArrayType at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Uint8ListType at position 0 index: 3");
   }
 }

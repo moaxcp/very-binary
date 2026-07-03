@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.bool;
 
-import com.github.moaxcp.verybinary.BoolArrayType;
+import com.github.moaxcp.verybinary.BoolListType;
 import com.github.moaxcp.verybinary.BoolType;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ public class GetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).get(struct, 0))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("get(Pointer, long) not supported for BoolArrayType. Use getBool(Pointer, long) instead.");
   }
@@ -39,7 +39,7 @@ public class GetBoolTypeTest {
     var struct = struct()
         .boolArray(constant(5))
         .build();
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).get(struct))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("get(Pointer) not supported for BoolArrayType. Use getBool(Pointer) instead.");
   }
@@ -50,7 +50,7 @@ public class GetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).get(struct, 2, 2))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 2, 2))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("getArray(Pointer, long, long) not supported for BoolArrayType. Use getBoolArray(Pointer, long, long) instead.");
   }
@@ -61,7 +61,7 @@ public class GetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).getList(struct))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("getList(Pointer) not supported for BoolArrayType. Use getBoolList(Pointer) instead.");
   }
@@ -72,7 +72,7 @@ public class GetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).getList(struct, 2, 2))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct, 2, 2))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("getList(Pointer, long, long) not supported for BoolArrayType. Use getBoolList(Pointer, long, long) instead.");
   }

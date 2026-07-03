@@ -64,7 +64,7 @@ Guidelines and pitfalls
 - Unsigned types:
   - getUint8 returns short; getUint16 returns int; getUint32 returns long. Use the specific getters/setters to avoid sign-extension issues
 - Struct types:
-  - StructBuilder / StructTypeBuilder support primitive fields, arrays (constant, length-field, expression), and alignment via ByteLengthListener.align
+  - StructBuilder / StructTypeBuilder support basicTypeInfo fields, arrays (constant, length-field, expression), and alignment via ByteLengthListener.align
   - Removing from non-array positions throws ArrayIndexOutOfBoundsException with type-specific message; tests enforce exact messages
 - Serialization:
   - BigEndianSerializer and LittleEndianSerializer implement Serializer; choose explicitly when constructing ByteArray if tests require LE

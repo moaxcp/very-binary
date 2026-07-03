@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Primitive.FLOAT64;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float64TypeTest {

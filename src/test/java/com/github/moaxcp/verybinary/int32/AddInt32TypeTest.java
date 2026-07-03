@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int32;
 
-import com.github.moaxcp.verybinary.Int32ArrayType;
+import com.github.moaxcp.verybinary.Int32ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,9 +16,9 @@ public class AddInt32TypeTest {
         .int32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int32ArrayType) struct.getType(1)).add(struct, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).add(struct, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Integer) not supported for Int32ArrayType. Use add(Pointer, int) instead.");
+        .hasMessage("add(Pointer, Integer) not supported for Int32ListType. Use add(Pointer, int) instead.");
   }
 
   @Test
@@ -28,9 +28,9 @@ public class AddInt32TypeTest {
         .int32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int32ArrayType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
+    assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Integer) not supported for Int32ArrayType. Use add(Pointer, long, int) instead.");
+        .hasMessage("add(Pointer, long, Integer) not supported for Int32ListType. Use add(Pointer, long, int) instead.");
   }
 
   @Test
@@ -93,7 +93,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int32ArrayType at position 0 is constant length: 5 index: 5");
+        .hasMessage("Int32ListType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(1, -1, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Int32ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(1, 3, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Int32ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -178,6 +178,6 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> struct.addInt32(0, 3, 3))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int32ArrayType at position 0 is constant length: 5 index: 3");
+        .hasMessage("Int32ListType at position 0 is constant length: 5 index: 3");
   }
 }

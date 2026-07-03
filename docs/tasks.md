@@ -1,29 +1,29 @@
 
 1. [x] Phase 1 — Primitive definitions and rules
   - [x] Define constants for supported primitives and their byte widths: bool (1), int8/uint8 (1), int16/uint16 (2), int32/uint32 (4), int64/uint64 (8), float32 (4), float64 (8).
-  - [x] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
-  - [x] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
+  - [x] Specify unsigned read return types (e.g., int→long, long→BigInteger or custom) and implement write-time range validation for all unsigned types — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.1. Primitive definitions and rules
+  - [x] Implement canonical conversions for uint32/uint64 to ensure full-range, sign-safe handling — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.1. Primitive definitions and rules
   - [x] Decide and document canonical NaN handling for float32/float64; ensure bit pattern preservation on round-trips.
-  - [x] Provide shared utilities for range checks and constant-width lookups used across layers — refs: req: Layers of abstraction > primitive types; plan: 4.1. Primitive definitions and rules
+  - [x] Provide shared utilities for range checks and constant-width lookups used across layers — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.1. Primitive definitions and rules
 
 2. [x] Phase 2 — Serializer layer
   - [x] Implement BigEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Implement LittleEndian serializer covering all primitives (signed/unsigned, floats) with consistent method names.
   - [x] Ensure all reads/writes go through the Serializer (no direct byte[] access in higher layers).
   - [x] Add cross-endian unit tests validating symmetry, correct byte order, and edge values (including unsigned bounds and NaN payloads).
-  - [x] Add cross-endian unit tests for float32/float64 non-NaN values — refs: req: Layers of abstraction > primitive types; plan: 4.2. Serializer layer
+  - [x] Add cross-endian unit tests for float32/float64 non-NaN values — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.2. Serializer layer
   - [x] Update tests comparing bytes to assert ByteArray equality using ba() instead of getBytes() — refs: req: ByteArray; plan: 4.2. Serializer layer
 
 3. [x] Phase 3 — ByteArray core
   - [x] Provide constructors with optional initial capacity and pluggable Serializer.
   - [x] Use long for public indices/lengths; add defensive checks against exceeding single-array addressable limits — refs: req: ByteArray; plan: 4.3. ByteArray core
   - [x] Implement capacity management with growth strategy and efficient shifting via System.arraycopy.
-  - [x] Implement per-primitive APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length). — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [x] Implement per-primitive APIs (pattern applies to all types): setX(index, value), setX(index, values...), setX(index, List).
-  - [x] Implement per-primitive APIs (pattern applies to all types): insert APIs: addX(index, value), addX(index, values), addX(index, List) with shifting — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [x] Implement per-primitive APIs (pattern applies to all types: bool, int8, uint8, int16, uint16, int32, uint32, int64, uint64, float32, flaot64): append APIs: x(value), x(values...), x(List) using the add methods with an index of the length of the bytes. — refs: req: ByteArray; plan: 4.3. ByteArray core
-  - [x] Implement per-primitive APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
-  - [x] Validate per-primitive APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
+  - [x] Implement per-basicTypeInfo APIs (pattern applies to all types): getX(index), getX(index, length), getXList(index, length). — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [x] Implement per-basicTypeInfo APIs (pattern applies to all types): setX(index, value), setX(index, values...), setX(index, List).
+  - [x] Implement per-basicTypeInfo APIs (pattern applies to all types): insert APIs: addX(index, value), addX(index, values), addX(index, List) with shifting — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [x] Implement per-basicTypeInfo APIs (pattern applies to all types: bool, int8, uint8, int16, uint16, int32, uint32, int64, uint64, float32, flaot64): append APIs: x(value), x(values...), x(List) using the add methods with an index of the length of the bytes. — refs: req: ByteArray; plan: 4.3. ByteArray core
+  - [x] Implement per-basicTypeInfo APIs (pattern applies to all types): remove APIs: removeX(index) and removeX(index, length).
+  - [x] Validate per-basicTypeInfo APIs (pattern applies to all types): all index/length arguments; throw descriptive out-of-range exceptions.
 
 4. [x] Phase 4 — ByteArray listeners and shift events
    - [x] Implement listener registration and removal APIs.
@@ -32,7 +32,7 @@
    - [ ] Define and enforce non-reentrant listener behavior; document ordering and re-entrancy rules.
 
 5. [x] Phase 5 — Primitive Type classes
-   - [x] Create Type classes for each primitive with known byte-width and any alignment rules.
+   - [x] Create Type classes for each basicTypeInfo with known byte-width and any alignment rules.
    - [x] Compute absolute byte indices from Pointer offset and field index.
    - [x] Delegate all data access to ByteArray methods (no direct serialization logic here).
    - [x] Expose value, array, and list operations mirroring ByteArray’s surface.
@@ -47,6 +47,21 @@
      - [x] Uint64Type
      - [x] Float32Type
      - [x] Float64Type
+     - [x] Int32ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Int64ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Int64Consumer — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Int64Iterator — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Int64List — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint8ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint8Consumer — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint8Iterator — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint8List — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint16ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint32ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint64ListType — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint64Consumer — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint64Iterator — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
+     - [x] Uint64List — refs: req: Layers of abstraction > basicTypeInfo types; plan: 5. Primitive Type classes
      - [ ] StructType
 
 6. [ ] Phase 6 — StructType schema
@@ -69,25 +84,25 @@
    - [x] Update StructList to look like BoolList but working with Structs — refs: req: ByteArray; plan: 4.8. Struct
 
 9. [ ] Phase 9 — Builders and ergonomics
-   - [ ] Provide builder classes for StructType creation, including sub-builders for primitive fields and pad entries.
+   - [ ] Provide builder classes for StructType creation, including sub-builders for basicTypeInfo fields and pad entries.
    - [ ] Introduce helper utilities for computed lengths or conditional fields if required by schemas.
 
 10. [ ] Phase 10 — Testing strategy
-  - [x] Add unit tests for each primitive under both endianness serializers with edge values, including unsigned boundaries — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Add unit tests for each basicTypeInfo under both endianness serializers with edge values, including unsigned boundaries — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
   - [ ] Add ByteArray tests for set/get, append, insert, remove, capacity growth, and listener notifications verifying indices/lengths.
   - [ ] Add Type tests confirming offset calculations and delegation to ByteArray.
   - [ ] Add StructType tests for total size, field offsets, and padding correctness.
   - [ ] Add Struct tests for full read/write round-trips across multiple fields, including nested structs and shifting scenarios.
-  - [x] Split Float32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Float64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Int8TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Int16TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Int32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Int64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Uint8TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Uint16TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Uint32TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
-  - [x] Split Uint64TypeTest into seperate tests files — refs: req: Layers of abstraction > primitive types; plan: 4.10. Testing strategy
+  - [x] Split Float32TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Float64TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Int8TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Int16TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Int32TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Int64TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Uint8TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Uint16TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Uint32TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
+  - [x] Split Uint64TypeTest into seperate tests files — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy
   - [ ] Add property-based or fuzz tests for random sequences of inserts/removes validating invariants (lengths, contents).
 
 11. [ ] Phase 11 — Performance and memory
@@ -99,7 +114,7 @@
    - [ ] Update README and docs to explain abstractions, layering, and usage patterns (without code samples for this phase).
    - [ ] Describe listener semantics, unsigned behavior, and endianness configuration.
    - [ ] Correct the specification typo: clarify that uint64 is the 64-bit unsigned integer (not uint32).
-   - [x] Add data types table to README.md — refs: req: Layers of abstraction > primitive types; plan: 12. Documentation
+   - [x] Add data types table to README.md — refs: req: Layers of abstraction > basicTypeInfo types; plan: 12. Documentation
 
 13. [ ] Phase 13 — Dependencies and sequencing checks
    - [ ] Verify Serializer layer completion before integrating ByteArray.

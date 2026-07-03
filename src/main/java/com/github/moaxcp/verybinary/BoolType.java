@@ -3,9 +3,7 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
-import static com.github.moaxcp.verybinary.Primitive.BOOL;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.BOOL;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 /**
@@ -17,15 +15,15 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   private final boolean constantValueSet;
   private final boolean constantValue;
 
-  public BoolType(int position, @Nullable Boolean constantValue) {
-    super(position, BOOL);
+  public BoolType(int position, @Nullable Boolean constantValue, @Nullable ComplexType parent) {
+    super(position, BOOL, parent);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : false;
   }
 
   @Override
-  public BoolType copy(int position) {
-    return new BoolType(position, constantValueSet ? constantValue : null);
+  public BoolType copy(int position, @Nullable ComplexType parent) {
+    return new BoolType(position, constantValueSet ? constantValue : null, parent);
   }
 
   @Override
@@ -33,28 +31,28 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
     return constantValueSet;
   }
 
+  public boolean getBoolConstantValue() {
+    return constantValue;
+  }
+
   public boolean getBool(Pointer<?, ? extends Type<?>> pointer) {
     return pointer.getByteArray().getBool(getOffset(pointer));
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean value) {
-    checkForConstantValue(pointer, value);
+    checkForConstantValue();
     setUnchecked(SET_VALUE, pointer, value);
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, boolean value) {
-    if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getBool(getOffset(pointer));
-      pointer.getByteArray().setBool(getOffset(pointer), value);
-      notifyValueChange(reason, pointer, old, value);
+    if (!valueChangeListeners.isEmpty()) {
+      var old = getBool(pointer);
+      if (value != old) {
+        pointer.getByteArray().setBool(getOffset(pointer), value);
+        notifyValueChange(reason, pointer, old, value);
+      }
     } else {
       pointer.getByteArray().setBool(getOffset(pointer), value);
-    }
-  }
-
-  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, boolean value) {
-    if (isConstant() && !Objects.equals(constantValue, value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
     }
   }
 

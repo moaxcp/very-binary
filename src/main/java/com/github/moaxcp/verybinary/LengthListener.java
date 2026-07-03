@@ -21,7 +21,7 @@ public interface LengthListener {
       }
       switch (pointer) {
         case Struct struct:
-          ((NumberType) struct.getType(position)).setForArrayLength(pointer, current);
+          ((LengthType) struct.getType(position)).setForArrayLength(pointer, current);
       }
     }
 

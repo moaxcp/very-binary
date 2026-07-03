@@ -9,8 +9,6 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
-  Expression byteLengthExpression;
-  Expression lengthExpression;
   @Nullable Object constant;
   final List<Type<?>> fields = new ArrayList<>();
 
@@ -47,21 +45,6 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
-  /**
-   * StructList can be top level with a length constant but not a field.
-   * @param lengthExpression
-   * @return
-   */
-  public SELF lengthExpression(Expression lengthExpression) {
-    this.lengthExpression = lengthExpression;
-    return (SELF) this;
-  }
-
-  public SELF byteLengthExpression(Expression byteLengthExpression) {
-    this.byteLengthExpression = byteLengthExpression;
-    return (SELF) this;
-  }
-
   public StructTypePrimitiveSubBuilder<SELF> primitive() {
     return new StructTypePrimitiveSubBuilder<>((SELF) this, fields.size());
   }
@@ -82,7 +65,21 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF bool() {
-    return primitive().bool();
+    type(new BoolType(fields.size(), null));
+    return (SELF) this;
+  }
+
+  public SELF bool(boolean defaultValue) {
+    throw new UnsupportedOperationException("need to add defaultValue support");
+  }
+
+  public SELF boolConst(boolean constantValue) {
+    type(new BoolType(fields.size(), constantValue));
+    return (SELF) this;
+  }
+
+  public SELF boolArray() {
+    return primitive().lengthField(fields.size() - 1).bool();
   }
 
   public SELF boolArray(int lengthPosition) {
@@ -95,6 +92,10 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public SELF int8() {
     return primitive().int8();
+  }
+
+  public SELF int8Array() {
+    return primitive().lengthExpression(Expression.constant(0)).int8();
   }
 
   public SELF int8Array(int lengthPosition) {

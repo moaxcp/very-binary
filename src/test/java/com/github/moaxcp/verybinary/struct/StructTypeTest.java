@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigInteger;
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.Builders.structType;
+import static com.github.moaxcp.verybinary.Builders.*;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -260,7 +259,7 @@ public class StructTypeTest {
   void isFixedLength_constant_length_field() {
     var inner = structType()
         .primitive().constant(3).int16()
-        .primitive().constant(true).lengthField(0).bool()
+        .primitive().constant(new boolean[]{true, true, true}).bool()
         .build();
 
     var struct = struct()
@@ -337,7 +336,7 @@ public class StructTypeTest {
   @Test
   void toString_notEmpty() {
     var inner = structType().int8().build();
-    var innerArray = structType().int8().lengthExpression(constant(2)).build();
+    var innerArray = structListType().int8().lengthExpression(constant(2)).build();
     var struct = struct()
         .int8()
         .int8Array(constant(2))
@@ -360,7 +359,7 @@ public class StructTypeTest {
         .float64()
         .float64Array(constant(2))
         .struct(inner)
-        .struct(innerArray)
+        .structArray(innerArray)
         .build()
         .setInt8(0, -127)
         .setInt8(1, new int[] {-127, 128})

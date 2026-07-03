@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int16;
 
-import com.github.moaxcp.verybinary.Int16ArrayType;
+import com.github.moaxcp.verybinary.Int16ListType;
 import com.github.moaxcp.verybinary.Int16Type;
 import org.junit.jupiter.api.Test;
 
@@ -103,9 +103,9 @@ public class GetInt16TypeTest {
         .int16Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int16ArrayType) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((Int16ListType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Int16ArrayType. Use getInt16(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Int16ListType. Use getInt16(Pointer, long) instead.");
   }
 
   @Test
@@ -129,7 +129,7 @@ public class GetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.getInt16(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType at position 1 index: -1 length: 0");
+        .hasMessage("Int16ListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -142,7 +142,7 @@ public class GetInt16TypeTest {
 
     assertThatThrownBy(() -> struct.getInt16(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int16ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Int16ListType at position 1 index: 2 length: 2");
   }
 
   @Test

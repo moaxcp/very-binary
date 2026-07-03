@@ -83,9 +83,9 @@ public class SetUint8TypeTest {
         .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ArrayType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
+    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Short) not supported for Uint8ArrayType. Use set(Pointer, long, short) instead.");
+        .hasMessage("set(Pointer, long, Short) not supported for Uint8ListType. Use set(Pointer, long, short) instead.");
   }
 
   @Test
@@ -115,7 +115,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.setUint8(1, -1, (byte) 5))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Uint8ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -129,7 +129,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.setUint8(1, 2, (byte) 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Uint8ListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getUint8(0)).isEqualTo((byte) 1);
     assertThat(struct.getUint8(1, 0)).isEqualTo((byte) 2);
@@ -167,7 +167,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Uint8ListType at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
@@ -180,7 +180,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.setUint8(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Uint8ListType at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

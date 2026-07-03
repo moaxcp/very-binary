@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int64;
 
-import com.github.moaxcp.verybinary.Int64ArrayType;
+import com.github.moaxcp.verybinary.Int64ListType;
 import com.github.moaxcp.verybinary.Int64Type;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +84,9 @@ public class SetInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int64ArrayType) struct.getType(1)).set(struct, 0, Long.valueOf(2L)))
+    assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Long) not supported for Int64ArrayType. Use set(Pointer, long, long) instead.");
+        .hasMessage("set(Pointer, long, Long) not supported for Int64ListType. Use set(Pointer, long, long) instead.");
   }
 
   @Test
@@ -116,7 +116,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.setInt64(1, -1, 5L))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Int64ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.setInt64(1, 2, 5L))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Int64ListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getInt64(0)).isEqualTo(1L);
     assertThat(struct.getInt64(1, 0)).isEqualTo(2L);
@@ -168,7 +168,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64ArrayType at position 0 is constant index: 3 value: 2 constant: 5");
+        .hasMessage("Int64ListType at position 0 is constant index: 3 value: 2 constant: 5");
   }
 
   @Test
@@ -181,7 +181,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> struct.setInt64(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64ArrayType at position 1 is constant index: 1 value: 2 constant: 5");
+        .hasMessage("Int64ListType at position 1 is constant index: 1 value: 2 constant: 5");
   }
 
   @Test

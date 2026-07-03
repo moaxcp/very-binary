@@ -107,7 +107,7 @@ public class RemoveInt64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Int64ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -120,7 +120,7 @@ public class RemoveInt64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int64ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Int64ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class RemoveInt64TypeTest {
 
     assertThatThrownBy(() -> struct.removeAll(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length Int64ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Int64ListType at position 0");
   }
 
   @Test
@@ -154,6 +154,6 @@ public class RemoveInt64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Int64ArrayType at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Int64ListType at position 0 index: 3");
   }
 }

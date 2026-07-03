@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.bool;
 
-import com.github.moaxcp.verybinary.BoolArrayType;
+import com.github.moaxcp.verybinary.BoolListType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class AddBoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(1)).add(struct, Boolean.TRUE))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, Boolean) not supported for BoolArrayType. Use add(Pointer, boolean) instead.");
   }
@@ -32,7 +32,7 @@ public class AddBoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(1)).add(struct, 0, Boolean.TRUE))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, long, Boolean) not supported for BoolArrayType. Use add(Pointer, long, boolean) instead.");
   }
@@ -44,7 +44,7 @@ public class AddBoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(1)).add(struct, new Boolean[]{true, false}))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, new Boolean[]{true, false}))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, Boolean...) not supported for BoolArrayType. Use add(Pointer, boolean...) instead.");
   }
@@ -56,7 +56,7 @@ public class AddBoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(1)).add(struct, 0, new Boolean[]{true, false}))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, new Boolean[]{true, false}))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("add(Pointer, long, Boolean...) not supported for BoolArrayType. Use add(Pointer, long, boolean...) instead.");
   }

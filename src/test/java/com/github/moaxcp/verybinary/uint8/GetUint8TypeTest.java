@@ -102,9 +102,9 @@ public class GetUint8TypeTest {
         .uint8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ArrayType) struct.getType(1)).get(struct, 0))
+    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for Uint8ArrayType. Use getUint8(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for Uint8ListType. Use getUint8(Pointer, long) instead.");
   }
 
   @Test
@@ -128,7 +128,7 @@ public class GetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.getUint8(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: -1 length: 0");
+        .hasMessage("Uint8ListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -141,7 +141,7 @@ public class GetUint8TypeTest {
 
     assertThatThrownBy(() -> struct.getUint8(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Uint8ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Uint8ListType at position 1 index: 2 length: 2");
   }
 
   @Test

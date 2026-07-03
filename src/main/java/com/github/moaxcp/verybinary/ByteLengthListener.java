@@ -66,7 +66,7 @@ public interface ByteLengthListener {
       }
       switch (pointer) {
         case Struct struct -> {
-          ((NumberType) struct.getType(position)).setForByteLength(pointer, current);
+          ((LengthType) struct.getType(position)).setForByteLength(pointer, current);
         }
       }
     }

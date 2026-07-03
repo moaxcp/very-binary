@@ -3,70 +3,92 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static com.github.moaxcp.verybinary.LengthChangeReason.*;
+import static com.github.moaxcp.verybinary.LengthChangeReason.DEALLOCATED;
+import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-sealed interface ValueType<SELF extends ValueType<SELF, T>, T> permits IndexedValueType, PrimitiveType, StructType {
-  int getPosition();
+sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits BasicType, ListType, StructType {
 
-  @Nullable T getConstantValue();
+  protected final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
+  @Nullable
+  protected T constantValue;
 
-  List<ByteLengthListener> getByteLengthListeners();
-
-  List<ValueChangeListener> getValueChangeListeners();
-
-  default SELF addValueChangeListeners(List<ValueChangeListener> valueChangeListeners) {
-    getValueChangeListeners().addAll(valueChangeListeners);
-    return (SELF) this;
+  protected ValueType(int position, @Nullable T constantValue, @Nullable ComplexType parent) {
+    super(position, parent);
+    this.constantValue = constantValue;
   }
 
-  default SELF addValueChangeListener(ValueChangeListener listener) {
-    getValueChangeListeners().add(listener);
-    return (SELF) this;
+  @Nullable
+  public T getConstantValue() {
+    return constantValue;
   }
 
-  default void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, T value) {
-    if (!Objects.equals(getConstantValue(), value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + getConstantValue());
+  /**
+   * Checks if this type is constant and throws an exception if it is. This method should be called in all methods that
+   * modify the value of this type.
+   */
+  protected final void checkForConstantValue() {
+    if (isConstant()) {
+      throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value");
     }
   }
 
-  long getOffset(Pointer<?, ? extends Type<?>> pointer);
-
-  long getByteLength(Pointer<?, ? extends Type<?>> pointer);
+  /**
+   * Checks if the constant value has been set in the pointer. If the value is not set an exception is thrown..
+   * @param pointer
+   */
+  protected void checkConstantValueSet(Pointer<?, ? extends Type<?>> pointer) {
+    var value = get(pointer);
+    if (!constantValue.equals(value)) {
+      throw new IllegalStateException("Constant value " + constantValue + " does not match value " + value);
+    }
+  }
 
   /**
    * Should always call {@link #isConstant()} since all ValueTypes know their constant value
-   * @param parent
    * @return
    */
-  default boolean isConstant(@Nullable Type<?> parent) {
-    return isConstant();
-  }
-
-  default boolean isConstant() {
+  public boolean isConstant() {
     return getConstantValue() != null;
   }
 
-  boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer);
+  protected final SELF addValueChangeListener(ValueChangeListener listener) {
+    valueChangeListeners.add(listener);
+    return (SELF) this;
+  }
 
-  T get(Pointer<?, ? extends Type<?>> pointer);
+  protected final SELF addValueChangeListeners(List<ValueChangeListener> valueChangeListeners) {
+    this.valueChangeListeners.addAll(valueChangeListeners);
+    return (SELF) this;
+  }
 
-  void set(Pointer<?, ? extends Type<?>> pointer, T value);
+  public abstract T get(Pointer<?, ? extends Type<?>> pointer);
 
-  default void remove(Pointer<?, ? extends Type<?>> pointer) {
-    if (isFixedLength(pointer)) {
+  public abstract void set(Pointer<?, ? extends Type<?>> pointer, T value);
+
+  protected abstract void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, T value);
+
+  @Override
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    if (this.isConstant()) {
+      setUnchecked(SET_VALUE, pointer, constantValue);
+    } else {
+      long length = getByteLength(pointer);
+      pointer.getByteArray().shiftBytesFor(getOffset(pointer), length);
+    }
+  }
+
+  public void remove(Pointer<?, ? extends Type<?>> pointer) {
+    if (isFixedLength()) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length " + getClass().getSimpleName() + " at position " + getPosition());
     }
     callWithByteLengthChange(DEALLOCATED, pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer)));
   }
 
-  void callWithByteLengthChange(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Runnable runnable);
-
-  default void notifyValueChange(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Object oldValue, Object newValue) {
-    for(ValueChangeListener listener : getValueChangeListeners()) {
+  public final void notifyValueChange(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, T oldValue, T newValue) {
+    for(ValueChangeListener listener : valueChangeListeners) {
       listener.valueChanged(reason, pointer, oldValue, newValue);
     }
   }

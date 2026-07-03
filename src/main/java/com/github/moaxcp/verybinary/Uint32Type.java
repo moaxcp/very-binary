@@ -3,25 +3,23 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
-import static com.github.moaxcp.verybinary.Primitive.UINT32;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT32;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.*;
 
-public final class Uint32Type extends NumberType<Uint32Type, Long> {
+public final class Uint32Type extends PrimitiveType<Uint32Type, Long> implements LengthType<Uint32Type, Long> {
 
   private final long constantValue;
   private final boolean constantValueSet;
 
-  public Uint32Type(int position, @Nullable Long constantValue) {
-    super(position, UINT32);
+  public Uint32Type(int position, @Nullable Long constantValue, @Nullable ComplexType parent) {
+    super(position, UINT32, parent);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
-  public Uint32Type copy(int position) {
-    return new Uint32Type(position, constantValueSet ? constantValue : null);
+  public Uint32Type copy(int position, @Nullable ComplexType parent) {
+    return new Uint32Type(position, constantValueSet ? constantValue : null, parent);
   }
 
   @Override
@@ -30,12 +28,12 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
   }
 
   public long getUint32ConstantValue() {
-    return constantValueSet ? constantValue : 0;
+    return constantValue;
   }
 
   @Override
   public long defaultLengthValue() {
-    return constantValueSet ? constantValue : 0;
+    return constantValue;
   }
 
   public long getUint32(Pointer<?, ? extends Type<?>> pointer) {
@@ -43,21 +41,23 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long value) {
-    checkForConstantValue(pointer, value);
+    checkForConstantValue();
     setUnchecked(SET_VALUE, pointer, value);
   }
 
-  void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, value);
   }
 
-  void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
+  @Override
+  public void setForByteLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_BYTE_LENGTH, pointer, value);
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long value) {
-    if (!getValueChangeListeners().isEmpty()) {
-      var old = pointer.getByteArray().getUint32(getOffset(pointer));
+    if (!valueChangeListeners.isEmpty()) {
+      var old = getUint32(pointer);
       if (value != old) {
         pointer.getByteArray().setUint32(getOffset(pointer), value);
         notifyValueChange(reason, pointer, old, value);
@@ -67,12 +67,7 @@ public final class Uint32Type extends NumberType<Uint32Type, Long> {
     }
   }
 
-  private void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long value) {
-    if (isConstant() && !Objects.equals(constantValue, value)) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant value: " + value + " constant: " + constantValue);
-    }
-  }
-
+  @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     pointer.getByteArray().addUint32(getOffset(pointer), constantValueSet ? constantValue : 0L);
   }

@@ -7,7 +7,7 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.Primitive.FLOAT32;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT32;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float32TypeTest {

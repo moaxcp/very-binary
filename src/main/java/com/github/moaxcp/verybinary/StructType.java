@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-public final class StructType extends ComplexType<StructType> implements ValueType<StructType, Struct> {
+public final class StructType implements ComplexType<StructType>, ValueType<StructType, Struct> {
 
   private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   @Nullable
@@ -26,7 +26,7 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
   }
 
   @Override
-  public boolean isConstant(@Nullable Type<?> parent) {
+  public boolean isConstant(@Nullable ComplexType parent) {
     return ValueType.super.isConstant(parent);
   }
 
@@ -63,7 +63,7 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
   }
 
   @Override
-  public long getAllocationLength(@Nullable Type<?> parent) {
+  public long getAllocationLength(@Nullable ComplexType parent) {
     return fields.stream().mapToLong(f -> f.getAllocationLength(this)).sum();
   }
 
@@ -100,7 +100,7 @@ public final class StructType extends ComplexType<StructType> implements ValueTy
 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, Struct value) {
-    checkForConstantValue(pointer, value);
+    checkForConstantValue();
     if (!valueChangeListeners.isEmpty()) {
       var old = new Struct(getOffset(pointer), this, pointer.getByteArray());
       if (!old.equals(value)) {

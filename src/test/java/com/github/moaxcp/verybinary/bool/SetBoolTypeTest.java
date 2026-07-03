@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.bool;
 
-import com.github.moaxcp.verybinary.BoolArrayType;
+import com.github.moaxcp.verybinary.BoolListType;
 import com.github.moaxcp.verybinary.BoolType;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +31,7 @@ public class SetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).set(struct, 0, TRUE))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, 0, TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("set(Pointer, long, Boolean) not supported for BoolArrayType. Use set(Pointer, long, boolean) instead.");
   }
@@ -42,7 +42,7 @@ public class SetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).set(struct, new Boolean[] {TRUE, FALSE, TRUE, FALSE}))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, new Boolean[] {TRUE, FALSE, TRUE, FALSE}))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("set(Pointer, Boolean...) not supported for BoolArrayType. Use set(Pointer, boolean...) instead.");
   }
@@ -53,7 +53,7 @@ public class SetBoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThatThrownBy(() -> ((BoolArrayType) struct.getType(0)).set(struct, 1, new Boolean[] {TRUE, FALSE, TRUE, FALSE}))
+    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, 1, new Boolean[] {TRUE, FALSE, TRUE, FALSE}))
       .isInstanceOf(UnsupportedOperationException.class)
       .hasMessage("set(Pointer, long, Boolean...) not supported for BoolArrayType. Use set(Pointer, long, boolean...) instead.");
   }

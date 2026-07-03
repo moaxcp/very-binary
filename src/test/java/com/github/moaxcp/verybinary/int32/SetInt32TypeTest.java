@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int32;
 
-import com.github.moaxcp.verybinary.Int32ArrayType;
+import com.github.moaxcp.verybinary.Int32ListType;
 import com.github.moaxcp.verybinary.Int32Type;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +84,9 @@ public class SetInt32TypeTest {
         .int32Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int32ArrayType) struct.getType(1)).set(struct, 0, Integer.valueOf(2)))
+    assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).set(struct, 0, Integer.valueOf(2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Integer) not supported for Int32ArrayType. Use set(Pointer, long, int) instead.");
+        .hasMessage("set(Pointer, long, Integer) not supported for Int32ListType. Use set(Pointer, long, int) instead.");
   }
 
   @Test
@@ -116,7 +116,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(1, -1, 5))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Int32ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(1, 2, 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int32ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Int32ListType at position 1 index: 2 length: 1");
   }
 
   @Test
@@ -164,7 +164,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(0, 3, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int32ArrayType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
+        .hasMessage("Int32ListType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
@@ -177,7 +177,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int32ArrayType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
+        .hasMessage("Int32ListType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test

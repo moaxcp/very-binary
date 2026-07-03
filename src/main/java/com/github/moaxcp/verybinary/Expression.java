@@ -14,17 +14,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> parent) {
+    public boolean isConstant(ComplexType parent) {
       return true;
     }
 
     @Override
-    public long constantValue(Type<?> parent) {
+    public long constantValue(ComplexType parent) {
       return value;
     }
 
     @Override
-    public long defaultValue(Type<?> parent) {
+    public long defaultValue(ComplexType parent) {
       return value;
     }
 
@@ -63,12 +63,12 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> parent) {
-      return parent.getType(position) instanceof NumberType<?, ?> v && v.isConstant();
+    public boolean isConstant(ComplexType parent) {
+      return parent.getType(position) instanceof LengthType<?, ?> v && v.isConstant();
     }
 
     @Override
-    public long constantValue(Type<?> parent) {
+    public long constantValue(ComplexType parent) {
       return switch (parent.getType(position)) {
         case Int8Type t -> t.getInt8ConstantValue();
         case Int16Type t -> t.getInt16ConstantValue();
@@ -85,8 +85,8 @@ public interface Expression {
     }
 
     @Override
-    public long defaultValue(Type<?> parent) {
-      return ((NumberType<?, ?>) parent.getType(position)).defaultLengthValue();
+    public long defaultValue(ComplexType parent) {
+      return ((LengthType<?, ?>) parent.getType(position)).defaultLengthValue();
     }
 
     @Override
@@ -114,7 +114,7 @@ public interface Expression {
         case BoolType ignored -> throw new IllegalArgumentException("cannot evaluate boolean type");
         case StructType ignored -> throw new IllegalArgumentException("cannot evaluate struct type");
         case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
-        case IndexedValueType ignored -> throw new IllegalArgumentException("cannot evaluate indexed value type");
+        case ListType ignored -> throw new IllegalArgumentException("cannot evaluate indexed value type");
         case null -> throw new IllegalArgumentException("cannot evaluate null type");
       };
     }
@@ -149,17 +149,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(Type<?> parent) {
+    public boolean isConstant(ComplexType parent) {
       return Arrays.stream(expressions).allMatch(e -> e.isConstant(parent));
     }
 
     @Override
-    public long constantValue(Type<?> parent) {
+    public long constantValue(ComplexType parent) {
       return Arrays.stream(expressions).mapToLong(e -> e.constantValue(parent)).sum();
     }
 
     @Override
-    public long defaultValue(Type<?> parent) {
+    public long defaultValue(ComplexType parent) {
       return Arrays.stream(expressions).mapToLong(e -> e.defaultValue(parent)).sum();
     }
 
@@ -201,11 +201,11 @@ public interface Expression {
     return new Sum(expressions);
   }
 
-  boolean isConstant(Type<?> parent);
+  boolean isConstant(ComplexType parent);
 
-  long constantValue(Type<?> parent);
+  long constantValue(ComplexType parent);
 
-  long defaultValue(Type<?> parent);
+  long defaultValue(ComplexType parent);
 
   long evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

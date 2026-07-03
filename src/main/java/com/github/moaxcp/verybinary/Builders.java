@@ -17,6 +17,10 @@ public class Builders {
     return new StructTypeStructTypeBuilder();
   }
 
+  public static StructListTypeStructTypeBuilder structListType() {
+    return new StructListTypeStructTypeBuilder();
+  }
+
   public static StructTypeStructTypeBuilder structType(StructType type) {
     return new StructTypeStructTypeBuilder().from(type);
   }

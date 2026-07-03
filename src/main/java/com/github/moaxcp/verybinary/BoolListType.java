@@ -60,13 +60,6 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
     set(pointer, 0, values);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, BoolList values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size64() - 1);
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean[] values) {
     set(pointer, 0, values);
   }
@@ -101,7 +94,7 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(BOOL.size() * values.length).addBool(0, values);
+      var bytes = new ByteArray(getElementAllocationLength() * values.length).addBool(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -117,7 +110,6 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
-
     } else {
       pointer.getByteArray().setBool(getOffset(pointer, index), values);
     }

@@ -16,8 +16,8 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
   }
 
   @Override
-  public Int64ListType copy(int position) {
-    return new Int64ListType(position, getParent(), constantValue, lengthExpression);
+  public Int64ListType copy(int position, @Nullable ComplexType parent) {
+    return new Int64ListType(position, parent, constantValue, lengthExpression);
   }
 
   @Override
@@ -27,6 +27,7 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
 
   @Override
   public Int64List get(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    checkArrayRange(pointer, index, index + length);
     return new Int64List(pointer, this, index, length);
   }
 
@@ -37,7 +38,6 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
 
   public long[] getInt64Array(Pointer<?, ? extends Type<?>> pointer) {
     long length = getLength(pointer);
-    checkIndex(pointer, length - 1);
     return pointer.getByteArray().getInt64(getOffset(pointer), length);
   }
 
@@ -48,7 +48,6 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
 
   public List<Long> getList(Pointer<?, ? extends Type<?>> pointer) {
     long length = getLength(pointer);
-    checkIndex(pointer, length - 1);
     return pointer.getByteArray().getInt64List(getOffset(pointer), length);
   }
 
@@ -60,13 +59,6 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, Int64List value) {
     set(pointer, 0, value);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Int64List value) {
-    checkIndex(pointer, index);
-    checkForConstantValue();
-    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long[] values) {
@@ -85,41 +77,26 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Long> values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size());
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long value) {
     if (pointer.getByteArray().getInt64(getOffset(pointer, index)) == value) {
       return;
     }
     if (!valueChangeListeners.isEmpty()) {
-      var old = get(pointer).copy();
+      var old =get(pointer).copy();
+      var newValue = old.copy();
+      newValue.set(index, value);
       pointer.getByteArray().setInt64(getOffset(pointer, index), value);
-      var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
       pointer.getByteArray().setInt64(getOffset(pointer, index), value);
-    }
-  }
-
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Int64List values) {
-    if (!valueChangeListeners.isEmpty()) {
-      var old = get(pointer).copy();
-      values.replaceBytes(pointer.getByteArray(), getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index));
-      var newValue = get(pointer).copy();
-      notifyValueChange(reason, pointer, old, newValue);
-    } else {
-      values.replaceBytes(pointer.getByteArray(), getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index));
     }
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      pointer.getByteArray().setInt64(getOffset(pointer, index), values);
+      var bytes = new ByteArray(getElementAllocationLength() * values.length).addInt64(0, values);
+      pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
@@ -127,10 +104,11 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
     }
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Long> values) {
+  protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Long> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      pointer.getByteArray().setInt64(getOffset(pointer, index), values);
+      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addInt64(0, values);
+      pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
@@ -143,10 +121,6 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long[] values) {
-    add(pointer, getLength(pointer), values);
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, List<Long> values) {
     add(pointer, getLength(pointer), values);
   }
 
@@ -166,42 +140,5 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
     checkForConstantValue();
     allocate(pointer, index, values.length);
     setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, List<Long> values) {
-    if (isFixedLength()) {
-      throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
-    }
-    checkForConstantValue();
-    allocate(pointer, index, values.size());
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
-  @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (this.isConstant()) {
-      constantValue.replaceBytes(pointer.getByteArray(), getOffset(pointer), 0);
-    } else {
-      long length = getByteLength(pointer);
-      pointer.getByteArray().shiftBytesFor(getOffset(pointer), length);
-    }
-  }
-
-  @Override
-  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    allocate(reason, pointer, index, 1);
-  }
-
-  @Override
-  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (this.isConstant()) {
-      throw new IllegalStateException("Cannot allocate element in constantValue " + constantValue);
-    }
-    callWithLengthChange(reason, pointer, length, () -> {
-      callWithByteLengthChange(reason, pointer, () -> {
-        checkIndexAllocate(pointer, index);
-        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), length * basicTypeInfo.size());
-      });
-    });
   }
 }

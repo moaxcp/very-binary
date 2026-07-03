@@ -12,7 +12,7 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Uint64List extends BinaryList<BigInteger> implements Iterable<BigInteger> {
+public final class Uint64List extends BinaryList<Uint64List, BigInteger> implements Iterable<BigInteger> {
 
   public static Uint64List toUint64List(long[] values) {
     return getUint64ListStruct(Arrays.stream(values).mapToObj(BigInteger::valueOf).collect(Collectors.toList()))
@@ -58,7 +58,7 @@ public final class Uint64List extends BinaryList<BigInteger> implements Iterable
 
     @Override
     public BigInteger next() {
-      return ((Uint64ListType) type).getUint64(pointer, getIndex(index++));
+      return type.get(pointer, getIndex(index++));
     }
 
     @Override

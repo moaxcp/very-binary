@@ -61,13 +61,6 @@ public final class Int8ListType extends PrimitiveListType<Int8ListType, Byte, In
     set(pointer, 0, value);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Int8List values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size64() - 1);
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   public void set(Pointer<?, ? extends Type<?>> pointer, byte[] values) {
     set(pointer, 0, values);
   }

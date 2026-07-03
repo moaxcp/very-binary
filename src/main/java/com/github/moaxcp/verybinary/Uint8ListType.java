@@ -16,8 +16,8 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   }
 
   @Override
-  public Uint8ListType copy(int position) {
-    return new Uint8ListType(position, getParent(), constantValue, lengthExpression);
+  public Uint8ListType copy(int position, @Nullable ComplexType parent) {
+    return new Uint8ListType(position, parent, constantValue, lengthExpression);
   }
 
   @Override
@@ -27,6 +27,7 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
 
   @Override
   public Uint8List get(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    checkArrayRange(pointer, index, index + length);
     return new Uint8List(pointer, this, index, length);
   }
 
@@ -37,7 +38,6 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
 
   public short[] getUint8Array(Pointer<?, ? extends Type<?>> pointer) {
     long length = getLength(pointer);
-    checkIndex(pointer, length - 1);
     return pointer.getByteArray().getUint8(getOffset(pointer), length);
   }
 
@@ -48,7 +48,6 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
 
   public List<Short> getList(Pointer<?, ? extends Type<?>> pointer) {
     long length = getLength(pointer);
-    checkIndex(pointer, length - 1);
     return pointer.getByteArray().getUint8List(getOffset(pointer), length);
   }
 
@@ -60,13 +59,6 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   @Override
   public void set(Pointer<?, ? extends Type<?>> pointer, Uint8List value) {
     set(pointer, 0, value);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Uint8List value) {
-    checkIndex(pointer, index);
-    checkForConstantValue();
-    setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short[] values) {
@@ -85,41 +77,26 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size());
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, short value) {
     if (pointer.getByteArray().getUint8(getOffset(pointer, index)) == value) {
       return;
     }
     if (!valueChangeListeners.isEmpty()) {
-      var old = get(pointer).copy();
+      var old =get(pointer).copy();
+      var newValue = old.copy();
+      newValue.set(index, value);
       pointer.getByteArray().setUint8(getOffset(pointer, index), value);
-      var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
       pointer.getByteArray().setUint8(getOffset(pointer, index), value);
-    }
-  }
-
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, Uint8List values) {
-    if (!valueChangeListeners.isEmpty()) {
-      var old = get(pointer).copy();
-      values.replaceBytes(pointer.getByteArray(), getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index));
-      var newValue = get(pointer).copy();
-      notifyValueChange(reason, pointer, old, newValue);
-    } else {
-      values.replaceBytes(pointer.getByteArray(), getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index));
     }
   }
 
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      pointer.getByteArray().setUint8(getOffset(pointer, index), values);
+      var bytes = new ByteArray(getElementAllocationLength() * values.length).addUint8(0, values);
+      pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
@@ -127,10 +104,11 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
     }
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
+  protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      pointer.getByteArray().setUint8(getOffset(pointer, index), values);
+      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addUint8(0, values);
+      pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
@@ -143,10 +121,6 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, short[] values) {
-    add(pointer, getLength(pointer), values);
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, List<Short> values) {
     add(pointer, getLength(pointer), values);
   }
 
@@ -166,42 +140,5 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
     checkForConstantValue();
     allocate(pointer, index, values.length);
     setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
-    if (isFixedLength()) {
-      throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
-    }
-    checkForConstantValue();
-    allocate(pointer, index, values.size());
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
-  @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (this.isConstant()) {
-      constantValue.replaceBytes(pointer.getByteArray(), getOffset(pointer), 0);
-    } else {
-      long length = getByteLength(pointer);
-      pointer.getByteArray().shiftBytesFor(getOffset(pointer), length);
-    }
-  }
-
-  @Override
-  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    allocate(reason, pointer, index, 1);
-  }
-
-  @Override
-  public void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (this.isConstant()) {
-      throw new IllegalStateException("Cannot allocate element in constantValue " + constantValue);
-    }
-    callWithLengthChange(reason, pointer, length, () -> {
-      callWithByteLengthChange(reason, pointer, () -> {
-        checkIndexAllocate(pointer, index);
-        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), length * basicTypeInfo.size());
-      });
-    });
   }
 }

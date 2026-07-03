@@ -62,13 +62,6 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
     set(pointer, 0, values);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Float32List values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size64() - 1);
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   public void set(Pointer<?, ? extends Type<?>> pointer, float[] values) {
     set(pointer, 0, values);
   }
@@ -128,10 +121,6 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, float[] values) {
-    add(pointer, getLength(pointer), values);
-  }
-
-  public void add(Pointer<?, ? extends Type<?>> pointer, List<Float> values) {
     add(pointer, getLength(pointer), values);
   }
 

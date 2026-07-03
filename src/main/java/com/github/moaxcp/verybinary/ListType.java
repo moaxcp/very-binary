@@ -137,14 +137,16 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
     checkForConstantValue();
+    checkIndex(pointer, index);
     setUnchecked(SET_VALUE, pointer, index, value);
   }
 
   protected abstract void setUnchecked(ValueChangeReason reason, Pointer<?,? extends Type<?>> pointer, long index, T value);
 
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, L value) {
+  public final void set(Pointer<?, ? extends Type<?>> pointer, long index, L values) {
     checkForConstantValue();
-    setUnchecked(SET_VALUE, pointer, index, value);
+    checkArrayRange(pointer, index, index + values.size64() - 1);
+    setUnchecked(SET_VALUE, pointer, index, values);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, T[] values) {

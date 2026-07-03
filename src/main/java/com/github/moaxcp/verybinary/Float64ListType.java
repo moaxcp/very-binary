@@ -63,13 +63,6 @@ public Float64ListType copy(int position, @Nullable ComplexType parent) {
     set(pointer, 0, value);
   }
 
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, Float64List values) {
-    checkForConstantValue();
-    checkArrayRange(pointer, index, index + values.size64() - 1);
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
   public void set(Pointer<?, ? extends Type<?>> pointer, double[] values) {
     set(pointer, 0, values);
   }

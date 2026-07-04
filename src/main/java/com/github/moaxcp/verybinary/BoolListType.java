@@ -11,11 +11,11 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class BoolListType extends PrimitiveListType<BoolListType, Boolean, BoolList> {
 
-  public BoolListType(int position, @Nullable ComplexType parent, @Nullable BoolList constantValue, Expression lengthExpression) {
+  public BoolListType(int position, @Nullable ComplexType<?> parent, @Nullable BoolList constantValue, Expression lengthExpression) {
     super(position, parent, BOOL, constantValue, lengthExpression);
   }
 
-  public BoolListType copy(int position, @Nullable ComplexType parent) {
+  public BoolListType copy(int position, @Nullable ComplexType<?> parent) {
     return new BoolListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -53,11 +53,6 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   public List<Boolean> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getBoolList(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, BoolList values) {
-    set(pointer, 0, values);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, boolean[] values) {

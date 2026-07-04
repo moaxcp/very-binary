@@ -1,25 +1,27 @@
 package com.github.moaxcp.verybinary.list;
 
-import com.github.moaxcp.verybinary.Pointer;
-import com.github.moaxcp.verybinary.Struct;
-import com.github.moaxcp.verybinary.StructListType;
-import com.github.moaxcp.verybinary.Type;
+import com.github.moaxcp.verybinary.*;
 
-import java.util.AbstractList;
 import java.util.Iterator;
 
-public final class StructList extends AbstractList<Struct> {
+import static com.github.moaxcp.verybinary.Builders.struct;
+import static com.github.moaxcp.verybinary.Builders.structType;
+import static com.github.moaxcp.verybinary.Expression.constant;
 
-  private final Pointer<?, ? extends Type<?>> pointer;
-  private final StructListType type;
-  private final long indexOffset;
-  private final long length;
+public final class StructList extends BinaryList<StructList, StructListType, Struct> {
+
+  public static StructType getStructListStructType(long length, StructType type) {
+    return structType()
+        .structArray(constant(length), type)
+        .build();
+  }
+
+  public StructList(Pointer<?, ? extends Type<?>> pointer, StructListType type) {
+    super(pointer, type, 0, 0, false);
+  }
 
   public StructList(Pointer<?, ? extends Type<?>> pointer, StructListType type, long indexOffset, long length) {
-    this.pointer = pointer;
-    this.type = type;
-    this.indexOffset = indexOffset;
-    this.length = length;
+    super(pointer, type , indexOffset, length, true);
   }
 
   public Pointer<?, ? extends Type<?>> getPointer() {
@@ -27,26 +29,9 @@ public final class StructList extends AbstractList<Struct> {
   }
 
   @Override
-  public Struct get(int index) {
-    if (index > length) {
-      throw new IndexOutOfBoundsException("Index out of range: " + index);
-    }
-    return type.get(pointer, index + indexOffset);
-  }
-
-  public Struct getStruct(long index) {
-    if (index > length) {
-      throw new IndexOutOfBoundsException("Index out of range: " + index);
-    }
-    return type.get(pointer, index + indexOffset);
-  }
-
-  @Override
   public Iterator<Struct> iterator() {
     return new StructListIterator();
   }
-
-  @Override
   public int size() {
     return Math.toIntExact(length);
   }
@@ -72,5 +57,12 @@ public final class StructList extends AbstractList<Struct> {
     public void remove() {
       type.remove(pointer, index--);
     }
+  }
+
+  @Override
+  public StructList copy() {
+    var s = struct(getStructListStructType(size64(), type.getStructType())).build();
+    s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getLength(pointer));
+    return s.getList(0);
   }
 }

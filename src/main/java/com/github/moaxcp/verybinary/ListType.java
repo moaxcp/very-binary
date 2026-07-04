@@ -10,12 +10,12 @@ import java.util.List;
 import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L extends BinaryList<L, T>> extends ValueType<SELF, L> permits BasicListType {
+public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends ValueType<SELF, L> permits BasicListType, StructListType {
 
   protected final Expression lengthExpression;
   protected final List<LengthListener> lengthListeners = new ArrayList<>();
 
-  protected ListType(int position, @Nullable ComplexType parent, @Nullable L constantValue, @Nullable Expression lengthExpression) {
+  protected ListType(int position, @Nullable ComplexType<?> parent, @Nullable L constantValue, @Nullable Expression lengthExpression) {
     super(position, constantValue, parent);
     if (lengthExpression == null && constantValue == null) {
       throw new IllegalArgumentException("lengthExpression and constantValue cannot both be null");
@@ -27,17 +27,17 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
       this.constantValue = constantValue;
       this.lengthExpression = new Expression() {
         @Override
-        public boolean isConstant(ComplexType parent) {
+        public boolean isConstant(ComplexType<?> parent) {
           return true;
         }
 
         @Override
-        public long constantValue(ComplexType parent) {
+        public long constantValue(ComplexType<?> parent) {
           return constantValue.size64();
         }
 
         @Override
-        public long defaultValue(ComplexType parent) {
+        public long defaultValue(ComplexType<?> parent) {
           return 0;
         }
 
@@ -72,7 +72,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
     return lengthExpression.evaluate(pointer);
   }
 
-  protected long getAllocationLength() {
+  public long getAllocationLength() {
     if (lengthExpression.isConstant(parent)) {
       return lengthExpression.constantValue(parent) * getElementAllocationLength();
     } else {
@@ -123,14 +123,6 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
 
   public abstract L get(Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
-  public T[] getArray(Pointer<?, ? extends Type<?>> pointer) {
-    long length = getLength(pointer);
-    checkIndex(pointer, length - 1);
-    return getArray(pointer, 0, length);
-  }
-
-  public abstract T[] getArray(Pointer<?, ? extends Type<?>> pointer, long index, long length);
-
   public abstract List<T> getList(Pointer<?, ? extends Type<?>> pointer);
 
   public abstract List<T> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length);
@@ -146,15 +138,6 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   public final void set(Pointer<?, ? extends Type<?>> pointer, long index, L values) {
     checkForConstantValue();
     checkArrayRange(pointer, index, index + values.size64() - 1);
-    setUnchecked(SET_VALUE, pointer, index, values);
-  }
-
-  public void set(Pointer<?, ? extends Type<?>> pointer, T[] values) {
-    set(pointer, 0, values);
-  }
-
-  public void set(Pointer<?, ? extends Type<?>> pointer, long index, T[] values) {
-    checkForConstantValue();
     setUnchecked(SET_VALUE, pointer, index, values);
   }
 

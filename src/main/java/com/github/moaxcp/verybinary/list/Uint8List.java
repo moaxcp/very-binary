@@ -11,11 +11,11 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Uint8List extends PrimitiveList<Uint8List, Short> implements PrimitiveIterable<Short, Uint8Consumer> {
+public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Short> implements PrimitiveIterable<Short, Uint8Consumer> {
 
   public static Uint8List toUint8List(short[] values) {
     return getUint8ListStruct(values)
-        .getUint8List(0);
+        .getList(0);
   }
 
   public static Struct getUint8ListStruct(short[] values) {
@@ -83,7 +83,7 @@ public final class Uint8List extends PrimitiveList<Uint8List, Short> implements 
   public Uint8List copy() {
     var s = struct(getUint8ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getUint8List(0);
+    return s.getList(0);
   }
 
   public boolean equals(Object o) {

@@ -10,13 +10,13 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implements LengthType<Uint64Type, BigInteger> {
 
-  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable ComplexType parent) {
+  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable ComplexType<?> parent) {
     super(position, UINT64, constantValue, parent);
     this.constantValue = constantValue;
   }
 
   @Override
-  public Uint64Type copy(int position, @Nullable ComplexType parent) {
+  public Uint64Type copy(int position, @Nullable ComplexType<?> parent) {
     return new Uint64Type(position, constantValue, parent);
   }
 
@@ -36,12 +36,6 @@ public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implemen
   }
 
   @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
-    checkForConstantValue();
-    setUnchecked(SET_VALUE, pointer, value);
-  }
-
-  @Override
   public void setForArrayLength(Pointer<?, ? extends Type<?>> pointer, long value) {
     setUnchecked(SET_BY_ARRAY_LENGTH, pointer, BigInteger.valueOf(value));
   }
@@ -51,7 +45,7 @@ public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implemen
     setUnchecked(SET_BY_BYTE_LENGTH, pointer, BigInteger.valueOf(value));
   }
 
-  private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
+  protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, BigInteger value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer);
       if (!value.equals(old)) {

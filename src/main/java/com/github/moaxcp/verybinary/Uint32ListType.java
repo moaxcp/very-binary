@@ -11,12 +11,12 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint32ListType extends PrimitiveListType<Uint32ListType, Long, Uint32List> {
 
-  public Uint32ListType(int position, @Nullable ComplexType parent, @Nullable Uint32List constantValue, Expression lengthExpression) {
+  public Uint32ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint32List constantValue, Expression lengthExpression) {
     super(position, parent, UINT32, constantValue, lengthExpression);
   }
 
   @Override
-  public Uint32ListType copy(int position, @Nullable ComplexType parent) {
+  public Uint32ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Uint32ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -54,11 +54,6 @@ public final class Uint32ListType extends PrimitiveListType<Uint32ListType, Long
   public List<Long> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getUint32List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Uint32List value) {
-    set(pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long[] values) {

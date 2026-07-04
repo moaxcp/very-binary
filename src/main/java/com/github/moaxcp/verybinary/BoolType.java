@@ -15,14 +15,14 @@ public final class BoolType extends PrimitiveType<BoolType, Boolean> {
   private final boolean constantValueSet;
   private final boolean constantValue;
 
-  public BoolType(int position, @Nullable Boolean constantValue, @Nullable ComplexType parent) {
+  public BoolType(int position, @Nullable Boolean constantValue, @Nullable ComplexType<?> parent) {
     super(position, BOOL, parent);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : false;
   }
 
   @Override
-  public BoolType copy(int position, @Nullable ComplexType parent) {
+  public BoolType copy(int position, @Nullable ComplexType<?> parent) {
     return new BoolType(position, constantValueSet ? constantValue : null, parent);
   }
 

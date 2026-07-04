@@ -11,11 +11,11 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class BoolList extends PrimitiveList<BoolList, Boolean> implements PrimitiveIterable<Boolean, BooleanConsumer> {
+public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolean> implements PrimitiveIterable<Boolean, BooleanConsumer> {
 
   public static BoolList toBoolList(boolean[] values) {
     return getBoolListStruct(values)
-        .getBoolList(0);
+        .getList(0);
   }
 
   public static Struct getBoolListStruct(boolean[] values) {
@@ -84,7 +84,7 @@ public final class BoolList extends PrimitiveList<BoolList, Boolean> implements 
   public BoolList copy() {
     var s = struct(getBoolListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getLength(pointer));
-    return s.getBoolList(0);
+    return s.getList(0);
   }
   
   public boolean equals(Object o) {

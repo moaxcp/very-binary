@@ -14,17 +14,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(ComplexType parent) {
+    public boolean isConstant(ComplexType<?> parent) {
       return true;
     }
 
     @Override
-    public long constantValue(ComplexType parent) {
+    public long constantValue(ComplexType<?> parent) {
       return value;
     }
 
     @Override
-    public long defaultValue(ComplexType parent) {
+    public long defaultValue(ComplexType<?> parent) {
       return value;
     }
 
@@ -63,12 +63,12 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(ComplexType parent) {
+    public boolean isConstant(ComplexType<?> parent) {
       return parent.getType(position) instanceof LengthType<?, ?> v && v.isConstant();
     }
 
     @Override
-    public long constantValue(ComplexType parent) {
+    public long constantValue(ComplexType<?> parent) {
       return switch (parent.getType(position)) {
         case Int8Type t -> t.getInt8ConstantValue();
         case Int16Type t -> t.getInt16ConstantValue();
@@ -85,7 +85,7 @@ public interface Expression {
     }
 
     @Override
-    public long defaultValue(ComplexType parent) {
+    public long defaultValue(ComplexType<?> parent) {
       return ((LengthType<?, ?>) parent.getType(position)).defaultLengthValue();
     }
 
@@ -103,7 +103,7 @@ public interface Expression {
         case Uint32Type u32 -> u32.getUint32(pointer);
         case Int64Type i64 -> i64.getInt64(pointer);
         case Uint64Type u64 -> {
-          var value = u64.getUint64(pointer);
+          var value = u64.get(pointer);
           if (value.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             throw new IllegalArgumentException("cannot convert " + value + " to long");
           }
@@ -112,7 +112,7 @@ public interface Expression {
         case Float32Type f32 -> (long) f32.getFloat32(pointer);
         case Float64Type f32 -> (long) f32.getFloat64(pointer);
         case BoolType ignored -> throw new IllegalArgumentException("cannot evaluate boolean type");
-        case StructType ignored -> throw new IllegalArgumentException("cannot evaluate struct type");
+        case ComplexType<?> ignored -> throw new IllegalArgumentException("cannot evaluate complex type");
         case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
         case ListType ignored -> throw new IllegalArgumentException("cannot evaluate indexed value type");
         case null -> throw new IllegalArgumentException("cannot evaluate null type");
@@ -149,17 +149,17 @@ public interface Expression {
     }
 
     @Override
-    public boolean isConstant(ComplexType parent) {
+    public boolean isConstant(ComplexType<?> parent) {
       return Arrays.stream(expressions).allMatch(e -> e.isConstant(parent));
     }
 
     @Override
-    public long constantValue(ComplexType parent) {
+    public long constantValue(ComplexType<?> parent) {
       return Arrays.stream(expressions).mapToLong(e -> e.constantValue(parent)).sum();
     }
 
     @Override
-    public long defaultValue(ComplexType parent) {
+    public long defaultValue(ComplexType<?> parent) {
       return Arrays.stream(expressions).mapToLong(e -> e.defaultValue(parent)).sum();
     }
 
@@ -201,11 +201,11 @@ public interface Expression {
     return new Sum(expressions);
   }
 
-  boolean isConstant(ComplexType parent);
+  boolean isConstant(ComplexType<?> parent);
 
-  long constantValue(ComplexType parent);
+  long constantValue(ComplexType<?> parent);
 
-  long defaultValue(ComplexType parent);
+  long defaultValue(ComplexType<?> parent);
 
   long evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

@@ -160,3 +160,4 @@ Add support for default values. Constant values might actually be useless.
 * isFixedLength does not need a pointer. It needs the parent type which is used in pad and length expression.
 * Paths to navigate to sub fields. Could be like xpath or json paths.
 * There are two concepts for length. Array length and byte length. Maybe the listeners can be handled the same way. And if the value doesn't fit into a byte length (long list with length of 6) an exception should be thrown.
+* Lists should implement java List.

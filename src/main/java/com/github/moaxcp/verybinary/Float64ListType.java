@@ -11,12 +11,12 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Float64ListType extends PrimitiveListType<Float64ListType, Double, Float64List> {
 
-  public Float64ListType(int position, @Nullable ComplexType parent, @Nullable Float64List constantValue, Expression lengthExpression) {
+  public Float64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Float64List constantValue, Expression lengthExpression) {
     super(position, parent, FLOAT64, constantValue, lengthExpression);
   }
 
   @Override
-public Float64ListType copy(int position, @Nullable ComplexType parent) {
+public Float64ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Float64ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -56,11 +56,6 @@ public Float64ListType copy(int position, @Nullable ComplexType parent) {
   public List<Double> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getFloat64List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Float64List value) {
-    set(pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, double[] values) {

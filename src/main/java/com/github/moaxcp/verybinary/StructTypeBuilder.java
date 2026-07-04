@@ -14,7 +14,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public SELF from(StructType structType) {
     constant(structType.getConstantValue());
-    for (var type : structType.getFields()) {
+    for (var type : structType.getTypes()) {
       fields.add(type);
     }
     return (SELF) this;
@@ -57,7 +57,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     if (type instanceof PadType p && p.isAlign()) {
       var previous = fields.getLast();
       fields.add(type);
-      previous.addByteLengthChangeListener(ByteLengthListener.align(type.getPosition()));
+      previous.addByteLengthListeners(List.of(ByteLengthListener.align(type.getPosition())));
     } else {
       fields.add(type);
     }
@@ -65,7 +65,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF bool() {
-    type(new BoolType(fields.size(), null));
+    type(new BoolType(fields.size(), null, null));
     return (SELF) this;
   }
 
@@ -74,7 +74,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF boolConst(boolean constantValue) {
-    type(new BoolType(fields.size(), constantValue));
+    type(new BoolType(fields.size(), constantValue, null));
     return (SELF) this;
   }
 
@@ -235,7 +235,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
         .constant(type.getConstantValue());
 
-    for (var field : type.getFields()) {
+    for (var field : type.getTypes()) {
       builder.type(field);
     }
     return builder.end();
@@ -246,7 +246,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
         .lengthField(lengthPosition)
         .constant(type.getConstantValue());
 
-    for (var field : type.getFields()) {
+    for (var field : type.getTypes()) {
       builder.type(field);
     }
     return builder.end();
@@ -261,7 +261,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
         .lengthExpression(lengthExpression)
         .constant(type.getConstantValue());
 
-    for (var field : type.getFields()) {
+    for (var field : type.getTypes()) {
       builder.type(field);
     }
     return builder.end();

@@ -10,14 +10,14 @@ public final class Float64Type extends PrimitiveType<Float64Type, Double> implem
   private final boolean constantValueSet;
   private final double constantValue;
 
-  public Float64Type(int position, @Nullable Double constantValue, @Nullable ComplexType parent) {
+  public Float64Type(int position, @Nullable Double constantValue, @Nullable ComplexType<?> parent) {
     super(position, FLOAT64, parent);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0.0d;
   }
 
   @Override
-  public Float64Type copy(int position, @Nullable ComplexType parent) {
+  public Float64Type copy(int position, @Nullable ComplexType<?> parent) {
     return new Float64Type(position, constantValueSet ? constantValue : null, parent);
   }
 

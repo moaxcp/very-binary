@@ -1,11 +1,12 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
 public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, T> extends BasicType<SELF, T> permits BoolType, Float32Type, Float64Type, Int16Type, Int32Type, Int64Type, Int8Type, Uint16Type, Uint32Type, Uint8Type {
 
 
-  PrimitiveType(int position, BasicTypeInfo basicTypeInfo, @Nullable ComplexType parent) {
+  PrimitiveType(int position, BasicTypeInfo basicTypeInfo, @Nullable ComplexType<?> parent) {
     super(position, basicTypeInfo, null, parent);
   }
 
@@ -20,8 +21,8 @@ public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, 
   }
 
   @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, T value) {
-    throw new UnsupportedOperationException("set(Pointer, " + basicTypeInfo.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use set(Pointer, " + basicTypeInfo.primitive() + ") instead.");
+  protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, T value) {
+    throw new UnsupportedOperationException("setUnchecked(Pointer, " + basicTypeInfo.wrapper() + ") not supported for " + getClass().getSimpleName() + ". Use setUnchecked(Pointer, " + basicTypeInfo.primitive() + ") instead.");
   }
 
   /**

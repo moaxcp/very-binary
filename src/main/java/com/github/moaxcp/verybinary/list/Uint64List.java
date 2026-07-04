@@ -12,17 +12,17 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Uint64List extends BinaryList<Uint64List, BigInteger> implements Iterable<BigInteger> {
+public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, BigInteger> implements Iterable<BigInteger> {
 
   public static Uint64List toUint64List(long[] values) {
     return getUint64ListStruct(Arrays.stream(values).mapToObj(BigInteger::valueOf).collect(Collectors.toList()))
-        .getUint64List(0);
+        .getList(0);
   }
 
   public static Struct getUint64ListStruct(List<BigInteger> values) {
     return struct(getUint64ListStructType(values.size()))
         .build()
-        .setUint64(0, values);
+        .set(0, values);
   }
 
   public static StructType getUint64ListStructType(long length) {
@@ -75,7 +75,7 @@ public final class Uint64List extends BinaryList<Uint64List, BigInteger> impleme
   public Uint64List copy() {
     var s = struct(getUint64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getUint64List(0);
+    return s.getList(0);
   }
 
   public boolean equals(Object o) {

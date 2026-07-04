@@ -1,8 +1,9 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.list.*;
+import com.github.moaxcp.verybinary.list.BinaryList;
+import com.github.moaxcp.verybinary.list.Float32List;
+import com.github.moaxcp.verybinary.list.Float64List;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static com.github.moaxcp.verybinary.Util.mapIntsToBytes;
@@ -129,6 +130,69 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return parentOffset;
   }
 
+  public <T> T get(int position) {
+    return ((ValueType<?, T>)structType.getType(position)).get(this);
+  }
+
+  public <T> Struct set(int position, T value) {
+     ((ValueType<?, T>)structType.getType(position)).set(this, value);
+     return this;
+  }
+
+  public <T> List<T> getStandardList(int position) {
+    return ((ListType<?, T, ?>) structType.getType(position)).getList(this);
+  }
+
+  public <T> Struct set(int position, List<T> values) {
+    ((ListType<?, T, ?>) structType.getType(position)).set(this, values);
+    return this;
+  }
+
+  public <T> Struct set(int position, long index, List<T> values) {
+    ((ListType<?, T, ?>) structType.getType(position)).set(this, index, values);
+    return this;
+  }
+
+  public <L extends BinaryList<L, T, E>, T extends ListType<T, E, L>, E> L getList(int position) {
+    return ((ListType<T, E, L>) structType.getType(position)).get(this);
+  }
+
+  public <L extends BinaryList<L, T, E>, T extends ListType<T, E, L>, E> L getList(int position, long index, long length) {
+    return ((ListType<T, E, L>) structType.getType(position)).get(this, index, length);
+  }
+
+  public <L extends BinaryList<L, T, E>, T extends ListType<T, E, L>, E> Struct set(int position, L values) {
+    ((ListType<T, E, L>) structType.getType(position)).set(this, values);
+    return this;
+  }
+
+  public <L extends BinaryList<L, T, E>, T extends ListType<T, E, L>, E> Struct set(int position, long index, L values) {
+    ((ListType<T, E, L>) structType.getType(position)).set(this, index, values);
+    return this;
+  }
+
+  public <T> Struct add(int position, List<T> values) {
+    ((ListType<?, T, ?>) structType.getType(position)).add(this, values);
+    return this;
+  }
+
+  public <T> Struct add(int position, long index, List<T> values) {
+    ((ListType<?, T, ?>) structType.getType(position)).add(this, index, values);
+    return this;
+  }
+
+  public void remove(int position) {
+    ((ValueType<?, ?>) structType.getType(position)).remove(this);
+  }
+
+  public void remove(int position, long index) {
+    ((ListType<?, ?, ?>) structType.getType(position)).remove(this, index);
+  }
+
+  public void remove(int position, long index, long length) {
+     ((ListType<?, ?, ?>) structType.getType(position)).remove(this, index, length);
+  }
+
   public boolean getBool(int position) {
     return ((BoolType) structType.getType(position)).getBool(this);
   }
@@ -144,15 +208,6 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
 
   public Struct set(int position, long index, boolean b) {
     ((BoolListType) structType.getType(position)).set(this, index, b);
-    return this;
-  }
-  
-  public <T> BinaryList<? extends T> getList(int position) {
-    return ((ListType<?, T, ?>) structType.getType(position)).get(this);
-  }
-
-  public <T> Struct set(int position, BinaryList<? extends T> values) {
-    ((ListType<?, T, ?>) structType.getType(position)).set(this, values);
     return this;
   }
 
@@ -174,17 +229,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
   
-  public BoolList getBoolList(int position) {
-    return ((BoolListType) structType.getType(position)).get(this);
-  }
-  
   public Struct setBool(int position, List<Boolean> values) {
     ((BoolListType) structType.getType(position)).set(this, values);
     return this;
-  }
-  
-  public BoolList getBoolList(int position, long index, long length) {
-    return ((BoolListType) structType.getType(position)).get(this, index, length);
   }
   
   public Struct setBool(int position, long index, List<Boolean> values) {
@@ -260,11 +307,11 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public byte getInt8(int position, long index) {
-    return ((Int8ArrayType) structType.getType(position)).getInt8(this, index);
+    return ((Int8ListType) structType.getType(position)).getInt8(this, index);
   }
 
   public Struct setInt8(int position, long index, byte b) {
-    ((Int8ArrayType) structType.getType(position)).set(this, index, b);
+    ((Int8ListType) structType.getType(position)).set(this, index, b);
     return this;
   }
 
@@ -273,11 +320,11 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public byte[] getInt8Array(int position) {
-    return ((Int8ArrayType) structType.getType(position)).getInt8(this);
+    return ((Int8ListType) structType.getType(position)).getInt8Array(this);
   }
 
   public Struct setInt8(int position, byte... values) {
-    ((Int8ArrayType) structType.getType(position)).set(this, values);
+    ((Int8ListType) structType.getType(position)).set(this, values);
     return this;
   }
 
@@ -286,11 +333,11 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public byte[] getInt8Array(int position, long index, long length) {
-    return ((Int8ArrayType) structType.getType(position)).getInt8(this, index, length);
+    return ((Int8ListType) structType.getType(position)).getInt8Array(this, index, length);
   }
 
   public Struct setInt8(int position, long index, byte... values) {
-    ((Int8ArrayType) structType.getType(position)).set(this, index, values);
+    ((Int8ListType) structType.getType(position)).set(this, index, values);
     return this;
   }
 
@@ -298,34 +345,18 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return setInt8(position, index, mapIntsToBytes(values));
   }
 
-  public Int8List getInt8List(int position) {
-    return (Int8List) getList(position);
-  }
-
-  public Int8List getInt8List(int position, long index, long length) {
-    return (Int8List) getList(position, index, length);
-  }
-
-  public List<Byte> getInt8RawList(int position) {
-    return getType(position, Int8ListType.class).getList(this);
-  }
-
   public Struct setInt8(int position, List<Byte> values) {
-    getType(position, Int8ListType.class).set(this, values);
+    ((Int8ListType) structType.getType(position)).set(this, values);
     return this;
   }
 
-  public List<Byte> getInt8RawList(int position, long index, long length) {
-    return getType(position, Int8ListType.class).getList(this, index, length);
-  }
-
   public Struct setInt8(int position, long index, List<Byte> values) {
-    getType(position, Int8ListType.class).set(this, index, values);
+    ((Int8ListType) structType.getType(position)).set(this, index, values);
     return this;
   }
 
   public Struct addInt8(int position, byte b) {
-    getType(position, Int8ListType.class).add(this, b);
+    ((Int8ListType) structType.getType(position)).add(this, b);
     return this;
   }
 
@@ -338,7 +369,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addInt8(int position, byte... values) {
-    getType(position, Int8ListType.class).add(this, values);
+    ((Int8ListType) structType.getType(position)).add(this, values);
     return this;
   }
 
@@ -351,7 +382,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addInt8(int position, List<Byte> values) {
-    getType(position, Int8ListType.class).add(this, values);
+    ((Int8ListType) structType.getType(position)).add(this, values);
     return this;
   }
 
@@ -360,7 +391,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addInt8(int position, long index, byte b) {
-    getType(position, Int8ListType.class).add(this, index, b);
+    ((Int8ListType) structType.getType(position)).add(this, index, b);
     return this;
   }
 
@@ -373,7 +404,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addInt8(int position, long index, byte... values) {
-    getType(position, Int8ListType.class).add(this, index, values);
+    ((Int8ListType) structType.getType(position)).add(this, index, values);
     return this;
   }
 
@@ -386,7 +417,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public Struct addInt8(int position, long index, List<Byte> values) {
-    getType(position, Int8ListType.class).add(this, index, values);
+    ((Int8ListType) structType.getType(position)).add(this, index, values);
     return this;
   }
 
@@ -421,7 +452,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public short[] getUint8Array(int position) {
-    return ((Uint8ListType) structType.getType(position)).getUint8(this);
+    return ((Uint8ListType) structType.getType(position)).getUint8Array(this);
   }
 
   public Struct setUint8(int position, short... values) {
@@ -434,7 +465,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public short[] getUint8Array(int position, long index, long length) {
-    return ((Uint8ListType) structType.getType(position)).getUint8(this, index, length);
+    return ((Uint8ListType) structType.getType(position)).getUint8Array(this, index, length);
   }
 
   public Struct setUint8(int position, long index, short... values) {
@@ -446,17 +477,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return setInt8(position, index, mapIntsToBytes(values));
   }
 
-  public Uint8List getUint8List(int position) {
-    return ((Uint8ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setUint8(int position, List<Short> values) {
     ((Uint8ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Uint8List getUint8List(int position, long index, long length) {
-    return ((Uint8ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setUint8(int position, long index, List<Short> values) {
@@ -561,7 +584,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public short[] getInt16Array(int position) {
-    return ((Int16ListType) structType.getType(position)).getInt16(this);
+    return ((Int16ListType) structType.getType(position)).getInt16Array(this);
   }
 
   public Struct setInt16(int position, short... values) {
@@ -574,7 +597,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public short[] getInt16Array(int position, long index, long length) {
-    return ((Int16ListType) structType.getType(position)).getInt16(this, index, length);
+    return ((Int16ListType) structType.getType(position)).getInt16Array(this, index, length);
   }
 
   public Struct setInt16(int position, long index, short... values) {
@@ -586,17 +609,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return setInt16(position, index, mapIntsToShorts(values));
   }
 
-  public Int16List getInt16List(int position) {
-    return ((Int16ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setInt16(int position, List<Short> values) {
     ((Int16ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Int16List getInt16List(int position, long index, long length) {
-    return ((Int16ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setInt16(int position, long index, List<Short> values) {
@@ -693,7 +708,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public int[] getUint16Array(int position) {
-    return ((Uint16ListType) structType.getType(position)).getUint16(this);
+    return ((Uint16ListType) structType.getType(position)).getUint16Array(this);
   }
 
   public Struct setUint16(int position, int... values) {
@@ -702,7 +717,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public int[] getUint16Array(int position, long index, long length) {
-    return ((Uint16ListType) structType.getType(position)).getUint16(this, index, length);
+    return ((Uint16ListType) structType.getType(position)).getUint16Array(this, index, length);
   }
 
   public Struct setUint16(int position, long index, int... values) {
@@ -710,17 +725,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
 
-  public Uint16List getUint16List(int position) {
-    return ((Uint16ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setUint16(int position, List<Integer> values) {
     ((Uint16ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Uint16List getUint16List(int position, long index, long length) {
-    return ((Uint16ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setUint16(int position, long index, List<Integer> values) {
@@ -801,7 +808,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public int[] getInt32Array(int position) {
-    return ((Int32ListType) structType.getType(position)).getInt32(this);
+    return ((Int32ListType) structType.getType(position)).getInt32Array(this);
   }
 
   public Struct setInt32(int position, int... values) {
@@ -810,7 +817,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public int[] getInt32Array(int position, long index, long length) {
-    return ((Int32ListType) structType.getType(position)).getInt32(this, index, length);
+    return ((Int32ListType) structType.getType(position)).getInt32Array(this, index, length);
   }
 
   public Struct setInt32(int position, long index, int... values) {
@@ -818,17 +825,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
 
-  public Int32List getInt32List(int position) {
-    return ((Int32ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setInt32(int position, List<Integer> values) {
     ((Int32ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Int32List getInt32List(int position, long index, long length) {
-    return ((Int32ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setInt32(int position, long index, List<Integer> values) {
@@ -905,7 +904,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long[] getUint32Array(int position) {
-    return ((Uint32ListType) structType.getType(position)).getUint32(this);
+    return ((Uint32ListType) structType.getType(position)).getUint32Array(this);
   }
 
   public Struct setUint32(int position, long... values) {
@@ -914,7 +913,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long[] getUint32Array(int position, long index, long length) {
-    return ((Uint32ListType) structType.getType(position)).getUint32(this, index, length);
+    return ((Uint32ListType) structType.getType(position)).getUint32Array(this, index, length);
   }
 
   public Struct setUint32(int position, long index, long... values) {
@@ -922,17 +921,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
 
-  public Uint32List getUint32List(int position) {
-    return ((Uint32ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setUint32(int position, List<Long> values) {
     ((Uint32ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Uint32List getUint32List(int position, long index, long length) {
-    return ((Uint32ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setUint32(int position, long index, List<Long> values) {
@@ -1013,7 +1004,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long[] getInt64Array(int position) {
-    return ((Int64ListType) structType.getType(position)).getInt64(this);
+    return ((Int64ListType) structType.getType(position)).getInt64Array(this);
   }
 
   public Struct setInt64(int position, long... values) {
@@ -1022,7 +1013,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public long[] getInt64Array(int position, long index, long length) {
-    return ((Int64ListType) structType.getType(position)).getInt64(this, index, length);
+    return ((Int64ListType) structType.getType(position)).getInt64Array(this, index, length);
   }
 
   public Struct setInt64(int position, long index, long... values) {
@@ -1030,17 +1021,9 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
 
-  public Int64List getInt64List(int position) {
-    return ((Int64ListType) structType.getType(position)).get(this);
-  }
-
   public Struct setInt64(int position, List<Long> values) {
     ((Int64ListType) structType.getType(position)).set(this, values);
     return this;
-  }
-
-  public Int64List getInt64List(int position, long index, long length) {
-    return ((Int64ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setInt64(int position, long index, List<Long> values) {
@@ -1102,102 +1085,6 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
      return addInt64(position, index, values);
   }
 
-  public BigInteger getUint64(int position) {
-    return ((Uint64Type) structType.getType(position)).getUint64(this);
-  }
-
-  public Struct setUint64(int position, BigInteger bi) {
-    ((Uint64Type) structType.getType(position)).set(this, bi);
-    return this;
-  }
-
-  public Struct setUint64(int position, long bi) {
-    return setUint64(position, BigInteger.valueOf(bi));
-  }
-
-  public BigInteger getUint64(int position, long index) {
-    return ((Uint64ListType) structType.getType(position)).get(this, index);
-  }
-
-  public Struct setUint64(int position, long index, BigInteger bi) {
-    ((Uint64ListType) structType.getType(position)).set(this, index, bi);
-    return this;
-  }
-
-  public Struct setUint64(int position, long index, long bi) {
-     return setUint64(position, index, BigInteger.valueOf(bi));
-  }
-
-  public Uint64List getUint64List(int position) {
-    return ((Uint64ListType) structType.getType(position)).get(this);
-  }
-
-  public Struct setUint64(int position, List<BigInteger> values) {
-    ((Uint64ListType) structType.getType(position)).set(this, values);
-    return this;
-  }
-
-  public Uint64List getUint64List(int position, long index, long length) {
-    return ((Uint64ListType) structType.getType(position)).get(this, index, length);
-  }
-
-  public Struct setUint64(int position, long index, List<BigInteger> values) {
-    ((Uint64ListType) structType.getType(position)).set(this, index, values);
-    return this;
-  }
-
-  public Struct addUint64(int position, BigInteger bi) {
-    ((Uint64ListType) structType.getType(position)).add(this, bi);
-    return this;
-  }
-
-  public Struct uint64(int position, BigInteger bi) {
-     return addUint64(position, bi);
-  }
-
-  public Struct addUint64(int position, long bi) {
-     return addUint64(position, BigInteger.valueOf(bi));
-  }
-
-  public Struct uint64(int position, long bi) {
-     return addUint64(position, bi);
-  }
-
-  public Struct addUint64(int position, List<BigInteger> values) {
-    ((Uint64ListType) structType.getType(position)).add(this, values);
-    return this;
-  }
-
-  public Struct uint64(int position, List<BigInteger> values) {
-     return addUint64(position, values);
-  }
-
-  public Struct addUint64(int position, long index, BigInteger bi) {
-    ((Uint64ListType) structType.getType(position)).add(this, index, bi);
-    return this;
-  }
-
-  public Struct uint64(int position, long index, BigInteger bi) {
-     return addUint64(position, index, bi);
-  }
-
-  public Struct addUint64(int position, long index, long bi) {
-     return addUint64(position, index, BigInteger.valueOf(bi));
-  }
-
-  public Struct uint64(int position, long index, long bi) {
-     return addUint64(position, index, bi);
-  }
-
-  public Struct addUint64(int position, long index, List<BigInteger> values) {
-    ((Uint64ListType) structType.getType(position)).add(this, index, values);
-    return this;
-  }
-
-  public Struct uint64(int position, long index, List<BigInteger> values) {
-     return addUint64(position, index, values);
-  }
-
   public float getFloat32(int position) {
     return ((Float32Type) structType.getType(position)).getFloat32(this);
   }
@@ -1232,18 +1119,6 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   public Struct setFloat32(int position, long index, float... values) {
     ((Float32ListType) structType.getType(position)).set(this, index, values);
     return this;
-  }
-
-  public Float32List getFloat32Array(int position, long index, long length) {
-    return ((Float32ListType) structType.getType(position)).get(this, index, length);
-  }
-
-  public List<Float> getFloat32List(int position) {
-     return ((Float32ListType) structType.getType(position)).getFloat32List(this);
-  }
-
-  public List<Float> getFloat32List(int position, long index, long length) {
-    return ((Float32ListType) structType.getType(position)).getFloat32List(this, index, length);
   }
 
   public Struct setFloat32(int position, List<Float> values) {
@@ -1286,7 +1161,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public double getFloat64(int position, long index) {
-    return ((Float64ArrayType) structType.getType(position)).getFloat64(this, index);
+    return ((Float64ListType) structType.getType(position)).getFloat64(this, index);
   }
 
   public Struct setFloat64(int position, double d) {
@@ -1323,20 +1198,12 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
   }
 
   public double[] getFloat64Array(int position, long index, long length) {
-    return ((Float64ListType) structType.getType(position)).getFloat64(this, index, length);
+    return ((Float64ListType) structType.getType(position)).getFloat64Array(this, index, length);
   }
 
   public Struct setFloat64(int position, long index, double... values) {
     ((Float64ListType) structType.getType(position)).set(this, index, values);
     return this;
-  }
-
-  public Float64List getFloat64List(int position) {
-    return ((Float64ListType) structType.getType(position)).get(this);
-  }
-
-  public Float64List getFloat64List(int position, long index, long length) {
-    return ((Float64ListType) structType.getType(position)).get(this, index, length);
   }
 
   public Struct setFloat64(int position, List<Double> values) {
@@ -1364,102 +1231,6 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return this;
   }
 
-  public Struct getStruct(int position) {
-    return ((StructType) structType.getType(position)).get(this);
-  }
-
-  public Struct setStruct(int position, Struct other) {
-    ((StructType) structType.getType(position)).set(this, other);
-    return this;
-  }
-
-  public Struct getStruct(int position, long index) {
-     return ((StructListType) structType.getType(position)).get(this, index);
-  }
-
-  public Struct setStruct(int position, long index, Struct struct) {
-     ((StructListType) structType.getType(position)).set(this, index, struct);
-     return this;
-  }
-
-  public List<Struct> getStructList(int position) {
-     return ((StructListType) structType.getType(position)).get(this);
-  }
-
-  public Struct setStruct(int position, List<Struct> structs) {
-    ((StructListType) structType.getType(position)).set(this, structs);
-     return this;
-  }
-
-  public List<Struct> getStructList(int position, long index, long length) {
-     return ((StructListType) structType.getType(position)).get(this, index, length);
-  }
-
-  public Struct setStruct(int position, long index, List<Struct> structs) {
-    ((StructListType) structType.getType(position)).set(this, index, structs);
-     return this;
-  }
-
-  public Struct addStruct(int position, Struct struct) {
-    ((StructListType) structType.getType(position)).add(this, struct);
-     return this;
-  }
-
-  public Struct struct(int position, Struct struct) {
-    return addStruct(position, struct);
-  }
-
-  public Struct addStruct(int position, List<Struct> structs) {
-    ((StructListType) structType.getType(position)).add(this, structs);
-    return this;
-  }
-
-  public Struct struct(int position, List<Struct> structs) {
-     return addStruct(position, structs);
-  }
-
-  public Struct addStruct(int position, long index, Struct struct) {
-    ((StructListType) structType.getType(position)).add(this, index, struct);
-    return this;
-  }
-
-  public Struct struct(int position, long index, Struct struct) {
-     return addStruct(position, index, struct);
-  }
-
-  public Struct addStruct(int position, long index, List<Struct> structs) {
-    ((StructListType) structType.getType(position)).add(this, index, structs);
-    return this;
-  }
-
-  public Struct struct(int position, long index, List<Struct> structs) {
-     return addStruct(position, index, structs);
-  }
-
-  public void removeAll(int position) {
-    ((ValueType<?, ?>) structType.getType(position)).remove(this);
-  }
-
-  public void remove(int position, long index) {
-     if (structType.getType(position) instanceof ArrayValueType<?, ?> valueType) {
-       valueType.remove(this, index);
-     } else if (structType.getType(position) instanceof ListValueType<?, ?> valueType) {
-       valueType.remove(this, index);
-     } else {
-       throw new IllegalArgumentException("Field at postion " + position + " is not a ArrayValueType or ListValueType");
-     }
-  }
-
-  public void remove(int position, long index, long length) {
-     if (structType.getType(position) instanceof ArrayValueType<?, ?> valueType) {
-       valueType.remove(this, index, length);
-     } else if(structType.getType(position) instanceof ListValueType<?, ?> valueType) {
-       valueType.remove(this, index, length);
-     } else {
-       throw new IllegalArgumentException("Field at postion " + position + " is not a ValueType");
-     }
-  }
-
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof Struct struct)) return false;
@@ -1484,8 +1255,8 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     for (int i = 0; i < getPositions(); i++) {
       if (i > 0) builder.append(", ");
       Type<?> type = getType(i);
-      if (type instanceof PrimitiveType<?,?> primitiveType) {
-        builder.append(primitiveType.getUnitSize().label()).append("=");
+      if (type instanceof BasicType<?,?> primitiveType) {
+        builder.append(primitiveType.getTypeInfo().label()).append("=");
       }
       if (type instanceof BoolType) {
         builder.append(getBool(i));
@@ -1504,13 +1275,13 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
       } else if (type instanceof Int64Type) {
         builder.append(getInt64(i));
       } else if (type instanceof Uint64Type) {
-        builder.append(getUint64(i));
+        builder.append(get(i).toString());
       } else if (type instanceof Float32Type) {
         builder.append(getFloat32(i));
       } else if (type instanceof Float64Type) {
         builder.append(getFloat64(i));
       } else if (type instanceof StructType) {
-        builder.append("Struct=").append(getStruct(i));
+        builder.append("Struct=").append(get(i).toString());
       } else if (type instanceof PadType padType) {
         if (padType.isAlign()) {
           builder.append("align=").append(padType.getByteLength(this));

@@ -5,15 +5,15 @@ import com.github.moaxcp.verybinary.ListType;
 import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
 
-public abstract class BinaryList<SELF extends BinaryList<SELF, T>, T> implements Iterable<T> {
+public abstract class BinaryList<SELF extends BinaryList<SELF, T, E>, T extends ListType<T, E, SELF>, E> implements Iterable<E> {
 
   protected final Pointer<?,? extends Type<?>> pointer;
-  protected final ListType<?, T, ? extends BinaryList<SELF, T>> type;
+  protected final T type;
   protected final long indexOffset;
   protected final long length;
   protected final boolean checkLength;
 
-  protected BinaryList(Pointer<?, ? extends Type<?>> pointer, ListType<?, T, SELF> type, long indexOffset, long length, boolean checkLength) {
+  protected BinaryList(Pointer<?, ? extends Type<?>> pointer, T type, long indexOffset, long length, boolean checkLength) {
     this.type = type;
     this.pointer = pointer;
     this.indexOffset = indexOffset;
@@ -28,11 +28,11 @@ public abstract class BinaryList<SELF extends BinaryList<SELF, T>, T> implements
     return index + indexOffset;
   }
 
-  public T get(long index) {
+  public E get(long index) {
     return type.get(pointer, getIndex(index));
   }
 
-  public void set(long index, T value) {
+  public void set(long index, E value) {
     type.set(pointer, getIndex(index), value);
   }
 

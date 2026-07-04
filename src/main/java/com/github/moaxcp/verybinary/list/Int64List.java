@@ -11,11 +11,11 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Int64List extends PrimitiveList<Int64List, Long> implements PrimitiveIterable<Long, Int64Consumer> {
+public final class Int64List extends PrimitiveList<Int64List, Int64ListType, Long> implements PrimitiveIterable<Long, Int64Consumer> {
 
   public static Int64List toInt64List(long[] values) {
     return getInt64ListStruct(values)
-        .getInt64List(0);
+        .getList(0);
   }
 
   public static Struct getInt64ListStruct(long[] values) {
@@ -83,7 +83,7 @@ public final class Int64List extends PrimitiveList<Int64List, Long> implements P
   public Int64List copy() {
     var s = struct(getInt64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getInt64List(0);
+    return s.getList(0);
   }
 
   public boolean equals(Object o) {

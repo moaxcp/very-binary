@@ -9,13 +9,13 @@ import java.util.List;
 import static com.github.moaxcp.verybinary.LengthChangeReason.DEALLOCATED;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> extends Type<SELF> permits BasicType, ListType, StructType {
+public sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> extends AbstractType<SELF> permits BasicType, ListType, StructType {
 
   protected final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   @Nullable
   protected T constantValue;
 
-  protected ValueType(int position, @Nullable T constantValue, @Nullable ComplexType parent) {
+  protected ValueType(int position, @Nullable T constantValue, @Nullable ComplexType<?> parent) {
     super(position, parent);
     this.constantValue = constantValue;
   }
@@ -66,7 +66,10 @@ sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> extends Type
 
   public abstract T get(Pointer<?, ? extends Type<?>> pointer);
 
-  public abstract void set(Pointer<?, ? extends Type<?>> pointer, T value);
+  public final void set(Pointer<?, ? extends Type<?>> pointer, T value) {
+    checkForConstantValue();
+    setUnchecked(SET_VALUE, pointer, value);
+  }
 
   protected abstract void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, T value);
 

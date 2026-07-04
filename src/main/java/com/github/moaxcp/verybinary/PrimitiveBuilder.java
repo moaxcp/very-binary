@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.list.Float64List;
+import com.github.moaxcp.verybinary.list.*;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
@@ -61,14 +61,7 @@ public final class PrimitiveBuilder {
 
   private <T> T getConstantValue(Class<T> clazz) {
     return switch (constantValue) {
-      case boolean[] b -> (T) b;
-      case byte[] b -> (T) b;
-      case short[] s -> (T) s;
-      case int[] i -> (T) i;
-      case long[] l -> (T) l;
-      case float[] f -> (T) f;
-      case double[] d -> (T) d;
-      case List l -> (T) l;
+      case BinaryList l -> (T) l;
       case Number n -> {
         if (clazz == Byte.class) {
           yield (T) Byte.valueOf(n.byteValue());
@@ -96,12 +89,12 @@ public final class PrimitiveBuilder {
 
   public Type<?> bool() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof boolean[]) {
-      return new BoolListType(position, getConstantValue(boolean[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new BoolListType(position, null, getConstantValue(BoolList.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new BoolType(position, getConstantValue(Boolean.class));
+      return new BoolType(position, getConstantValue(Boolean.class), null);
     }
   }
 
@@ -118,23 +111,23 @@ public final class PrimitiveBuilder {
 
   public Type<?> uint8() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof short[]) {
-      return new Uint8ListType(position, getConstantValue(short[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Uint8ListType(position, null, getConstantValue(Uint8List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Uint8Type(position, getConstantValue(Short.class));
+      return new Uint8Type(position, getConstantValue(Short.class), null);
     }
   }
 
   public Type<?> int16() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof short[]) {
-      return new Int16ListType(position, getConstantValue(short[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Int16ListType(position, null, getConstantValue(Int16List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Int16Type(position, getConstantValue(Short.class));
+      return new Int16Type(position, getConstantValue(Short.class), null);
     }
   }
 

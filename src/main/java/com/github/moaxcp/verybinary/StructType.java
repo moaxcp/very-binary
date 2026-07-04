@@ -1,61 +1,31 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
-public final class StructType implements ComplexType<StructType>, ValueType<StructType, Struct> {
+public final class StructType extends ValueType<StructType, Struct> implements ComplexType<StructType> {
 
-  private final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
-  @Nullable
-  private final Struct constantValue;
-  private final List<Type<?>> fields;
+  private final List<Type<?>> fields = new ArrayList<>();
 
-  StructType(int position, List<Type<?>> fields) {
-    super(position);
-    this.fields = fields;
-    if (fields.stream().allMatch(t -> t.isConstant(this))) {
-      constantValue = new Struct(this);
-    } else {
-      constantValue = null;
+  StructType(int position, @Nullable Struct constantValue, List<Type<?>> fields, @Nullable ComplexType<?> parent) {
+    super(position, constantValue, parent);
+    for(int i = 0; i < fields.size(); i++) {
+      this.fields.add(fields.get(i).copy(i, this));
     }
   }
 
   @Override
-  public boolean isConstant(@Nullable ComplexType parent) {
-    return ValueType.super.isConstant(parent);
+  public StructType copy(int position, @Nullable ComplexType<?> parent) {
+    return new StructType(position, constantValue, new ArrayList<>(fields), parent);
   }
 
-  public @Nullable Struct getConstantValue() {
-    return constantValue;
-  }
-
-  @Override
-  public List<ValueChangeListener> getValueChangeListeners() {
-    return valueChangeListeners;
-  }
-
-  public StructType addValueChangeListeners(List<ValueChangeListener> valueChangeListeners) {
-    this.valueChangeListeners.addAll(valueChangeListeners);
-    return this;
-  }
-
-  public StructType addValueChangeListener(ValueChangeListener listener) {
-    this.valueChangeListeners.add(listener);
-    return this;
-  }
-
-  List<Type<?>> getFields() {
+  public List<Type<?>> getTypes() {
     return fields;
-  }
-
-  @Override
-  public StructType copy(int position) {
-    return new StructType(position, new ArrayList<>(fields));
   }
 
   public <V extends Type<?>> V getType(int position) {
@@ -63,8 +33,8 @@ public final class StructType implements ComplexType<StructType>, ValueType<Stru
   }
 
   @Override
-  public long getAllocationLength(@Nullable ComplexType parent) {
-    return fields.stream().mapToLong(f -> f.getAllocationLength(this)).sum();
+  public long getAllocationLength() {
+    return fields.stream().mapToLong(Type::getAllocationLength).sum();
   }
 
   public int getPositions() {
@@ -82,10 +52,10 @@ public final class StructType implements ComplexType<StructType>, ValueType<Stru
   }
 
   @Override
-  public boolean isFixedLength(Pointer<?, ? extends Type<?>> pointer) {
+  public boolean isFixedLength() {
       for (int i = 0; i < fields.size(); i++) {
         var type = fields.get(i);
-        if(!type.isFixedLength(pointer)) {
+        if(!type.isFixedLength()) {
           return false;
         }
       }
@@ -99,8 +69,7 @@ public final class StructType implements ComplexType<StructType>, ValueType<Stru
   }
 
   @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Struct value) {
-    checkForConstantValue();
+  protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, Struct value) {
     if (!valueChangeListeners.isEmpty()) {
       var old = new Struct(getOffset(pointer), this, pointer.getByteArray());
       if (!old.equals(value)) {
@@ -110,23 +79,6 @@ public final class StructType implements ComplexType<StructType>, ValueType<Stru
       old.removeByteArrayListener();
     } else {
       pointer.getByteArray().replace(getOffset(pointer), getByteLength(pointer), value.getByteArray(), value.getOffset(), value.getByteLength());
-    }
-  }
-
-  public void checkForConstantValue(Pointer<?, ? extends Type<?>> pointer, long index, Struct value) {
-    if (this.isConstant(pointer.getType()) && !Objects.equals(constantValue.getByteArray(), value.getByteArray())) {
-      throw new IllegalArgumentException(getClass().getSimpleName() + " at position " + getPosition() + " is constant index: " + index + " value: " + value + " constant: " + constantValue);
-    }
-  }
-
-  @Override
-  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
-    if (isConstant(pointer.getType())) {
-      pointer.getByteArray().addInt8(getOffset(pointer), constantValue.getByteArray().getAllocatedBytes());
-    } else {
-      for (int i = 0; i < fields.size(); i++) {
-        getType(i).allocate(pointer);
-      }
     }
   }
 

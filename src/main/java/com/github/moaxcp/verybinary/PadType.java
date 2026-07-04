@@ -1,19 +1,21 @@
 package com.github.moaxcp.verybinary;
 
-public final class PadType extends Type<PadType> {
+import org.jspecify.annotations.Nullable;
+
+public final class PadType extends AbstractType<PadType> {
 
   private final long length;
   private final boolean align;
 
-  public PadType(int position, ComplexType parent, long length, boolean align) {
+  public PadType(int position, @Nullable ComplexType<?> parent, long length, boolean align) {
     super(position, parent);
     this.length = length;
     this.align = align;
   }
 
   @Override
-  public PadType copy(int position) {
-    return new PadType(position, this.parent, this.length, this.align);
+  public PadType copy(int position, @Nullable ComplexType<?> parent) {
+    return new PadType(position, parent, this.length, this.align);
   }
 
   @Override

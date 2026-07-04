@@ -11,7 +11,7 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Float32List extends PrimitiveList<Float32List, Float> implements PrimitiveIterable<Float, Float32Consumer> {
+public final class Float32List extends PrimitiveList<Float32List, Float32ListType, Float> implements PrimitiveIterable<Float, Float32Consumer> {
 
   public static Float32List toFloat32List(float[] values) {
     return getFloat32ListStruct(values)

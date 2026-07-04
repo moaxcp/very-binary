@@ -1,8 +1,8 @@
 package com.github.moaxcp.verybinary.struct;
 
+import com.github.moaxcp.verybinary.Type;
 import com.github.moaxcp.verybinary.Int16Type;
 import com.github.moaxcp.verybinary.Int8Type;
-import com.github.moaxcp.verybinary.Type;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

@@ -11,12 +11,12 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, Int64List> {
 
-  public Int64ListType(int position, @Nullable ComplexType parent, @Nullable Int64List constantValue, Expression lengthExpression) {
+  public Int64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Int64List constantValue, Expression lengthExpression) {
     super(position, parent, INT64, constantValue, lengthExpression);
   }
 
   @Override
-  public Int64ListType copy(int position, @Nullable ComplexType parent) {
+  public Int64ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Int64ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -54,11 +54,6 @@ public final class Int64ListType extends PrimitiveListType<Int64ListType, Long, 
   public List<Long> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getInt64List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Int64List value) {
-    set(pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, long[] values) {

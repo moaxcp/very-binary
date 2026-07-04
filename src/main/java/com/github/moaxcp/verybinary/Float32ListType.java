@@ -6,18 +6,17 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.BasicTypeInfo.BOOL;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT32;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class Float32ListType extends PrimitiveListType<Float32ListType, Float, Float32List> {
 
-  public Float32ListType(int position, @Nullable ComplexType parent, @Nullable Float32List constantValue, Expression lengthExpression) {
+  public Float32ListType(int position, @Nullable ComplexType<?> parent, @Nullable Float32List constantValue, Expression lengthExpression) {
     super(position, parent, FLOAT32, constantValue, lengthExpression);
   }
 
   @Override
-  public Float32ListType copy(int position, @Nullable ComplexType parent) {
+  public Float32ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Float32ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -55,11 +54,6 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
   public List<Float> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getFloat32List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Float32List values) {
-    set(pointer, 0, values);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, float[] values) {

@@ -11,11 +11,11 @@ import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.Expression.constant;
 
-public final class Int32List extends PrimitiveList<Int32List, Integer> implements PrimitiveIterable<Integer, Int32Consumer> {
+public final class Int32List extends PrimitiveList<Int32List, Int32ListType, Integer> implements PrimitiveIterable<Integer, Int32Consumer> {
 
   public static Int32List toInt32List(int[] values) {
     return getInt32ListStruct(values)
-        .getInt32List(0);
+        .getList(0);
   }
 
   public static Struct getInt32ListStruct(int[] values) {
@@ -83,7 +83,7 @@ public final class Int32List extends PrimitiveList<Int32List, Integer> implement
   public Int32List copy() {
     var s = struct(getInt32ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getInt32List(0);
+    return s.getList(0);
   }
 
   public boolean equals(Object o) {

@@ -11,12 +11,12 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Int16ListType extends PrimitiveListType<Int16ListType, Short, Int16List> {
 
-  public Int16ListType(int position, @Nullable ComplexType parent, @Nullable Int16List constantValue, Expression lengthExpression) {
+  public Int16ListType(int position, @Nullable ComplexType<?> parent, @Nullable Int16List constantValue, Expression lengthExpression) {
     super(position, parent, INT8, constantValue, lengthExpression);
   }
 
   @Override
-  public Int16ListType copy(int position, @Nullable ComplexType parent) {
+  public Int16ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Int16ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -54,11 +54,6 @@ public final class Int16ListType extends PrimitiveListType<Int16ListType, Short,
   public List<Short> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getInt16List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Int16List values) {
-    set(pointer, 0, values);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short[] values) {

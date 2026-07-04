@@ -11,12 +11,12 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short, Uint8List> {
 
-  public Uint8ListType(int position, @Nullable ComplexType parent, @Nullable Uint8List constantValue, Expression lengthExpression) {
+  public Uint8ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint8List constantValue, Expression lengthExpression) {
     super(position, parent, UINT8, constantValue, lengthExpression);
   }
 
   @Override
-  public Uint8ListType copy(int position, @Nullable ComplexType parent) {
+  public Uint8ListType copy(int position, @Nullable ComplexType<?> parent) {
     return new Uint8ListType(position, parent, constantValue, lengthExpression);
   }
 
@@ -54,11 +54,6 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   public List<Short> getList(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return pointer.getByteArray().getUint8List(getOffset(pointer, index), length);
-  }
-
-  @Override
-  public void set(Pointer<?, ? extends Type<?>> pointer, Uint8List value) {
-    set(pointer, 0, value);
   }
 
   public void set(Pointer<?, ? extends Type<?>> pointer, short[] values) {

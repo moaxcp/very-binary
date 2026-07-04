@@ -6,20 +6,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public sealed abstract class PrimitiveListType<SELF extends PrimitiveListType<SELF, T, L>, T, L extends BinaryList<L, T>> extends BasicListType<SELF, T, L> permits BoolListType, Float32ListType, Float64ListType, Int16ListType, Int32ListType, Int64ListType, Int8ListType, Uint16ListType, Uint32ListType, Uint64ListType, Uint8ListType {
+public sealed abstract class PrimitiveListType<SELF extends PrimitiveListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends BasicListType<SELF, T, L> permits BoolListType, Float32ListType, Float64ListType, Int16ListType, Int32ListType, Int64ListType, Int8ListType, Uint16ListType, Uint32ListType, Uint8ListType {
 
-  protected PrimitiveListType(int position, @Nullable ComplexType parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, Expression lengthExpression) {
+  protected PrimitiveListType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, Expression lengthExpression) {
     super(position, basicTypeInfo, parent, constantValue, lengthExpression);
   }
 
   @Override
   public T get(Pointer<?, ? extends Type<?>> pointer, long index) {
     throw new UnsupportedOperationException("get(Pointer, long) not supported for " + getClass().getSimpleName() + ". Use get" + basicTypeInfo.title() + "(Pointer, long) instead.");
-  }
-
-  @Override
-  public T[] getArray(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    throw new UnsupportedOperationException("getArray(Pointer, long, long) not supported for " + getClass().getSimpleName() + ". Use get" + basicTypeInfo.title() + "Array(Pointer, long, long) instead.");
   }
 
   @Override

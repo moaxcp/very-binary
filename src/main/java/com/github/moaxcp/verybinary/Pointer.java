@@ -9,7 +9,7 @@ public sealed interface Pointer<SELF extends Pointer<SELF, TYPE>, TYPE extends T
   long getByteLength();
 
   default boolean isFixedLength() {
-    return getType().isFixedLength(this);
+    return getType().isFixedLength();
   }
 
   TYPE getType();

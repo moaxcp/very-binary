@@ -10,14 +10,14 @@ public final class Int32Type extends PrimitiveType<Int32Type, Integer> implement
   private final int constantValue;
   private final boolean constantValueSet;
 
-  public Int32Type(int position, @Nullable Integer constantValue, @Nullable ComplexType parent) {
+  public Int32Type(int position, @Nullable Integer constantValue, @Nullable ComplexType<?> parent) {
     super(position, INT32, parent);
     this.constantValue = constantValue != null ? constantValue : 0;
     this.constantValueSet = constantValue != null;
   }
 
   @Override
-  public Int32Type copy(int position, @Nullable ComplexType parent) {
+  public Int32Type copy(int position, @Nullable ComplexType<?> parent) {
     return new Int32Type(position, constantValueSet ? constantValue : null, parent);
   }
 

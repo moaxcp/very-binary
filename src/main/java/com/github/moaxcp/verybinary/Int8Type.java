@@ -11,14 +11,14 @@ public final class Int8Type extends PrimitiveType<Int8Type, Byte> implements Len
   private final byte constantValue;
   private final boolean constantValueSet;
 
-  public Int8Type(int position, @Nullable Byte constantValue, @Nullable ComplexType parent) {
+  public Int8Type(int position, @Nullable Byte constantValue, @Nullable ComplexType<?> parent) {
     super(position, INT8, parent);
     this.constantValue = constantValue != null ? constantValue : 0;
     this.constantValueSet = constantValue != null;
   }
 
   @Override
-  public Int8Type copy(int position, @Nullable ComplexType parent) {
+  public Int8Type copy(int position, @Nullable ComplexType<?> parent) {
     return new Int8Type(position, constantValueSet ? constantValue : null, parent);
   }
 

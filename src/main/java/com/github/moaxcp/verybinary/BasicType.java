@@ -7,9 +7,13 @@ import java.util.Objects;
 public abstract sealed class BasicType<SELF extends ValueType<SELF, T>, T> extends ValueType<SELF, T> permits PrimitiveType, Uint64Type {
   protected BasicTypeInfo basicTypeInfo;
 
-  protected BasicType(int position, BasicTypeInfo basicTypeInfo, @Nullable T constantValue, @Nullable ComplexType parent) {
+  protected BasicType(int position, BasicTypeInfo basicTypeInfo, @Nullable T constantValue, @Nullable ComplexType<?> parent) {
     super(position, constantValue, parent);
     this.basicTypeInfo = basicTypeInfo;
+  }
+
+  public BasicTypeInfo getTypeInfo() {
+    return basicTypeInfo;
   }
 
   @Override

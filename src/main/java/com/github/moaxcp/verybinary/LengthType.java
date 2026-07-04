@@ -7,6 +7,8 @@ package com.github.moaxcp.verybinary;
  */
 public sealed interface LengthType<SELF extends LengthType<SELF, T>, T extends Number> permits Float32Type, Float64Type, Int16Type, Int32Type, Int64Type, Int8Type, Uint16Type, Uint32Type, Uint64Type, Uint8Type {
 
+  boolean isConstant();
+
   /**
    * Lists will always have a long index. This returns the default value for the length. It is typlically the constant
    * value converted to a long.

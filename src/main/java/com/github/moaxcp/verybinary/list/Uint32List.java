@@ -15,7 +15,7 @@ public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, 
 
   public static Uint32List toUint32List(long[] values) {
     return getUint32ListStruct(values)
-        .getList(0);
+        .getUint32List(0);
   }
 
   public static Struct getUint32ListStruct(long[] values) {
@@ -83,7 +83,7 @@ public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, 
   public Uint32List copy() {
     var s = struct(getUint32ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getUint32List(0);
   }
 
   public boolean equals(Object o) {

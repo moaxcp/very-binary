@@ -11,15 +11,15 @@ public final class Int64Type extends PrimitiveType<Int64Type, Long> implements L
   private final long constantValue;
   private final boolean constantValueSet;
 
-  public Int64Type(int position, @Nullable Long constantValue, @Nullable ComplexType<?> parent) {
-    super(position, INT64, parent);
+  public Int64Type(int position, @Nullable ComplexType<?> parent, @Nullable Long constantValue) {
+    super(position, parent, INT64);
     this.constantValue = constantValue != null ? constantValue : 0L;
     this.constantValueSet = constantValue != null;
   }
 
   @Override
   public Int64Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Int64Type(position, constantValueSet ? constantValue : null, parent);
+    return new Int64Type(position, parent, constantValueSet ? constantValue : null);
   }
 
   public long getInt64ConstantValue() {

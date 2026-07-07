@@ -15,7 +15,7 @@ public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolea
 
   public static BoolList toBoolList(boolean[] values) {
     return getBoolListStruct(values)
-        .getList(0);
+        .getBoolList(0);
   }
 
   public static Struct getBoolListStruct(boolean[] values) {
@@ -84,7 +84,7 @@ public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolea
   public BoolList copy() {
     var s = struct(getBoolListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getLength(pointer));
-    return s.getList(0);
+    return s.getBoolList(0);
   }
   
   public boolean equals(Object o) {

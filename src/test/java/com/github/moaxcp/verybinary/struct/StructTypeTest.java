@@ -359,7 +359,7 @@ public class StructTypeTest {
         .float64()
         .float64Array(constant(2))
         .struct(inner)
-        .structArray(innerArray)
+        .structList(innerArray)
         .build()
         .setInt8(0, -127)
         .setInt8(1, new int[] {-127, 128})
@@ -375,8 +375,8 @@ public class StructTypeTest {
         .setUint32(11, new long[] {0, 4294967295L})
         .setInt64(12, -9223372036854775808L)
         .setInt64(13, new long[] {-9223372036854775808L, 9223372036854775807L})
-        .setUint64(14, new BigInteger("18446744073709551615"))
-        .setUint64(15, List.of(BigInteger.ZERO, new BigInteger("18446744073709551615")))
+        .set(14, new BigInteger("18446744073709551615"))
+        .set(15, List.of(BigInteger.ZERO, new BigInteger("18446744073709551615")))
         .setFloat32(16, Float.MIN_VALUE)
         .setFloat32(17, Float.MIN_VALUE, Float.MAX_VALUE)
         .setFloat64(18, Double.MIN_VALUE)
@@ -444,9 +444,9 @@ public class StructTypeTest {
     assertThat(struct.getInt64(12)).isEqualTo(2);
     assertThat(struct.getInt64(13, 0)).isEqualTo(-20);
     assertThat(struct.getInt64(13, 1)).isEqualTo(-21);
-    assertThat(struct.getUint64(14)).isEqualTo(BigInteger.valueOf(2));
-    assertThat(struct.getUint64(15, 0)).isEqualTo(BigInteger.valueOf(20));
-    assertThat(struct.getUint64(15, 1)).isEqualTo(BigInteger.valueOf(21));
+    assertThat(struct.get(14)).isEqualTo(BigInteger.valueOf(2));
+    assertThat(struct.get(15, 0)).isEqualTo(BigInteger.valueOf(20));
+    assertThat(struct.get(15, 1)).isEqualTo(BigInteger.valueOf(21));
     assertThat(struct.getFloat32(16)).isEqualTo(2);
     assertThat(struct.getFloat32(17, 0)).isEqualTo(3);
     assertThat(struct.getFloat32(17, 1)).isEqualTo(4);

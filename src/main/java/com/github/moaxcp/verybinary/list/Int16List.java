@@ -15,7 +15,7 @@ public final class Int16List extends PrimitiveList<Int16List, Int16ListType, Sho
 
   public static Int16List toInt16List(short[] values) {
     return getInt16ListStruct(values)
-        .getList(0);
+        .getInt16List(0);
   }
 
   public static Struct getInt16ListStruct(short[] values) {
@@ -83,7 +83,7 @@ public final class Int16List extends PrimitiveList<Int16List, Int16ListType, Sho
   public Int16List copy() {
     var s = struct(getInt16ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getInt16List(0);
   }
 
   public boolean equals(Object o) {

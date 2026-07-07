@@ -262,7 +262,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThat(struct.getBoolList(0)).containsExactly(true, false, true, false, true);
+    assertThat(struct.getList(0)).containsExactly(true, false, true, false, true);
   }
 
   @Test
@@ -272,7 +272,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThat(struct.getBoolList(0, 2, 2)).containsExactly(true, false);
+    assertThat(struct.getList(0, 2, 2)).containsExactly(true, false);
   }
 
   @Test
@@ -282,7 +282,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThatThrownBy(() -> struct.getBoolList(0, -2, 2))
+    assertThatThrownBy(() -> struct.getList(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("BoolArrayType at position 0 length: 5 start: -2 end: 0");
   }
@@ -294,7 +294,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThatThrownBy(() -> struct.getBoolList(0, 5, 2))
+    assertThatThrownBy(() -> struct.getList(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("BoolArrayType at position 0 length: 5 start: 5 end: 7");
   }

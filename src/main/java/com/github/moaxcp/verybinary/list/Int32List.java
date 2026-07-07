@@ -15,7 +15,7 @@ public final class Int32List extends PrimitiveList<Int32List, Int32ListType, Int
 
   public static Int32List toInt32List(int[] values) {
     return getInt32ListStruct(values)
-        .getList(0);
+        .getInt32List(0);
   }
 
   public static Struct getInt32ListStruct(int[] values) {
@@ -83,7 +83,7 @@ public final class Int32List extends PrimitiveList<Int32List, Int32ListType, Int
   public Int32List copy() {
     var s = struct(getInt32ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getInt32List(0);
   }
 
   public boolean equals(Object o) {

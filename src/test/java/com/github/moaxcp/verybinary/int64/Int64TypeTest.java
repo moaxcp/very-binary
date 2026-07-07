@@ -25,7 +25,7 @@ public class Int64TypeTest {
         .int64()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -35,7 +35,7 @@ public class Int64TypeTest {
         .int64Array(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 }

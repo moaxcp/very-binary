@@ -16,7 +16,7 @@ public class RemoveInt64TypeTest {
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(0));
   }
@@ -28,7 +28,7 @@ public class RemoveInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -40,7 +40,7 @@ public class RemoveInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -53,7 +53,7 @@ public class RemoveInt64TypeTest {
         .int64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 8");
   }
@@ -64,7 +64,7 @@ public class RemoveInt64TypeTest {
         .int64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Int64Type at position 0");
   }
@@ -141,7 +141,7 @@ public class RemoveInt64TypeTest {
         .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Int64ListType at position 0");
   }

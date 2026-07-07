@@ -11,15 +11,15 @@ public final class Float32Type extends PrimitiveType<Float32Type, Float> impleme
   private final boolean constantValueSet;
   private final float constantValue;
 
-  public Float32Type(int position, @Nullable Float constantValue, @Nullable ComplexType<?> parent) {
-    super(position, FLOAT32, parent);
+  public Float32Type(int position, @Nullable ComplexType<?> parent, @Nullable Float constantValue) {
+    super(position, parent, FLOAT32);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
   public Float32Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Float32Type(position, constantValueSet ? constantValue : null, parent);
+    return new Float32Type(position, parent, constantValueSet ? constantValue : null);
   }
 
   @Override

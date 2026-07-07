@@ -11,15 +11,15 @@ public final class Int16Type extends PrimitiveType<Int16Type, Short> implements 
   private final short constantValue;
   private final boolean constantValueSet;
 
-  public Int16Type(int position, @Nullable Short constantValue, @Nullable ComplexType<?> parent) {
-    super(position, INT16, parent);
+  public Int16Type(int position, @Nullable ComplexType<?> parent, @Nullable Short constantValue) {
+    super(position, parent, INT16);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
   public Int16Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Int16Type(position, constantValueSet ? constantValue : null, parent);
+    return new Int16Type(position, parent, constantValueSet ? constantValue : null);
   }
 
   @Override

@@ -16,7 +16,7 @@ public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, Big
 
   public static Uint64List toUint64List(long[] values) {
     return getUint64ListStruct(Arrays.stream(values).mapToObj(BigInteger::valueOf).collect(Collectors.toList()))
-        .getList(0);
+        .getUint64List(0);
   }
 
   public static Struct getUint64ListStruct(List<BigInteger> values) {
@@ -75,7 +75,7 @@ public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, Big
   public Uint64List copy() {
     var s = struct(getUint64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getUint64List(0);
   }
 
   public boolean equals(Object o) {

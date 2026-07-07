@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int8;
 
-import com.github.moaxcp.verybinary.Int8ArrayType;
+import com.github.moaxcp.verybinary.Int8ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -17,7 +17,7 @@ public class RemoveInt8TypeTest {
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(0));
   }
@@ -29,7 +29,7 @@ public class RemoveInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -41,7 +41,7 @@ public class RemoveInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -54,7 +54,7 @@ public class RemoveInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 1");
   }
@@ -65,7 +65,7 @@ public class RemoveInt8TypeTest {
         .int8()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Int8Type at position 0");
   }
@@ -81,7 +81,7 @@ public class RemoveInt8TypeTest {
     struct.addInt8(1, (byte) 2);
     struct.remove(1, 0);
 
-    assertThat(((Int8ArrayType) struct.getType(1)).getInt8(struct, 0)).isEqualTo((byte) 2);
+    assertThat(((Int8ListType) struct.getType(1)).getInt8(struct, 0)).isEqualTo((byte) 2);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(1, 2));
   }
@@ -110,7 +110,7 @@ public class RemoveInt8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Int8ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -123,7 +123,7 @@ public class RemoveInt8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Int8ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -144,9 +144,9 @@ public class RemoveInt8TypeTest {
         .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length Int8ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Int8ListType at position 0");
   }
 
   @Test
@@ -157,6 +157,6 @@ public class RemoveInt8TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 3))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Int8ArrayType at position 0 index: 3");
+        .hasMessage("Cannot remove element from fixed length array Int8ListType at position 0 index: 3");
   }
 }

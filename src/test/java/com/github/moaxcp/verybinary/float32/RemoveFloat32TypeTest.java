@@ -17,7 +17,7 @@ public class RemoveFloat32TypeTest {
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float32(0));
   }
@@ -29,7 +29,7 @@ public class RemoveFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -41,7 +41,7 @@ public class RemoveFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -54,7 +54,7 @@ public class RemoveFloat32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 4");
   }
@@ -65,7 +65,7 @@ public class RemoveFloat32TypeTest {
         .float32()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Float32Type at position 0");
   }
@@ -144,7 +144,7 @@ public class RemoveFloat32TypeTest {
         .primitive().constant(new float[]{3, 3, 3}).float32()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Float32ArrayType at position 0");
   }

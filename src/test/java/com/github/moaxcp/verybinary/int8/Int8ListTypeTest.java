@@ -18,7 +18,7 @@ public class Int8ListTypeTest {
 
     struct.setInt8(0, (byte) 1, (byte) 2, (byte) 3);
 
-    com.github.moaxcp.verybinary.list.Int8List list = struct.getInt8List(0);
+    com.github.moaxcp.verybinary.list.Int8List list = struct.get(0);
     assertThat(list).containsExactly((byte) 1, (byte) 2, (byte) 3);
 
     list.set(1, (byte) 10);
@@ -35,7 +35,7 @@ public class Int8ListTypeTest {
     struct.addInt8(0, (byte) 5);
     struct.addInt8(0, (byte) 6);
 
-    com.github.moaxcp.verybinary.list.Int8List list = struct.getInt8List(0);
+    com.github.moaxcp.verybinary.list.Int8List list = struct.get(0);
     assertThat(list).containsExactly((byte) 5, (byte) 6);
   }
 
@@ -47,7 +47,7 @@ public class Int8ListTypeTest {
 
     struct.setInt8(0, List.of((byte) 100, (byte) 101));
 
-    List<Byte> raw = struct.getInt8RawList(0);
+    List<Byte> raw = struct.getStandardList(0);
     assertThat(raw).containsExactly((byte) 100, (byte) 101);
   }
 }

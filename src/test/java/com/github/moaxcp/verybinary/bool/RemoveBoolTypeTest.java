@@ -11,62 +11,62 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class RemoveBoolTypeTest {
 
   @Test
-  void removeAll() {
+  void remove() {
     var struct = struct()
         .int8()
         .boolArray(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(0));
   }
 
   @Test
-  void removeAll_position_negative() {
+  void remove_position_negative() {
     var struct = struct()
         .int8()
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
 
   @Test
-  void removeAll_position_greater_than_length() {
+  void remove_position_greater_than_length() {
     var struct = struct()
         .int8()
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
 
   @Test
-  void removeAll_not_allocated() {
+  void remove_not_allocated() {
     var struct = struct()
         .allocated()
         .int8()
         .boolArray(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test
-  void removeAll_not_array() {
+  void remove_not_array() {
     var struct = struct()
         .bool()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length BoolType at position 0");
   }
@@ -138,12 +138,12 @@ public class RemoveBoolTypeTest {
   }
 
   @Test
-  void removeAll_fixed_length() {
+  void remove_fixed_length() {
     var struct = struct()
         .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length BoolArrayType at position 0");
   }

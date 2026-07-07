@@ -6,8 +6,8 @@ import org.jspecify.annotations.Nullable;
 public abstract sealed class PrimitiveType<SELF extends PrimitiveType<SELF, T>, T> extends BasicType<SELF, T> permits BoolType, Float32Type, Float64Type, Int16Type, Int32Type, Int64Type, Int8Type, Uint16Type, Uint32Type, Uint8Type {
 
 
-  PrimitiveType(int position, BasicTypeInfo basicTypeInfo, @Nullable ComplexType<?> parent) {
-    super(position, basicTypeInfo, null, parent);
+  PrimitiveType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo) {
+    super(position, parent, basicTypeInfo, null);
   }
 
   @Override

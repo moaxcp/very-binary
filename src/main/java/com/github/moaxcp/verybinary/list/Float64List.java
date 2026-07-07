@@ -15,7 +15,7 @@ public final class Float64List extends PrimitiveList<Float64List, Float64ListTyp
 
   public static Float64List toFloat64List(double[] values) {
     return getFloat64ListStruct(values)
-        .getList(0);
+        .getFloat64List(0);
   }
 
   public static Struct getFloat64ListStruct(double[] values) {
@@ -84,7 +84,7 @@ public final class Float64List extends PrimitiveList<Float64List, Float64ListTyp
   public Float64List copy() {
     var s = struct(getFloat64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getFloat64List(0);
   }
 
   public boolean equals(Object o) {

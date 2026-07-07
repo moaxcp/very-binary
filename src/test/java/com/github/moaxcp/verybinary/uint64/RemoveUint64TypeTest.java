@@ -19,7 +19,7 @@ public class RemoveUint64TypeTest {
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(0));
   }
@@ -31,7 +31,7 @@ public class RemoveUint64TypeTest {
         .uint64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -43,7 +43,7 @@ public class RemoveUint64TypeTest {
         .uint64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -56,7 +56,7 @@ public class RemoveUint64TypeTest {
         .uint64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 8");
   }
@@ -67,7 +67,7 @@ public class RemoveUint64TypeTest {
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Uint64Type at position 0");
   }
@@ -79,8 +79,8 @@ public class RemoveUint64TypeTest {
         .uint64Array(0)
         .build();
 
-    struct.addUint64(1, BigInteger.ONE);
-    struct.addUint64(1, BigInteger.valueOf(2));
+    struct.add(1, BigInteger.ONE);
+    struct.add(1, BigInteger.valueOf(2));
     struct.remove(1, 0);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(1, 2));
@@ -92,8 +92,8 @@ public class RemoveUint64TypeTest {
         .uint64()
         .uint64Array(0)
         .build();
-    struct.addUint64(1, BigInteger.ONE);
-    struct.addUint64(1, BigInteger.valueOf(2));
+    struct.add(1, BigInteger.ONE);
+    struct.add(1, BigInteger.valueOf(2));
 
     struct.remove(1, 1);
 
@@ -144,7 +144,7 @@ public class RemoveUint64TypeTest {
         .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Uint64ListType at position 0");
   }

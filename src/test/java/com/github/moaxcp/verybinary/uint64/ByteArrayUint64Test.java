@@ -18,7 +18,7 @@ public class ByteArrayUint64Test {
   void uint64_overwrite() {
     var bytes = new ByteArray(new byte[] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5});
     for (int i = 0; i < 10; i++) {
-      bytes.setUint64(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
+      bytes.set(i * 8, new BigInteger("18446744073709551615").subtract(BigInteger.valueOf(i)));
     }
     assertThat(bytes).isEqualTo(ba(new byte[] {
         -1, -1, -1, -1, -1, -1, -1, -1,
@@ -89,15 +89,15 @@ public class ByteArrayUint64Test {
   void uint64_accepts_boundaries_and_rejects_out_of_range() {
     ByteArray arr = new ByteArray(new byte[16]);
     BigInteger max = BigInteger.ONE.shiftLeft(64).subtract(BigInteger.ONE);
-    arr.setUint64(0, BigInteger.ZERO);
-    arr.setUint64(8, max);
+    arr.set(0, BigInteger.ZERO);
+    arr.set(8, max);
     assertThat(arr.getUint64(0)).isEqualTo(BigInteger.ZERO);
     assertThat(arr.getUint64(8)).isEqualTo(max);
 
-    assertThatThrownBy(() -> arr.setUint64(0, BigInteger.valueOf(-1)))
+    assertThatThrownBy(() -> arr.set(0, BigInteger.valueOf(-1)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint64 out of range: -1");
-    assertThatThrownBy(() -> arr.setUint64(0, BigInteger.ONE.shiftLeft(64)))
+    assertThatThrownBy(() -> arr.set(0, BigInteger.ONE.shiftLeft(64)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint64 out of range: 18446744073709551616");
   }
@@ -106,10 +106,10 @@ public class ByteArrayUint64Test {
   void uint64_array_element_validation() {
     ByteArray arr = new ByteArray(new byte[16]);
     BigInteger tooLarge = BigInteger.ONE.shiftLeft(64);
-    assertThatThrownBy(() -> arr.setUint64(0, new BigInteger[]{BigInteger.ZERO, BigInteger.valueOf(-1)}))
+    assertThatThrownBy(() -> arr.set(0, new BigInteger[]{BigInteger.ZERO, BigInteger.valueOf(-1)}))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint64 out of range: -1");
-    assertThatThrownBy(() -> arr.setUint64(0, new BigInteger[]{BigInteger.ZERO, tooLarge}))
+    assertThatThrownBy(() -> arr.set(0, new BigInteger[]{BigInteger.ZERO, tooLarge}))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("uint64 out of range: 18446744073709551616");
   }

@@ -15,7 +15,7 @@ public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Sho
 
   public static Uint8List toUint8List(short[] values) {
     return getUint8ListStruct(values)
-        .getList(0);
+        .getUint8List(0);
   }
 
   public static Struct getUint8ListStruct(short[] values) {
@@ -83,7 +83,7 @@ public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Sho
   public Uint8List copy() {
     var s = struct(getUint8ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getUint8List(0);
   }
 
   public boolean equals(Object o) {

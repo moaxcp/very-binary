@@ -15,7 +15,7 @@ public final class Int64List extends PrimitiveList<Int64List, Int64ListType, Lon
 
   public static Int64List toInt64List(long[] values) {
     return getInt64ListStruct(values)
-        .getList(0);
+        .getInt64List(0);
   }
 
   public static Struct getInt64ListStruct(long[] values) {
@@ -83,7 +83,7 @@ public final class Int64List extends PrimitiveList<Int64List, Int64ListType, Lon
   public Int64List copy() {
     var s = struct(getInt64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
-    return s.getList(0);
+    return s.getInt64List(0);
   }
 
   public boolean equals(Object o) {

@@ -9,7 +9,7 @@ import java.util.List;
 public sealed abstract class PrimitiveListType<SELF extends PrimitiveListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends BasicListType<SELF, T, L> permits BoolListType, Float32ListType, Float64ListType, Int16ListType, Int32ListType, Int64ListType, Int8ListType, Uint16ListType, Uint32ListType, Uint8ListType {
 
   protected PrimitiveListType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, Expression lengthExpression) {
-    super(position, basicTypeInfo, parent, constantValue, lengthExpression);
+    super(position, parent, basicTypeInfo, constantValue, lengthExpression);
   }
 
   @Override

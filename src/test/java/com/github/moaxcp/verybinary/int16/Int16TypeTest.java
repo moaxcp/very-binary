@@ -24,7 +24,7 @@ public class Int16TypeTest {
         .int16()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -34,7 +34,7 @@ public class Int16TypeTest {
         .int16Array(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 }

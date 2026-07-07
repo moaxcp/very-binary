@@ -12,8 +12,8 @@ public final class StructType extends ValueType<StructType, Struct> implements C
 
   private final List<Type<?>> fields = new ArrayList<>();
 
-  StructType(int position, @Nullable Struct constantValue, List<Type<?>> fields, @Nullable ComplexType<?> parent) {
-    super(position, constantValue, parent);
+  StructType(int position, @Nullable ComplexType<?> parent, @Nullable Struct constantValue, List<Type<?>> fields) {
+    super(position, parent, constantValue);
     for(int i = 0; i < fields.size(); i++) {
       this.fields.add(fields.get(i).copy(i, this));
     }
@@ -21,7 +21,7 @@ public final class StructType extends ValueType<StructType, Struct> implements C
 
   @Override
   public StructType copy(int position, @Nullable ComplexType<?> parent) {
-    return new StructType(position, constantValue, new ArrayList<>(fields), parent);
+    return new StructType(position, parent, constantValue, new ArrayList<>(fields));
   }
 
   public List<Type<?>> getTypes() {

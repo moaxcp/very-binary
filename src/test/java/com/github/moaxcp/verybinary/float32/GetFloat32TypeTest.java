@@ -196,7 +196,7 @@ public class GetFloat32TypeTest {
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
-    assertThat(struct.getFloat32List(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
+    assertThat(struct.getList(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
   }
 
   @Test

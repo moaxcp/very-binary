@@ -16,7 +16,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   protected final List<LengthListener> lengthListeners = new ArrayList<>();
 
   protected ListType(int position, @Nullable ComplexType<?> parent, @Nullable L constantValue, @Nullable Expression lengthExpression) {
-    super(position, constantValue, parent);
+    super(position, parent, constantValue);
     if (lengthExpression == null && constantValue == null) {
       throw new IllegalArgumentException("lengthExpression and constantValue cannot both be null");
     }

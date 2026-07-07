@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.int8;
 
-import com.github.moaxcp.verybinary.Int8ArrayType;
+import com.github.moaxcp.verybinary.Int8ListType;
 import com.github.moaxcp.verybinary.Int8Type;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +84,9 @@ public class SetInt8TypeTest {
         .int8Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Int8ArrayType) struct.getType(1)).set(struct, 0, Byte.valueOf((byte) 2)))
+    assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).set(struct, 0, Byte.valueOf((byte) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Byte) not supported for Int8ArrayType. Use set(Pointer, long, byte) instead.");
+        .hasMessage("set(Pointer, long, Byte) not supported for Int8ListType. Use set(Pointer, long, byte) instead.");
   }
 
   @Test
@@ -116,7 +116,7 @@ public class SetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.setInt8(1, -1, (byte) 5))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Int8ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class SetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.setInt8(1, 2, (byte) 5))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Int8ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Int8ListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
     assertThat(struct.getInt8(1, 0)).isEqualTo((byte) 2);
@@ -168,7 +168,7 @@ public class SetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int8ArrayType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
+        .hasMessage("Int8ListType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
@@ -181,7 +181,7 @@ public class SetInt8TypeTest {
 
     assertThatThrownBy(() -> struct.setInt8(1, 1, 2))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int8ArrayType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
+        .hasMessage("Int8ListType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test

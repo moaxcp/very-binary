@@ -11,15 +11,15 @@ public final class Uint16Type extends PrimitiveType<Uint16Type, Integer> impleme
   private final int constantValue;
   private final boolean constantValueSet;
 
-  public Uint16Type(int position, @Nullable Integer constantValue, @Nullable ComplexType<?> parent) {
-    super(position, UINT16, parent);
+  public Uint16Type(int position, @Nullable ComplexType<?> parent, @Nullable Integer constantValue) {
+    super(position, parent, UINT16);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
   public Uint16Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Uint16Type(position, constantValue, parent);
+    return new Uint16Type(position, parent, constantValue);
   }
 
   @Override

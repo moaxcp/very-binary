@@ -12,63 +12,63 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SetUint64TypeTest {
   @Test
-  void setUint64() {
+  void set() {
     var struct = struct()
         .uint64()
         .build();
 
-    struct.setUint64(0, BigInteger.valueOf(2));
+    struct.set(0, BigInteger.valueOf(2));
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint64(2));
   }
 
   @Test
-  void setUint64_position_negative() {
+  void set_position_negative() {
     var struct = struct()
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(-1, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(-1, BigInteger.valueOf(2)))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 1");
   }
 
   @Test
-  void setUint64_position_greater_than_length() {
+  void set_position_greater_than_length() {
     var struct = struct()
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(2, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(2, BigInteger.valueOf(2)))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 1");
   }
 
   @Test
-  void setUint64_not_allocated() {
+  void set_not_allocated() {
     var struct = struct()
         .allocated()
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(0, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(0, BigInteger.valueOf(2)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Index 0 out of bounds for length 0");
   }
 
   @Test
-  void setUint64_constant() {
+  void set_constant() {
     var struct = struct()
         .primitive().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(0, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(0, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Uint64Type at position 0 is constant value: 2 constant: 5");
   }
 
   @Test
-  void setUint64Array() {
+  void setArray() {
     var struct = struct()
         .uint64()
         .uint64Array(0)
@@ -76,15 +76,15 @@ public class SetUint64TypeTest {
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
 
-    struct.setUint64(1, 0, BigInteger.valueOf(5));
+    struct.set(1, 0, BigInteger.valueOf(5));
 
-    assertThat(struct.getUint64(0)).isEqualTo(BigInteger.ONE);
-    assertThat(struct.getUint64(1, 0)).isEqualTo(BigInteger.valueOf(5));
+    assertThat((BigInteger) struct.get(0)).isEqualTo(BigInteger.ONE);
+    assertThat((BigInteger) struct.get(1, 0)).isEqualTo(BigInteger.valueOf(5));
     assertThat(struct.getByteArray()).isEqualTo(ba().uint64(1, 5, 3));
   }
 
   @Test
-  void setUint64Array_negative() {
+  void setArray_negative() {
     var struct = struct()
         .uint64()
         .uint64Array(0)
@@ -92,13 +92,13 @@ public class SetUint64TypeTest {
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(1, -1, BigInteger.valueOf(5)))
+    assertThatThrownBy(() -> struct.set(1, -1, BigInteger.valueOf(5)))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Uint64ListType at position 1 index: -1 length: 1");
   }
 
   @Test
-  void setUint64Array_greater_than_length() {
+  void setArray_greater_than_length() {
     var struct = struct()
         .uint64()
         .uint64Array(0)
@@ -106,7 +106,7 @@ public class SetUint64TypeTest {
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(1, 2, BigInteger.valueOf(5)))
+    assertThatThrownBy(() -> struct.set(1, 2, BigInteger.valueOf(5)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Uint64ListType at position 1 index: 2 length: 1");
 
@@ -116,73 +116,73 @@ public class SetUint64TypeTest {
   }
 
   @Test
-  void setUint64Array_not_allocated() {
+  void setArray_not_allocated() {
     var struct = struct()
         .allocated()
         .uint64()
         .uint64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(1, 0, BigInteger.valueOf(5)))
+    assertThatThrownBy(() -> struct.set(1, 0, BigInteger.valueOf(5)))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test
-  void setUint64Array_index_0_not_array() {
+  void setArray_index_0_not_array() {
     var struct = struct()
         .uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(0, 0, BigInteger.valueOf(5)))
+    assertThatThrownBy(() -> struct.set(0, 0, BigInteger.valueOf(5)))
         .isInstanceOf(ClassCastException.class);
   }
 
   @Test
-  void setUint64Array_constant_value_and_length() {
+  void setArray_constant_value_and_length() {
     var struct = struct()
         .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(0, 3, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(0, 3, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Uint64ListType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
-  void setUint64Array_constant_value() {
+  void setArray_constant_value() {
     var struct = struct()
         .uint64()
         .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
-    assertThatThrownBy(() -> struct.setUint64(1, 1, BigInteger.valueOf(2)))
+    assertThatThrownBy(() -> struct.set(1, 1, BigInteger.valueOf(2)))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Uint64ListType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
   }
 
   @Test
-  void setUint64Array_constant_value_same() {
+  void setArray_constant_value_same() {
     var struct = struct()
         .uint64()
         .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
-    struct.setUint64(1, 1, BigInteger.valueOf(5));
+    struct.set(1, 1, BigInteger.valueOf(5));
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint64(2, 5, 5));
   }
 
   @Test
-  void setUint64Array_set_length_field_without_adding_to_array() {
+  void setArray_set_length_field_without_adding_to_array() {
     var struct = struct()
         .uint64()
         .uint64Array(0)
         .build();
 
-    struct.setUint64(0, BigInteger.valueOf(2));
+    struct.set(0, BigInteger.valueOf(2));
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint64(2, 0, 0));
   }

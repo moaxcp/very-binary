@@ -47,8 +47,9 @@ public class Float64ListTypeTest {
         .build();
 
     struct.setFloat64(0, List.of(3.3, 4.4));
+    struct.getList(0).get(0);
 
-    assertThat(struct.getFloat64List(0)).containsExactly(3.3, 4.4);
+    assertThat(struct.getList(0)).containsExactly(3.3, 4.4);
   }
 
   @Test

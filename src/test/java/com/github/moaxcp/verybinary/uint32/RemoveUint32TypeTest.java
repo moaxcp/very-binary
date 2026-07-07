@@ -18,7 +18,7 @@ public class RemoveUint32TypeTest {
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint32(0));
   }
@@ -30,7 +30,7 @@ public class RemoveUint32TypeTest {
         .uint32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -42,7 +42,7 @@ public class RemoveUint32TypeTest {
         .uint32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -55,7 +55,7 @@ public class RemoveUint32TypeTest {
         .uint32Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 4");
   }
@@ -66,7 +66,7 @@ public class RemoveUint32TypeTest {
         .uint32()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Uint32Type at position 0");
   }
@@ -145,7 +145,7 @@ public class RemoveUint32TypeTest {
         .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Uint32ListType at position 0");
   }

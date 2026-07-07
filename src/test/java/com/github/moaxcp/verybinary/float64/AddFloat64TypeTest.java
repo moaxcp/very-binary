@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float64;
 
-import com.github.moaxcp.verybinary.Float64ArrayType;
+import com.github.moaxcp.verybinary.Float64ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -16,9 +16,9 @@ public class AddFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float64ArrayType) struct.getType(1)).add(struct, Double.valueOf(1.0d)))
+    assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, Double.valueOf(1.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Double) not supported for Float64ArrayType. Use add(Pointer, double) instead.");
+        .hasMessage("add(Pointer, Double) not supported for Float64ListType. Use add(Pointer, double) instead.");
   }
 
   @Test
@@ -28,9 +28,9 @@ public class AddFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> ((Float64ArrayType) struct.getType(1)).add(struct, 0, Double.valueOf(1.0d)))
+    assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, 0, Double.valueOf(1.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Double) not supported for Float64ArrayType. Use add(Pointer, long, double) instead.");
+        .hasMessage("add(Pointer, long, Double) not supported for Float64ListType. Use add(Pointer, long, double) instead.");
   }
 
   @Test
@@ -93,7 +93,7 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float64ArrayType at position 0 is constant length: 3 index: 3");
+        .hasMessage("Float64ListType at position 0 is constant length: 3 index: 3");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat64(1, -1, 3.0d))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Float64ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -143,7 +143,7 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat64(1, 3, 3.0d))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Float64ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -178,6 +178,6 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float64ArrayType at position 0 is constant length: 3 index: 2");
+        .hasMessage("Float64ListType at position 0 is constant length: 3 index: 2");
   }
 }

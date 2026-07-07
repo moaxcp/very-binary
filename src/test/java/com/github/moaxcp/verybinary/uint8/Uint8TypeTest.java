@@ -25,7 +25,7 @@ public class Uint8TypeTest {
         .uint8()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -35,7 +35,7 @@ public class Uint8TypeTest {
         .uint8Array(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 }

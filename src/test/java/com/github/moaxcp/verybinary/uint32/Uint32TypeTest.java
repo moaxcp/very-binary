@@ -25,7 +25,7 @@ public class Uint32TypeTest {
         .uint32()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -35,7 +35,7 @@ public class Uint32TypeTest {
         .uint32Array(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 }

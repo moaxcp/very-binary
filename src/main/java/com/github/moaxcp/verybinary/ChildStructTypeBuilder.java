@@ -1,5 +1,7 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.list.StructList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,6 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public ChildStructTypeBuilder<PARENT> byteLengthField(int byteLengthFieldPosition) {
-    this.byteLengthExpression = Expression.valueOf(byteLengthFieldPosition);
     this.byteLengthListeners.add(ByteLengthListener.lengthField(byteLengthFieldPosition));
     ((ValueType<?, ?>) parent.fields.get(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(byteLengthFieldPosition));
     return this;
@@ -48,20 +49,20 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public StructListType toStructListType() {
-    return new StructListType(position, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
-        .addByteLengthChangeListeners(byteLengthListeners)
+    return new StructListType(position, null, (StructList) constant, lengthExpression, toStructType())
+        .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners)
-        .addLengthChangeListeners(lengthListeners);
+        .addLengthListeners(lengthListeners);
   }
 
   public StructType toStructType() {
-    return new StructType(position, fields)
-        .addByteLengthChangeListeners(byteLengthListeners)
+    return new StructType(position, null, (Struct) constant, fields)
+        .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners);
   }
 
   public PARENT end() {
-    if (lengthExpression != null || byteLengthExpression != null) {
+    if (lengthExpression != null) {
       parent.type(toStructListType());
     } else {
       parent.type(toStructType());

@@ -1,5 +1,6 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.list.StructList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
+  Expression lengthExpression;
   final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   @Nullable Object constant;
@@ -26,6 +28,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
   public Type<?> getField(int position) {
     return fields.get(position);
+  }
+
+  public SELF lengthExpression(Expression lengthExpression) {
+    this.lengthExpression = lengthExpression;
+    return (SELF) this;
   }
 
   public SELF addByteLengthListeners(ByteLengthListener... listeners) {
@@ -74,7 +81,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF boolConst(boolean constantValue) {
-    type(new BoolType(fields.size(), constantValue, null));
+    type(new BoolType(fields.size(), null, constantValue));
     return (SELF) this;
   }
 
@@ -252,8 +259,8 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return builder.end();
   }
 
-  public ChildStructTypeBuilder<SELF> structArray(Expression lengthExpression) {
-    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthExpression(lengthExpression);
+  public SELF structArray(Expression lengthExpression) {
+    return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthExpression(lengthExpression).end();
   }
 
   public SELF structArray(Expression lengthExpression, StructType type) {
@@ -281,14 +288,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructListType toStructListType() {
-    return new StructListType(-1, (ByteArray) constant, lengthExpression, byteLengthExpression, toStructType())
-        .addByteLengthChangeListeners(byteLengthListeners)
+    return new StructListType(-1, null, (StructList) constant, lengthExpression, toStructType())
+        .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners);
   }
 
   public StructType toStructType() {
-    return new StructType(-1, fields)
-        .addByteLengthChangeListeners(byteLengthListeners)
+    return new StructType(-1, null, (Struct) constant, fields)
+        .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners);
   }
 }

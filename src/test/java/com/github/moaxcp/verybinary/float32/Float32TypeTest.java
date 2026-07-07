@@ -18,7 +18,7 @@ public class Float32TypeTest {
         .float32()
         .build();
 
-    assertThat(((Float32Type) struct.getType(0)).getUnitSize()).isEqualTo(FLOAT32);
+    assertThat(((Float32Type) struct.getType(0)).getTypeInfo()).isEqualTo(FLOAT32);
   }
 
   @Test
@@ -47,7 +47,7 @@ public class Float32TypeTest {
         .int8()
         .float32Array(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength(type)).isEqualTo(0);
+    assertThat(type.getType(1).getAllocationLength()).isEqualTo(0);
   }
 
   @Test
@@ -55,7 +55,7 @@ public class Float32TypeTest {
     var type = structType()
         .float32Array(constant(5))
         .build();
-    assertThat(type.getType(0).getAllocationLength(type)).isEqualTo(20);
+    assertThat(type.getType(0).getAllocationLength()).isEqualTo(20);
     assertThat(type.getAllocationLength()).isEqualTo(20);
   }
 
@@ -65,7 +65,7 @@ public class Float32TypeTest {
         .primitive().constant((byte) 5).int8()
         .float32Array(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength(type)).isEqualTo(20);
+    assertThat(type.getType(1).getAllocationLength()).isEqualTo(20);
     assertThat(type.getAllocationLength()).isEqualTo(21);
   }
 
@@ -124,7 +124,7 @@ public class Float32TypeTest {
         .float32()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -134,7 +134,7 @@ public class Float32TypeTest {
         .float32Array(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -145,7 +145,7 @@ public class Float32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength(struct)).isFalse();
+    assertThat(struct.getType(1).isFixedLength()).isFalse();
     assertThat(struct.isFixedLength()).isFalse();
   }
 
@@ -156,7 +156,7 @@ public class Float32TypeTest {
         .float32Array(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(1).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 

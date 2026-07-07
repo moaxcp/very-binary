@@ -10,14 +10,14 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implements LengthType<Uint64Type, BigInteger> {
 
-  public Uint64Type(int position, @Nullable BigInteger constantValue, @Nullable ComplexType<?> parent) {
-    super(position, UINT64, constantValue, parent);
+  public Uint64Type(int position, @Nullable ComplexType<?> parent, @Nullable BigInteger constantValue) {
+    super(position, parent, UINT64, constantValue);
     this.constantValue = constantValue;
   }
 
   @Override
   public Uint64Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Uint64Type(position, constantValue, parent);
+    return new Uint64Type(position, parent, constantValue);
   }
 
   @Override
@@ -49,11 +49,11 @@ public final class Uint64Type extends BasicType<Uint64Type, BigInteger> implemen
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer);
       if (!value.equals(old)) {
-        pointer.getByteArray().setUint64(getOffset(pointer), value);
+        pointer.getByteArray().set(getOffset(pointer), value);
         notifyValueChange(reason, pointer, old, value);
       }
     } else {
-      pointer.getByteArray().setUint64(getOffset(pointer), value);
+      pointer.getByteArray().set(getOffset(pointer), value);
     }
   }
 

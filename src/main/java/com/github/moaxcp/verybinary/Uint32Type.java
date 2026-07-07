@@ -11,15 +11,15 @@ public final class Uint32Type extends PrimitiveType<Uint32Type, Long> implements
   private final long constantValue;
   private final boolean constantValueSet;
 
-  public Uint32Type(int position, @Nullable Long constantValue, @Nullable ComplexType<?> parent) {
-    super(position, UINT32, parent);
+  public Uint32Type(int position, @Nullable ComplexType<?> parent, @Nullable Long constantValue) {
+    super(position, parent, UINT32);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
   public Uint32Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Uint32Type(position, constantValueSet ? constantValue : null, parent);
+    return new Uint32Type(position, parent, constantValueSet ? constantValue : null);
   }
 
   @Override

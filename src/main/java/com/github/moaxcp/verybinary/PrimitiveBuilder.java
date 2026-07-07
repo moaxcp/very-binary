@@ -94,7 +94,7 @@ public final class PrimitiveBuilder {
           .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new BoolType(position, getConstantValue(Boolean.class), null);
+      return new BoolType(position, null , getConstantValue(Boolean.class));
     }
   }
 
@@ -105,7 +105,7 @@ public final class PrimitiveBuilder {
           .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Int8Type(position, getConstantValue(Byte.class), null);
+      return new Int8Type(position, null, getConstantValue(Byte.class));
     }
   }
 
@@ -116,7 +116,7 @@ public final class PrimitiveBuilder {
           .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Uint8Type(position, getConstantValue(Short.class), null);
+      return new Uint8Type(position, null, getConstantValue(Short.class));
     }
   }
 
@@ -127,73 +127,73 @@ public final class PrimitiveBuilder {
           .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Int16Type(position, getConstantValue(Short.class), null);
+      return new Int16Type(position, null, getConstantValue(Short.class));
     }
   }
 
   public Type<?> uint16() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof int[]) {
-      return new Uint16ListType(position, getConstantValue(int[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Uint16ListType(position, null, getConstantValue(Uint16List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Uint16Type(position, getConstantValue(Integer.class));
+      return new Uint16Type(position, null, getConstantValue(Integer.class));
     }
   }
 
   public Type<?> int32() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof int[]) {
-      return new Int32ListType(position, getConstantValue(int[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Int32ListType(position, null, getConstantValue(Int32List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Int32Type(position, getConstantValue(Integer.class));
+      return new Int32Type(position, null, getConstantValue(Integer.class));
     }
   }
 
   public Type<?> uint32() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof long[]) {
-      return new Uint32ListType(position, getConstantValue(long[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Uint32ListType(position, null, getConstantValue(Uint32List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Uint32Type(position, getConstantValue(Long.class));
+      return new Uint32Type(position, null, getConstantValue(Long.class));
     }
   }
 
   public Type<?> int64() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof long[]) {
-      return new Int64ListType(position, getConstantValue(long[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Int64ListType(position, null, getConstantValue(Int64List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Int64Type(position, getConstantValue(Long.class));
+      return new Int64Type(position, null, getConstantValue(Long.class));
     }
   }
 
   public Type<?> uint64() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof List) {
-      return new Uint64ListType(position, getConstantValue(List.class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Uint64ListType(position, null, getConstantValue(Uint64List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Uint64Type(position, getConstantValue(BigInteger.class));
+      return new Uint64Type(position, null, getConstantValue(BigInteger.class));
     }
   }
 
   public Type<?> float32() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof float[]) {
-      return new Float32ListType(position, getConstantValue(float[].class), lengthExpression, byteLengthExpression)
-          .addLengthChangeListeners(lengthListeners)
-          .addByteLengthChangeListeners(byteLengthListeners)
+      return new Float32ListType(position, null, getConstantValue(Float32List.class), lengthExpression)
+          .addLengthListeners(lengthListeners)
+          .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Float32Type(position, getConstantValue(Float.class));
+      return new Float32Type(position, null, getConstantValue(Float.class));
     }
   }
 
@@ -204,7 +204,7 @@ public final class PrimitiveBuilder {
           .addByteLengthListeners(byteLengthListeners)
           .addValueChangeListeners(valueChangeListeners);
     } else {
-      return new Float64Type(position, getConstantValue(Double.class), null);
+      return new Float64Type(position, null, getConstantValue(Double.class));
     }
   }
 }

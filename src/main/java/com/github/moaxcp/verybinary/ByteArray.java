@@ -914,19 +914,19 @@ public class ByteArray {
     return list;
   }
 
-  public ByteArray setUint64(long index, BigInteger value) {
+  public ByteArray set(long index, BigInteger value) {
     requireUint64(value);
     serializer.writeUint64(bytes, Math.toIntExact(index), value);
     return this;
   }
 
-  public ByteArray setUint64(long index, BigInteger... values) {
+  public ByteArray set(long index, BigInteger... values) {
     requireUint64(values);
     serializer.writeUint64(bytes, Math.toIntExact(index), values);
     return this;
   }
 
-  public ByteArray setUint64(long index, List<BigInteger> values) {
+  public ByteArray set(long index, List<BigInteger> values) {
     checkAllocation(index, UINT64.size() * values.size());
     for (int i = 0; i < values.size(); i++) {
       BigInteger v = values.get(i);
@@ -958,7 +958,7 @@ public class ByteArray {
 
   public ByteArray addUint64(long index, BigInteger value) {
     shiftBytesFor(index, UINT64.size());
-    setUint64(index, value);
+    set(index, value);
     return this;
   }
 
@@ -971,7 +971,7 @@ public class ByteArray {
       return this;
     }
     shiftBytesFor(index, UINT64.size() * values.length);
-    setUint64(index, values);
+    set(index, values);
     return this;
   }
 
@@ -984,7 +984,7 @@ public class ByteArray {
       return this;
     }
     shiftBytesFor(index, UINT64.size() * values.size());
-    setUint64(index, values);
+    set(index, values);
     return this;
   }
 

@@ -63,6 +63,6 @@ public final class StructList extends BinaryList<StructList, StructListType, Str
   public StructList copy() {
     var s = struct(getStructListStructType(size64(), type.getStructType())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getLength(pointer));
-    return s.getList(0);
+    return s.getStructList(0);
   }
 }

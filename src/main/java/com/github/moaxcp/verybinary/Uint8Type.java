@@ -11,15 +11,15 @@ public final class Uint8Type extends PrimitiveType<Uint8Type, Short> implements 
   private final short constantValue;
   private final boolean constantValueSet;
 
-  public Uint8Type(int position, @Nullable Short constantValue, @Nullable ComplexType<?> parent) {
-    super(position, UINT8, parent);
+  public Uint8Type(int position, @Nullable ComplexType<?> parent, @Nullable Short constantValue) {
+    super(position, parent, UINT8);
     this.constantValueSet = constantValue != null;
     this.constantValue = constantValueSet ? constantValue : 0;
   }
 
   @Override
   public Uint8Type copy(int position, @Nullable ComplexType<?> parent) {
-    return new Uint8Type(position, constantValueSet ? constantValue : null, parent);
+    return new Uint8Type(position, parent, constantValueSet ? constantValue : null);
   }
 
   @Override

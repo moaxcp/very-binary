@@ -17,7 +17,7 @@ public class GetUint64TypeTest {
         .uint64()
         .build();
 
-    struct.setUint64(0, BigInteger.valueOf(2));
+    struct.set(0, BigInteger.valueOf(2));
 
     assertThat(struct.getUint64(0)).isEqualTo(BigInteger.valueOf(2));
   }

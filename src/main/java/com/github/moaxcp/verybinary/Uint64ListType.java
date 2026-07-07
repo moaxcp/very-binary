@@ -13,7 +13,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteger, Uint64List> {
 
   public Uint64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint64List constantValue, Expression lengthExpression) {
-    super(position, UINT64, parent, constantValue, lengthExpression);
+    super(position, parent, UINT64, constantValue, lengthExpression);
   }
 
   @Override
@@ -36,11 +36,6 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
   public Uint64List get(Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     checkArrayRange(pointer, index, index + length);
     return new Uint64List(pointer, this, index, length);
-  }
-
-  public BigInteger[] getArray(Pointer<?, ? extends Type<?>> pointer) {
-    long length = getLength(pointer);
-    return pointer.getByteArray().getUint64(getOffset(pointer), length);
   }
 
   public List<BigInteger> getList(Pointer<?, ? extends Type<?>> pointer) {
@@ -71,10 +66,10 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
       var old =get(pointer).copy();
       var newValue = old.copy();
       newValue.set(index, value);
-      pointer.getByteArray().setUint64(getOffset(pointer, index), value);
+      pointer.getByteArray().set(getOffset(pointer, index), value);
       notifyValueChange(reason, pointer, old, newValue);
     } else {
-      pointer.getByteArray().setUint64(getOffset(pointer, index), value);
+      pointer.getByteArray().set(getOffset(pointer, index), value);
     }
   }
 
@@ -86,7 +81,7 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
-      pointer.getByteArray().setUint64(getOffset(pointer, index), values);
+      pointer.getByteArray().set(getOffset(pointer, index), values);
     }
   }
 
@@ -98,7 +93,7 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
     } else {
-      pointer.getByteArray().setUint64(getOffset(pointer, index), values);
+      pointer.getByteArray().set(getOffset(pointer, index), values);
     }
   }
 }

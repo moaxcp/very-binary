@@ -1,6 +1,6 @@
 package com.github.moaxcp.verybinary.float64;
 
-import com.github.moaxcp.verybinary.Float64ArrayType;
+import com.github.moaxcp.verybinary.Float64ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
@@ -17,7 +17,7 @@ public class RemoveFloat64TypeTest {
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
-    struct.removeAll(1);
+    struct.remove(1);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(0));
   }
@@ -29,7 +29,7 @@ public class RemoveFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(-1))
+    assertThatThrownBy(() -> struct.remove(-1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index -1 out of bounds for length 2");
   }
@@ -41,7 +41,7 @@ public class RemoveFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(2))
+    assertThatThrownBy(() -> struct.remove(2))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 2 out of bounds for length 2");
   }
@@ -54,7 +54,7 @@ public class RemoveFloat64TypeTest {
         .float64Array(0)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("allocated: 0, index: 0, length: 8");
   }
@@ -65,7 +65,7 @@ public class RemoveFloat64TypeTest {
         .float64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Cannot remove element from fixed length Float64Type at position 0");
   }
@@ -81,7 +81,7 @@ public class RemoveFloat64TypeTest {
     struct.addFloat64(1, 2.0d);
     struct.remove(1, 0);
 
-    assertThat(((Float64ArrayType) struct.getType(1)).getFloat64(struct, 0)).isEqualTo(2.0d);
+    assertThat(((Float64ListType) struct.getType(1)).getFloat64(struct, 0)).isEqualTo(2.0d);
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(1).float64(2));
   }
@@ -110,7 +110,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Float64ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -123,7 +123,7 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float64ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Float64ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -144,9 +144,9 @@ public class RemoveFloat64TypeTest {
         .primitive().constant(new double[]{3, 3, 3}).float64()
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length Float64ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Float64ListType at position 0");
   }
 
   @Test
@@ -157,6 +157,6 @@ public class RemoveFloat64TypeTest {
 
     assertThatThrownBy(() -> struct.remove(0, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Float64ArrayType at position 0 index: 2");
+        .hasMessage("Cannot remove element from fixed length array Float64ListType at position 0 index: 2");
   }
 }

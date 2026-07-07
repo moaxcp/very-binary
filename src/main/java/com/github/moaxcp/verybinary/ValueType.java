@@ -15,7 +15,7 @@ public sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> exten
   @Nullable
   protected T constantValue;
 
-  protected ValueType(int position, @Nullable T constantValue, @Nullable ComplexType<?> parent) {
+  protected ValueType(int position, @Nullable ComplexType<?> parent, @Nullable T constantValue) {
     super(position, parent);
     this.constantValue = constantValue;
   }

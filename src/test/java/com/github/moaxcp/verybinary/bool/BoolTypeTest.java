@@ -18,7 +18,7 @@ public class BoolTypeTest {
         .bool()
         .build();
 
-    assertThat(((BoolType) struct.getType(0)).getUnitSize()).isEqualTo(BOOL);
+    assertThat(((BoolType) struct.getType(0)).getTypeInfo()).isEqualTo(BOOL);
   }
 
   @Test
@@ -47,7 +47,7 @@ public class BoolTypeTest {
         .int8()
         .boolArray(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength(type)).isEqualTo(0);
+    assertThat(type.getType(1).getAllocationLength()).isEqualTo(0);
     assertThat(type.getAllocationLength()).isEqualTo(1);
   }
 
@@ -66,7 +66,7 @@ public class BoolTypeTest {
         .primitive().constant((byte) 5).int8()
         .boolArray(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength(type)).isEqualTo(5);
+    assertThat(type.getType(1).getAllocationLength()).isEqualTo(5);
     assertThat(type.getAllocationLength()).isEqualTo(6);
   }
 
@@ -125,7 +125,7 @@ public class BoolTypeTest {
         .bool()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -135,7 +135,7 @@ public class BoolTypeTest {
         .boolArray(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(0).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
@@ -146,7 +146,7 @@ public class BoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength(struct)).isFalse();
+    assertThat(struct.getType(1).isFixedLength()).isFalse();
     assertThat(struct.isFixedLength()).isFalse();
   }
 
@@ -157,7 +157,7 @@ public class BoolTypeTest {
         .boolArray(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength(struct)).isTrue();
+    assertThat(struct.getType(1).isFixedLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 

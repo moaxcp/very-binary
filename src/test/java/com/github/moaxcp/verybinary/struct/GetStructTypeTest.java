@@ -20,7 +20,7 @@ public class GetStructTypeTest {
         .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
 
-    assertThat(struct.getStruct(1))
+    assertThat(struct.get(1))
         .isEqualTo(struct()
             .int8()
             .int8Array(0)

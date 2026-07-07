@@ -14,51 +14,11 @@ import java.util.stream.Stream;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.Expression.constant;
-import static com.github.moaxcp.verybinary.PadType.align;
-import static com.github.moaxcp.verybinary.PadType.pad;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PadTypeTest {
-
-  @Test
-  void constructor() {
-    var type = pad(4);
-    assertThat(type).isEqualTo(new PadType(-1, 4, false));
-  }
-
-  @Test
-  void constructorPosition() {
-    var type = pad(15, 4);
-    assertThat(type).isEqualTo(new PadType(15, 4, false));
-  }
-
-  @Test
-  void alignConstructor() {
-    var type = align(4);
-    assertThat(type).isEqualTo(new PadType(-1, 4, true));
-  }
-
-  @Test
-  void alignPosition() {
-    var type = align(15, 4);
-    assertThat(type).isEqualTo(new PadType(15, 4, true));
-  }
-
-  @Test
-  void copyPad() {
-    var type = pad(15, 4);
-    var copy = type.copy(15);
-    assertThat(type).isEqualTo(copy);
-  }
-
-  @Test
-  void copyAlign() {
-    var type = align(15, 4);
-    var copy = type.copy(15);
-    assertThat(type).isEqualTo(copy);
-  }
 
   @Test
   void getByteLength() {
@@ -208,7 +168,7 @@ public class PadTypeTest {
         .pad(8)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(0))
+    assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(ClassCastException.class)
         .hasMessageContaining("PadType cannot be cast to class");
   }
@@ -220,7 +180,7 @@ public class PadTypeTest {
         .align(8)
         .build();
 
-    assertThatThrownBy(() -> struct.removeAll(1))
+    assertThatThrownBy(() -> struct.remove(1))
         .isInstanceOf(ClassCastException.class)
         .hasMessageContaining("PadType cannot be cast to class");
   }

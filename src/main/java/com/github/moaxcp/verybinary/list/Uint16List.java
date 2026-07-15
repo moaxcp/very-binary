@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 
 public final class Uint16List extends PrimitiveList<Uint16List, Uint16ListType, Integer> implements PrimitiveIterable<Integer, Uint16Consumer> {
 

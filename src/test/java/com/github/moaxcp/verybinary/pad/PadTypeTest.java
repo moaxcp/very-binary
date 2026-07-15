@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.pad;
 
-import com.github.moaxcp.verybinary.PadType;
 import com.github.moaxcp.verybinary.Struct;
 import com.github.moaxcp.verybinary.StructBuilder;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import java.util.stream.Stream;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

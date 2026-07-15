@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 
 public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Short> implements PrimitiveIterable<Short, Uint8Consumer> {
 

@@ -1,11 +1,14 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.*;
+import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.moaxcp.verybinary.math.Expression.divide;
 
 public final class PrimitiveBuilder {
 
@@ -27,6 +30,10 @@ public final class PrimitiveBuilder {
   public PrimitiveBuilder position(int position) {
     this.position = position;
     return this;
+  }
+
+  public int getPosition() {
+    return position;
   }
 
   public PrimitiveBuilder byteLengthListener(ByteLengthListener byteLengthListener) {
@@ -61,7 +68,7 @@ public final class PrimitiveBuilder {
 
   private <T> T getConstantValue(Class<T> clazz) {
     return switch (constantValue) {
-      case BinaryList l -> (T) l;
+      case BinaryList<?, ?, ?> l -> (T) l;
       case Number n -> {
         if (clazz == Byte.class) {
           yield (T) Byte.valueOf(n.byteValue());
@@ -88,7 +95,10 @@ public final class PrimitiveBuilder {
   }
 
   public Type<?> bool() {
-    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof boolean[]) {
+    if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof BoolList) {
+      if (byteLengthExpression != null) {
+        lengthExpression = divide(byteLengthExpression, Expression.basicElementLengthOf(position));
+      }
       return new BoolListType(position, null, getConstantValue(BoolList.class), lengthExpression)
           .addLengthListeners(lengthListeners)
           .addByteLengthListeners(byteLengthListeners)

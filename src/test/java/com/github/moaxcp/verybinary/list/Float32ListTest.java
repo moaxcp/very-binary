@@ -1,14 +1,11 @@
 package com.github.moaxcp.verybinary.list;
 
-import com.github.moaxcp.verybinary.ByteArray;
 import com.github.moaxcp.verybinary.Struct;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Float32ListTest {

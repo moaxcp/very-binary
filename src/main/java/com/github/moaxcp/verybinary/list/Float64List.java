@@ -9,7 +9,7 @@ import java.util.function.DoubleConsumer;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 
 public final class Float64List extends PrimitiveList<Float64List, Float64ListType, Double> implements PrimitiveIterable<Double, DoubleConsumer> {
 

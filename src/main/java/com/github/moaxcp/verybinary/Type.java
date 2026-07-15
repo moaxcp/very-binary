@@ -2,20 +2,10 @@ package com.github.moaxcp.verybinary;
 
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
-
 public sealed interface Type<SELF extends Type<SELF>> permits AbstractType, ComplexType {
   int getPosition();
 
   <V extends ComplexType<V>> @Nullable ComplexType<V> getParent();
-
-  List<ByteLengthListener> getByteLengthListeners();
-
-  SELF addByteLengthListeners(List<ByteLengthListener> listeners);
-
-  SELF addByteLengthListener(ByteLengthListener listener);
-
-  SELF copy(int position, @Nullable ComplexType<?> parent);
 
   /**
    * true if the bytes for this type are always constant.

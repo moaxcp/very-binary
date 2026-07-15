@@ -82,6 +82,11 @@
    - [ ] Ensure struct-sized inserts/removes shift bytes properly through ByteArray.
    - [ ] Ensure listener notifications propagate correctly on struct operations.
    - [x] Update StructList to look like BoolList but working with Structs — refs: req: ByteArray; plan: 4.8. Struct
+   - [x] Add getXxxList(position) and getXxxList(position, index, length) methods to Struct for all list types (Int8, Uint8, Int16, Uint16, Int32, Uint32, Int64, Uint64, Float32, Float64, Bool, Struct) — refs: req: Struct; plan: 4.8. Struct
+   - [x] Add setXxx(position, List) and setXxx(position, index, List) methods to Struct for Float32 and Float64 list types — refs: req: Struct; plan: 4.8. Struct
+   - [x] Add getStruct(position), getStruct(position, index), setStruct(position, value), setStruct(position, index, value) methods to Struct — refs: req: Struct; plan: 4.8. Struct
+   - [x] Add generic get(position), get(position, index), getList(position), getList(position, index, length) methods to Struct — refs: req: Struct; plan: 4.8. Struct
+   - [x] Add structList(StructListType) method to StructTypeBuilder to accept pre-built StructListType — refs: req: Struct; plan: 4.8. Struct
 
 9. [ ] Phase 9 — Builders and ergonomics
    - [ ] Provide builder classes for StructType creation, including sub-builders for basicTypeInfo fields and pad entries.

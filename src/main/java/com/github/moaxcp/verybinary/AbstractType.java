@@ -10,7 +10,7 @@ public sealed abstract class AbstractType<SELF extends AbstractType<SELF>> imple
 
   protected final int position;
   @Nullable
-  protected final ComplexType<?> parent;
+  protected ComplexType<?> parent;
   protected final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
 
   protected AbstractType(int position, @Nullable ComplexType<?> parent) {
@@ -28,20 +28,24 @@ public sealed abstract class AbstractType<SELF extends AbstractType<SELF>> imple
     return (ComplexType<V>) parent;
   }
 
-  @Override
-  public final List<ByteLengthListener> getByteLengthListeners() {
+  final List<ByteLengthListener> getByteLengthListeners() {
     return byteLengthListeners;
   }
 
-  @Override
-  public final SELF addByteLengthListeners(List<ByteLengthListener> listeners) {
+  final SELF addByteLengthListeners(List<ByteLengthListener> listeners) {
     byteLengthListeners.addAll(listeners);
     return (SELF) this;
   }
 
-  @Override
-  public final SELF addByteLengthListener(ByteLengthListener listener) {
+  final SELF addByteLengthListener(ByteLengthListener listener) {
     byteLengthListeners.add(listener);
+    return (SELF) this;
+  }
+
+  abstract SELF copy(int position, @Nullable ComplexType<?> parent);
+
+  final SELF setParent(ComplexType<?> parent) {
+    this.parent = parent;
     return (SELF) this;
   }
 

@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 
 public final class StructList extends BinaryList<StructList, StructListType, Struct> {
 

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 
 public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, BigInteger> implements Iterable<BigInteger> {
 

@@ -15,7 +15,7 @@ public final class StructType extends ValueType<StructType, Struct> implements C
   StructType(int position, @Nullable ComplexType<?> parent, @Nullable Struct constantValue, List<Type<?>> fields) {
     super(position, parent, constantValue);
     for(int i = 0; i < fields.size(); i++) {
-      this.fields.add(fields.get(i).copy(i, this));
+      this.fields.add(((AbstractType<?>) fields.get(i)).setParent(this));
     }
   }
 
@@ -79,6 +79,17 @@ public final class StructType extends ValueType<StructType, Struct> implements C
       old.removeByteArrayListener();
     } else {
       pointer.getByteArray().replace(getOffset(pointer), getByteLength(pointer), value.getByteArray(), value.getOffset(), value.getByteLength());
+    }
+  }
+
+  @Override
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    if (isConstant()) {
+      setUnchecked(SET_VALUE, pointer, constantValue);
+    } else {
+      for (var field : fields) {
+        field.allocate(pointer);
+      }
     }
   }
 

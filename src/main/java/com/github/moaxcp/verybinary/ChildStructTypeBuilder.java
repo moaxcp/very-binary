@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.StructList;
+import com.github.moaxcp.verybinary.math.Expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public ChildStructTypeBuilder<PARENT> lengthField(int lengthFieldPosition) {
-    this.lengthExpression = Expression.valueOf(lengthFieldPosition);
+    this.lengthExpression = Expression.variable(lengthFieldPosition);
     this.lengthListeners.add(LengthListener.lengthField(lengthFieldPosition));
     ((ValueType<?, ?>) parent.fields.get(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(position));
     return this;

@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.StructList;
+import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     if (type instanceof PadType p && p.isAlign()) {
       var previous = fields.getLast();
       fields.add(type);
-      previous.addByteLengthListeners(List.of(ByteLengthListener.align(type.getPosition())));
+      ((AbstractType<?>) previous).addByteLengthListeners(List.of(ByteLengthListener.align(type.getPosition())));
     } else {
       fields.add(type);
     }
@@ -272,6 +273,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
       builder.type(field);
     }
     return builder.end();
+  }
+
+  public SELF structList(StructListType structListType) {
+    fields.add(structListType.copy(fields.size(), null));
+    return (SELF) this;
   }
 
   public SELF constant(Struct constant) {

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -196,7 +196,7 @@ public class GetFloat32TypeTest {
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
-    assertThat(struct.getList(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
+    assertThat(struct.getFloat32List(0)).containsExactly(5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
   }
 
   @Test

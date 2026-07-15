@@ -2,11 +2,13 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.BinaryList;
+import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
@@ -25,27 +27,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
     }
     if (constantValue != null) {
       this.constantValue = constantValue;
-      this.lengthExpression = new Expression() {
-        @Override
-        public boolean isConstant(ComplexType<?> parent) {
-          return true;
-        }
-
-        @Override
-        public long constantValue(ComplexType<?> parent) {
-          return constantValue.size64();
-        }
-
-        @Override
-        public long defaultValue(ComplexType<?> parent) {
-          return 0;
-        }
-
-        @Override
-        public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-          return constantValue.size64();
-        }
-      };
+      this.lengthExpression = constant(constantValue.size64());
     } else {
       this.lengthExpression = lengthExpression;
     }
@@ -102,7 +84,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
 
   protected final void checkArrayRange(Pointer<?, ? extends Type<?>> pointer, long start, long end) {
     var length = getLength(pointer);
-    if (start < 0 || end >= length || start > end) {
+    if (start < 0 || end > length || start > end) {
       throw new ArrayIndexOutOfBoundsException(this.getClass().getSimpleName() + " at position " + getPosition() + " length: " + length + " start: " + start + " end: " + end);
     }
   }

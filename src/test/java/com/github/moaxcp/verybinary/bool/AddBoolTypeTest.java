@@ -7,7 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -22,7 +22,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Boolean) not supported for BoolArrayType. Use add(Pointer, boolean) instead.");
+        .hasMessage("add(Pointer, T) not supported for BoolListType. Use addBool(Pointer, boolean) instead.");
   }
 
   @Test
@@ -34,7 +34,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, Boolean.TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Boolean) not supported for BoolArrayType. Use add(Pointer, long, boolean) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for BoolListType. Use addBool(Pointer, long, boolean) instead.");
   }
 
   @Test
@@ -46,7 +46,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, new Boolean[]{true, false}))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Boolean...) not supported for BoolArrayType. Use add(Pointer, boolean...) instead.");
+        .hasMessage("add(Pointer, T[]) not supported for BoolListType. Use addBool(Pointer, boolean[]) instead.");
   }
 
   @Test
@@ -58,7 +58,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, new Boolean[]{true, false}))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Boolean...) not supported for BoolArrayType. Use add(Pointer, long, boolean...) instead.");
+        .hasMessage("add(Pointer, long, T[]) not supported for BoolListType. Use addBool(Pointer, long, boolean[]) instead.");
   }
 
   @Test
@@ -135,7 +135,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, true))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("BoolArrayType at position 1 is constant length: 5 index: 5");
+        .hasMessage("BoolListType at position 1 is constant length: 5 index: 5");
   }
 
   @Test
@@ -147,7 +147,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, false))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("BoolArrayType at position 1 is constant length: 5 index: 5");
+        .hasMessage("BoolListType at position 1 is constant length: 5 index: 5");
   }
 
   @Test
@@ -158,7 +158,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(0, false))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("BoolArrayType at position 0 is constant length: 5 index: 5");
+        .hasMessage("BoolListType at position 0 is constant length: 5 index: 5");
   }
 
   @Test
@@ -195,7 +195,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, -1, true))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("BoolListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -208,7 +208,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, 3, true))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("BoolListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -254,7 +254,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("BoolArrayType at position 0 is constant length: 5 index: 3");
+        .hasMessage("BoolListType at position 0 is constant length: 5 index: 3");
   }
 
   @Test
@@ -265,7 +265,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("BoolArrayType at position 0 is constant length: 5 index: 3");
+        .hasMessage("BoolListType at position 0 is constant length: 5 index: 3");
   }
 
   @Test
@@ -289,7 +289,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, true, true, true, true, true))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Cannot add elements to fixed length array BoolArrayType at position 1 index: 5");
+        .hasMessage("Cannot add elements to fixed length array BoolListType at position 1 index: 5");
   }
 
   @Test
@@ -301,7 +301,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(1, false, false, false, false, false))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Cannot add elements to fixed length array BoolArrayType at position 1 index: 1");
+        .hasMessage("Cannot add elements to fixed length array BoolListType at position 1 index: 1");
   }
 
   @Test
@@ -312,7 +312,7 @@ public class AddBoolTypeTest {
 
     assertThatThrownBy(() -> struct.addBool(0, true, false, true, false, true))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Cannot add elements to fixed length array BoolArrayType at position 0 index: 5");
+        .hasMessage("Cannot add elements to fixed length array BoolListType at position 0 index: 5");
   }
 
   @Test

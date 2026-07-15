@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +32,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, 0, TRUE))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Boolean) not supported for BoolArrayType. Use set(Pointer, long, boolean) instead.");
+        .hasMessage("set(Pointer, long, Boolean) not supported for BoolListType. Use set(Pointer, long, boolean) instead.");
   }
 
   @Test
@@ -118,7 +118,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(1, -1, true))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: -1 length: 1");
+        .hasMessage("BoolListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -132,7 +132,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(1, 2, true))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: 2 length: 1");
+        .hasMessage("BoolListType at position 1 index: 2 length: 1");
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
     assertThat(struct.getBool(1, 0)).isTrue();
@@ -185,7 +185,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(1, 1, false))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 1 is constant index: 1 value: false constant: true");
+        .hasMessage("BoolListType at position 1 is constant index: 1 value: false constant: true");
   }
 
   @Test
@@ -196,7 +196,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, 3, false))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 0 is constant index: 3 value: false constant: true");
+        .hasMessage("BoolListType at position 0 is constant index: 3 value: false constant: true");
   }
 
   @Test
@@ -275,7 +275,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, -1, true, false))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: -1 end: 1");
+        .hasMessage("BoolListType at position 0 length: 5 start: -1 end: 1");
   }
 
   @Test
@@ -286,7 +286,7 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, 5, true, false))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("BoolListType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
@@ -297,6 +297,6 @@ public class SetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.setBool(0, 1, false, false))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("BoolArrayType at position 0 is constant index: 1 value: [false, false] constant: [true, true, true, true, true]");
+        .hasMessage("BoolListType at position 0 is constant index: 1 value: [false, false] constant: [true, true, true, true, true]");
   }
 }

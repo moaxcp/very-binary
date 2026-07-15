@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary.int64;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.INT64;
 import static org.assertj.core.api.Assertions.assertThat;
 

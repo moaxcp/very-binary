@@ -1,6 +1,5 @@
 package com.github.moaxcp.verybinary.float64;
 
-import com.github.moaxcp.verybinary.ByteArray;
 import com.github.moaxcp.verybinary.Struct;
 import com.github.moaxcp.verybinary.list.Float64List;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float64ListTypeTest {
@@ -47,9 +46,9 @@ public class Float64ListTypeTest {
         .build();
 
     struct.setFloat64(0, List.of(3.3, 4.4));
-    struct.getList(0).get(0);
+    struct.getFloat64List(0).get(0);
 
-    assertThat(struct.getList(0)).containsExactly(3.3, 4.4);
+    assertThat(struct.getFloat64List(0)).containsExactly(3.3, 4.4);
   }
 
   @Test

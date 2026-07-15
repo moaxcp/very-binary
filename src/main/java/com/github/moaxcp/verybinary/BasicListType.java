@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.BinaryList;
+import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
 public sealed abstract class BasicListType<SELF extends ListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends ListType<SELF, T, L> permits PrimitiveListType, Uint64ListType {
@@ -9,6 +10,10 @@ public sealed abstract class BasicListType<SELF extends ListType<SELF, T, L>, T,
   protected BasicListType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, @Nullable Expression lengthExpression) {
     super(position, parent, constantValue, lengthExpression);
     this.basicTypeInfo = basicTypeInfo;
+  }
+
+  public BasicTypeInfo getBasicTypeInfo() {
+    return basicTypeInfo;
   }
 
   @Override

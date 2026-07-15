@@ -2,6 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.BinaryList;
+import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;

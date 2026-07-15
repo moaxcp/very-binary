@@ -1269,11 +1269,28 @@ public class ByteArray {
   }
 
   public ByteArray replace(long index, long length, ByteArray source, long sourceIndex, long sourceLength) {
-    byte[] newBytes = new byte[Math.toIntExact(bytes.length - length + sourceLength)];
-    System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
-    System.arraycopy(source.bytes, Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
-    System.arraycopy(bytes, Math.toIntExact(index + length), newBytes, Math.toIntExact(index + sourceLength), bytes.length - Math.toIntExact(index + length));
+    if (index > bytes.length) {
+      throw new IndexOutOfBoundsException("index " + index + " is greater than length " + bytes.length);
+    }
+    long currentAllocated;
+    byte[] newBytes;
+    if (index + length > bytes.length) {
+      currentAllocated = index + length - bytes.length;
+      newBytes = new byte[Math.toIntExact(bytes.length + currentAllocated)];
+      System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
+      System.arraycopy(source.bytes, Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
+    } else {
+      currentAllocated = sourceLength - length;
+      newBytes = new byte[Math.toIntExact(bytes.length + currentAllocated)];
+      System.arraycopy(bytes, 0, newBytes, 0, Math.toIntExact(index));
+      System.arraycopy(source.bytes, Math.toIntExact(sourceIndex), newBytes, Math.toIntExact(index), Math.toIntExact(sourceLength));
+      System.arraycopy(bytes, Math.toIntExact(index + length), newBytes, Math.toIntExact(index + sourceLength), bytes.length - Math.toIntExact(index + length));
+    }
     bytes = newBytes;
+    allocated += currentAllocated;
+    if (currentAllocated != 0) {
+      notifyListeners(shiftBytes(index, currentAllocated));
+    }
     return this;
   }
 

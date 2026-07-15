@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.*;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StructTypeTest {
@@ -444,9 +444,9 @@ public class StructTypeTest {
     assertThat(struct.getInt64(12)).isEqualTo(2);
     assertThat(struct.getInt64(13, 0)).isEqualTo(-20);
     assertThat(struct.getInt64(13, 1)).isEqualTo(-21);
-    assertThat(struct.get(14)).isEqualTo(BigInteger.valueOf(2));
-    assertThat(struct.get(15, 0)).isEqualTo(BigInteger.valueOf(20));
-    assertThat(struct.get(15, 1)).isEqualTo(BigInteger.valueOf(21));
+    assertThat(struct.getUint64(14)).isEqualTo(BigInteger.valueOf(2));
+    assertThat(struct.getUint64(15, 0)).isEqualTo(BigInteger.valueOf(20));
+    assertThat(struct.getUint64(15, 1)).isEqualTo(BigInteger.valueOf(21));
     assertThat(struct.getFloat32(16)).isEqualTo(2);
     assertThat(struct.getFloat32(17, 0)).isEqualTo(3);
     assertThat(struct.getFloat32(17, 1)).isEqualTo(4);

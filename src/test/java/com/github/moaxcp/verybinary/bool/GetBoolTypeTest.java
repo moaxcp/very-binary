@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -31,7 +31,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer, long) not supported for BoolArrayType. Use getBool(Pointer, long) instead.");
+        .hasMessage("get(Pointer, long) not supported for BoolListType. Use getBool(Pointer, long) instead.");
   }
 
   @Test
@@ -41,7 +41,7 @@ public class GetBoolTypeTest {
         .build();
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer) not supported for BoolArrayType. Use getBool(Pointer) instead.");
+        .hasMessage("get(Pointer) not supported for BoolListType. Use getBool(Pointer) instead.");
   }
 
   @Test
@@ -52,7 +52,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 2, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getArray(Pointer, long, long) not supported for BoolArrayType. Use getBoolArray(Pointer, long, long) instead.");
+        .hasMessage("getArray(Pointer, long, long) not supported for BoolListType. Use getBoolArray(Pointer, long, long) instead.");
   }
 
   @Test
@@ -63,7 +63,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getList(Pointer) not supported for BoolArrayType. Use getBoolList(Pointer) instead.");
+        .hasMessage("getList(Pointer) not supported for BoolListType. Use getBoolList(Pointer) instead.");
   }
 
   @Test
@@ -74,7 +74,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct, 2, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getList(Pointer, long, long) not supported for BoolArrayType. Use getBoolList(Pointer, long, long) instead.");
+        .hasMessage("getList(Pointer, long, long) not supported for BoolListType. Use getBoolList(Pointer, long, long) instead.");
   }
 
   @Test
@@ -173,7 +173,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBool(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: -1 length: 0");
+        .hasMessage("BoolListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -186,7 +186,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBool(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 1 index: 2 length: 2");
+        .hasMessage("BoolListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -240,7 +240,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolArray(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: -2 end: 0");
+        .hasMessage("BoolListType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -252,7 +252,7 @@ public class GetBoolTypeTest {
 
     assertThatThrownBy(() -> struct.getBoolArray(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("BoolListType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
@@ -262,7 +262,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThat(struct.getList(0)).containsExactly(true, false, true, false, true);
+    assertThat(struct.getBoolList(0)).containsExactly(true, false, true, false, true);
   }
 
   @Test
@@ -272,7 +272,7 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThat(struct.getList(0, 2, 2)).containsExactly(true, false);
+    assertThat(struct.getBoolList(0, 2, 2)).containsExactly(true, false);
   }
 
   @Test
@@ -282,9 +282,9 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThatThrownBy(() -> struct.getList(0, -2, 2))
+    assertThatThrownBy(() -> struct.getBoolList(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: -2 end: 0");
+        .hasMessage("BoolListType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -294,8 +294,8 @@ public class GetBoolTypeTest {
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
-    assertThatThrownBy(() -> struct.getList(0, 5, 2))
+    assertThatThrownBy(() -> struct.getBoolList(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("BoolArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("BoolListType at position 0 length: 5 start: 5 end: 7");
   }
 }

@@ -1,5 +1,8 @@
 package com.github.moaxcp.verybinary;
 
+import com.github.moaxcp.verybinary.list.BoolList;
+import com.github.moaxcp.verybinary.math.Expression;
+
 public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARENT>> {
   private final PARENT structTypeBuilder;
   private final PrimitiveBuilder primitiveBuilder;
@@ -19,17 +22,22 @@ public class StructTypePrimitiveSubBuilder<PARENT extends StructTypeBuilder<PARE
     return this;
   }
 
+  public StructTypePrimitiveSubBuilder<PARENT> constant(boolean... constantValue) {
+    primitiveBuilder.constant(BoolList.toBoolList(constantValue));
+    return this;
+  }
+
   public StructTypePrimitiveSubBuilder<PARENT> lengthField(int lengthFieldPosition) {
-    primitiveBuilder.lengthExpression(Expression.valueOf(lengthFieldPosition));
+    primitiveBuilder.lengthExpression(Expression.variable(lengthFieldPosition));
     primitiveBuilder.arrayLengthListener(LengthListener.lengthField(lengthFieldPosition));
-    ((ValueType<?, ?>) structTypeBuilder.getField(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(structTypeBuilder.fields()));
+    ((ValueType<?, ?>) structTypeBuilder.getField(lengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendArrayListener(primitiveBuilder.getPosition()));
     return this;
   }
 
   public StructTypePrimitiveSubBuilder<PARENT> byteLengthField(int byteLengthFieldPosition) {
-    primitiveBuilder.byteLengthExpression(Expression.valueOf(byteLengthFieldPosition));
+    primitiveBuilder.byteLengthExpression(Expression.variable(byteLengthFieldPosition));
     primitiveBuilder.byteLengthListener(ByteLengthListener.lengthField(byteLengthFieldPosition));
-    ((ValueType<?, ?>) structTypeBuilder.getField(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(structTypeBuilder.fields()));
+    ((ValueType<?, ?>) structTypeBuilder.getField(byteLengthFieldPosition)).addValueChangeListener(ValueChangeListener.extendBytesListener(primitiveBuilder.getPosition()));
     return this;
   }
 

@@ -91,7 +91,7 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.length).addUint8(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.length).addUint8(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -103,7 +103,7 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addUint8(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.size()).addUint8(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -121,7 +121,7 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -130,7 +130,7 @@ public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     checkForConstantValue();

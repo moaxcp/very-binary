@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary.float64;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT64;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,22 +20,22 @@ public class Float64TypeTest {
   }
 
   @Test
-  void isFixedLength() {
+  void isFixedByteLength() {
     var struct = struct()
         .float64()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength()).isTrue();
+    assertThat(struct.getType(0).isFixedByteLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
   @Test
-  void isFixedLengthArray() {
+  void isFixedByteLengthArray() {
     var struct = struct()
         .float64Array(constant(3))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength()).isTrue();
+    assertThat(struct.getType(0).isFixedByteLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 }

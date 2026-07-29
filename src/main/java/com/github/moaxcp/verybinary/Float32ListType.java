@@ -102,7 +102,7 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Float> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addFloat32(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.size()).addFloat32(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -120,7 +120,7 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, float value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -129,7 +129,7 @@ public final class Float32ListType extends PrimitiveListType<Float32ListType, Fl
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, float[] values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();

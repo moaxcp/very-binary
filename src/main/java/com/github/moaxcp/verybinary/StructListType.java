@@ -50,8 +50,8 @@ public final class StructListType extends ListType<StructListType, Struct, Struc
   }
 
   @Override
-  public long getElementAllocationLength() {
-    return structType.getAllocationLength();
+  public long getElementAllocationByteLength() {
+    return structType.getAllocationByteLength();
   }
 
   @Override

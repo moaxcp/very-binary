@@ -2,13 +2,16 @@ package com.github.moaxcp.verybinary.math;
 
 import com.github.moaxcp.verybinary.*;
 
-public final class BasicElementLengthOf extends Constant {
+public final class ByteLengthOfBasicElement implements Expression {
 
   private final int position;
 
-  BasicElementLengthOf(int position) {
-    super(-1);
+  ByteLengthOfBasicElement(int position) {
     this.position = position;
+  }
+
+  public static ByteLengthOfBasicElement lengthOfBasicElement(int position) {
+    return new ByteLengthOfBasicElement(position);
   }
 
   public int position() {
@@ -37,16 +40,16 @@ public final class BasicElementLengthOf extends Constant {
 
   @Override
   public String toString() {
-    return "BasicElementLengthOf{" +
-        "position=" + position +
-        '}';
+    return "BasicElementLengthOf(" +
+        position +
+        ")";
   }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
 
-    var variable = (BasicElementLengthOf) o;
+    var variable = (ByteLengthOfBasicElement) o;
     return position == variable.position();
   }
 

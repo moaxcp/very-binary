@@ -3,19 +3,112 @@ package com.github.moaxcp.verybinary.math;
 import com.github.moaxcp.verybinary.ComplexType;
 import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
-import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.stream.Stream;
 
-public final class Multiply implements Expression {
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+
+public final class Multiply implements MultiExpression {
 
   private final List<Expression> expressions;
 
   Multiply(Expression... expressions) {
-    if (expressions == null || expressions.length < 2) {
-      throw new IllegalArgumentException("expressions must have at least two elements");
+    this(List.of(expressions));
+  }
+
+  Multiply(List<Expression> expressions) {
+    if (expressions.size() < 2) {
+      throw new IllegalArgumentException("Multiply must have at least two expressions");
     }
-    this.expressions = List.of(expressions);
+
+    this.expressions = List.copyOf(expressions);
+  }
+
+  public static Multiply multiply(Expression... expressions) {
+    return new Multiply(expressions);
+  }
+
+  public static Multiply multiply(List<Expression> expressions) {
+    return new Multiply(expressions);
+  }
+
+  public static Expression distribute(Multiply multiply) {
+    if (multiply.expressions().stream().noneMatch(e -> e instanceof MultiExpression)) {
+      return multiply;
+    }
+    var first = multiply.expressions().getFirst();
+    var newExpressions = new ArrayList<Expression>();
+    for (int i = 1; i < multiply.expressions().size(); i++) {
+      Expression expr = multiply.expressions().get(i);
+      switch (expr) {
+        case Sum sum -> newExpressions.add(new Sum(sum.expressions().stream()
+            .map(term -> multiplyBy(first, term))
+            .toList()));
+        case Subtract sub -> newExpressions.add(new Subtract(sub.expressions().stream()
+            .map(term -> multiplyBy(first, term))
+            .toList()));
+        case Multiply m -> newExpressions.add(distribute(multiply(Stream.concat(Stream.of(first), m.expressions.stream()).toList())));
+        case Divide d -> newExpressions.add(Divide.distribute(new Divide(d.expressions().stream()
+            .map(term -> multiplyBy(first, term))
+            .toList())));
+        case Constant constant -> newExpressions.add(multiplyBy(first, constant));
+        case Variable variable -> newExpressions.add(multiplyBy(first, variable));
+        case LengthOf lengthOf -> newExpressions.add(multiplyBy(first, lengthOf));
+        case ByteLengthOf byteLengthOf -> newExpressions.add(multiplyBy(first, byteLengthOf));
+        case ByteLengthOfBasicElement byteLengthOfBasicElement -> newExpressions.add(multiplyBy(first, byteLengthOfBasicElement));
+      }
+    }
+    if (newExpressions.size() == 1) {
+      return newExpressions.getFirst();
+    } else {
+      return multiply(newExpressions);
+    }
+  }
+
+  static Expression multiplyBy(Expression first, Expression second) {
+    return switch(second) {
+      case Sum sum -> new Sum(sum.expressions().stream().map(e -> multiplyBy(first, e)).toList());
+      case Subtract subtract -> new Subtract(subtract.expressions().stream().map(e -> multiplyBy(first, e)).toList());
+      case Multiply multiply -> distribute(new Multiply(Stream.concat(Stream.of(first), multiply.expressions().stream()).toList()));
+      case Divide divide -> Divide.distribute(new Divide(divide.expressions().stream().map(e -> multiplyBy(first, e)).toList()));
+      case Constant constant -> new Multiply(List.of(first, constant));
+      case Variable variable -> new Multiply(List.of(first, variable));
+      case LengthOf lengthOf -> new Multiply(List.of(first, lengthOf));
+      case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
+      case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));
+    };
+  }
+
+  static Expression simplify(Multiply multiply) {
+    var constants = new ArrayList<Constant>();
+    var newExpressions = new ArrayList<Expression>();
+    for (var expression : multiply.expressions()) {
+      if (expression instanceof Constant) {
+        constants.add((Constant) expression);
+      } else if (expression instanceof Sum sum) {
+        newExpressions.add(Sum.simplify(sum));
+      } else if (expression instanceof Subtract sub) {
+        newExpressions.add(Subtract.simplify(sub));
+      } else if (expression instanceof Multiply m) {
+        newExpressions.add(Multiply.simplify(m));
+      } else if (expression instanceof Divide d) {
+        newExpressions.add(Divide.simplify(d));
+      } else {
+        newExpressions.add(expression);
+      }
+    }
+    var constant = new Constant(constants.stream().map(Constant::value).reduce(1L, (a, b) -> a * b));
+    newExpressions.add(constant);
+    if (newExpressions.size() == 1) {
+      return newExpressions.getFirst();
+    } else {
+      return multiply(newExpressions);
+    }
   }
 
   public List<Expression> expressions() {
@@ -54,27 +147,36 @@ public final class Multiply implements Expression {
     return result;
   }
 
-  public @Nullable Expression distribute() {
-    return null;
-  }
-
   @Override
   public String toString() {
-    return "Multiply{" +
-        "expressions=" + expressions +
-        '}';
+    StringJoiner joiner = new StringJoiner(" * ");
+    for (Expression expression : expressions) {
+      if (expression instanceof Sum || expression instanceof Subtract || expression instanceof Divide) {
+        joiner.add("(" + expression + ")");
+      } else {
+        joiner.add(expression.toString());
+      }
+    }
+    return joiner.toString();
   }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
 
-    Multiply multiply = (Multiply) o;
-    return expressions.equals(multiply.expressions);
+    var other = ((Multiply) o).expressions();
+    if (expressions == other) return true;
+    if (expressions.size() != other.size()) return false;
+    Map<Expression, Long> map1 = expressions.stream().collect(groupingBy(e -> e, counting()));
+    Map<Expression, Long> map2 = other.stream().collect(groupingBy(e -> e, counting()));
+
+    return map1.equals(map2);
   }
 
   @Override
   public int hashCode() {
-    return expressions.hashCode();
+    return expressions.stream()
+      .mapToInt(Object::hashCode)
+      .sum();
   }
 }

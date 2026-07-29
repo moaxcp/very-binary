@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.StructList;
+import com.github.moaxcp.verybinary.math.Constant;
 import com.github.moaxcp.verybinary.math.Expression;
 import org.jspecify.annotations.Nullable;
 
@@ -103,7 +104,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF int8Array() {
-    return primitive().lengthExpression(Expression.constant(0)).int8();
+    return primitive().lengthExpression(Constant.constant(0)).int8();
   }
 
   public SELF int8Array(int lengthPosition) {

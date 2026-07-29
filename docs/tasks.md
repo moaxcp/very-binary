@@ -91,6 +91,8 @@
 9. [ ] Phase 9 — Builders and ergonomics
    - [ ] Provide builder classes for StructType creation, including sub-builders for basicTypeInfo fields and pad entries.
    - [ ] Introduce helper utilities for computed lengths or conditional fields if required by schemas.
+   - [x] Add support for Multiply to distribute() — handle nested Multiply by flattening expressions — refs: req: Layers of abstraction > basicTypeInfo types; plan: 9. Builders and ergonomics
+   - [x] Add distribute methods to Divide — distribute Sum/Subtract numerator into each term divided by remaining denominators; flatten nested Divide numerator — refs: req: Layers of abstraction > basicTypeInfo types; plan: 9. Builders and ergonomics
 
 10. [ ] Phase 10 — Testing strategy
   - [x] Add unit tests for each basicTypeInfo under both endianness serializers with edge values, including unsigned boundaries — refs: req: Layers of abstraction > basicTypeInfo types; plan: 4.10. Testing strategy

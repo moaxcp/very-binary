@@ -24,12 +24,12 @@ public final class PadType extends AbstractType<PadType> {
   }
 
   @Override
-  public long getAllocationLength() {
+  public long getAllocationByteLength() {
     if (!align) {
       return length;
     }
 
-    return length - parent.getType(position - 1).getAllocationLength() % length;
+    return length - parent.getType(position - 1).getAllocationByteLength() % length;
   }
 
   public long getPadLength() {
@@ -53,9 +53,9 @@ public final class PadType extends AbstractType<PadType> {
   }
 
   @Override
-  public boolean isFixedLength() {
+  public boolean isFixedByteLength() {
     return switch (parent) {
-      case StructType structType -> !align || structType.getType(position - 1).isFixedLength();
+      case StructType structType -> !align || structType.getType(position - 1).isFixedByteLength();
     };
   }
 

@@ -8,7 +8,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.math.Expression.divide;
+import static com.github.moaxcp.verybinary.math.ByteLengthOfBasicElement.lengthOfBasicElement;
+import static com.github.moaxcp.verybinary.math.Divide.divide;
 
 public final class PrimitiveBuilder {
 
@@ -97,7 +98,7 @@ public final class PrimitiveBuilder {
   public Type<?> bool() {
     if (lengthExpression != null || byteLengthExpression != null || constantValue != null && constantValue instanceof BoolList) {
       if (byteLengthExpression != null) {
-        lengthExpression = divide(byteLengthExpression, Expression.basicElementLengthOf(position));
+        lengthExpression = divide(byteLengthExpression, lengthOfBasicElement(position));
       }
       return new BoolListType(position, null, getConstantValue(BoolList.class), lengthExpression)
           .addLengthListeners(lengthListeners)

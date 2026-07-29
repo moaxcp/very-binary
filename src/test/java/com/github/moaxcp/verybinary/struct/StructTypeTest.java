@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.*;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StructTypeTest {
@@ -48,7 +48,7 @@ public class StructTypeTest {
   }
 
   @Test
-  void getAllocationLength() {
+  void getAllocationByteLength() {
     var struct = structType()
         .int8()
         .struct()
@@ -57,11 +57,11 @@ public class StructTypeTest {
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(4);
+    assertThat(struct.getAllocationByteLength()).isEqualTo(4);
   }
 
   @Test
-  void getAllocationLength_array() {
+  void getAllocationByteLength_array() {
     var struct = structType()
         .int8()
         .struct()
@@ -71,11 +71,11 @@ public class StructTypeTest {
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(1);
+    assertThat(struct.getAllocationByteLength()).isEqualTo(1);
   }
 
   @Test
-  void getAllocationLength_array_with_constant_length() {
+  void getAllocationLength_array_with_constant_Byte_length() {
     var struct = structType()
         .int8()
         .struct()
@@ -85,11 +85,11 @@ public class StructTypeTest {
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(56);
+    assertThat(struct.getAllocationByteLength()).isEqualTo(56);
   }
 
   @Test
-  void getAllocationLength_array_with_constant_length_field() {
+  void getAllocationLength_array_with_constant_Byte_length_field() {
     var struct = structType()
         .primitive().constant((byte) 5).int8()
         .struct()
@@ -99,7 +99,7 @@ public class StructTypeTest {
           .end()
         .build();
 
-    assertThat(struct.getAllocationLength()).isEqualTo(56);
+    assertThat(struct.getAllocationByteLength()).isEqualTo(56);
   }
 
   @Test
@@ -218,7 +218,7 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_constant_length() {
+  void isFixedLength_constant_Byte_length() {
     var inner = structType()
         .primitive().constant(3).int16()
         .primitive().constant(true).lengthField(0).bool()
@@ -237,7 +237,7 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_variable_length() {
+  void isFixedLength_variable_Byte_length() {
     var inner = structType()
         .int16()
         .boolArray(0)
@@ -256,7 +256,7 @@ public class StructTypeTest {
   }
 
   @Test
-  void isFixedLength_constant_length_field() {
+  void isFixedLength_constant_Byte_length_field() {
     var inner = structType()
         .primitive().constant(3).int16()
         .primitive().constant(new boolean[]{true, true, true}).bool()

@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float64ListTypeTest {

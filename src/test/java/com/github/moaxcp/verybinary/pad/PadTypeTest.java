@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -100,7 +100,7 @@ public class PadTypeTest {
   }
 
   @Test
-  void isFixedLength() {
+  void isFixedByteLength() {
     var struct = struct()
         .pad(4)
         .build();
@@ -109,7 +109,7 @@ public class PadTypeTest {
   }
 
   @Test
-  void isFixedLengthAlign() {
+  void isFixedByteLengthAlign() {
     var struct = struct()
         .int8()
         .align(4)
@@ -119,7 +119,7 @@ public class PadTypeTest {
   }
 
   @Test
-  void isFixedLengthAlignArray() {
+  void isFixedByteLengthAlignArray() {
     var struct = struct()
         .int8()
         .int8Array(0)
@@ -130,7 +130,7 @@ public class PadTypeTest {
   }
 
   @Test
-  void isFixedLengthAlignArrayConstant() {
+  void isFixedByteLengthAlignArrayConstant() {
     var struct = struct()
         .int8Array(constant(8))
         .align(4)

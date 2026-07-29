@@ -77,7 +77,7 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, BigInteger[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.length).addUint64(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.length).addUint64(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -89,7 +89,7 @@ public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteg
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<BigInteger> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addUint64(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.size()).addUint64(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);

@@ -8,13 +8,14 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.math.Expression.constant;
 import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 
 public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends ValueType<SELF, L> permits BasicListType, StructListType {
 
   protected final Expression lengthExpression;
+
   protected final List<LengthListener> lengthListeners = new ArrayList<>();
 
   protected ListType(int position, @Nullable ComplexType<?> parent, @Nullable L constantValue, @Nullable Expression lengthExpression) {
@@ -56,21 +57,25 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
 
   public long getAllocationLength() {
     if (lengthExpression.isConstant(parent)) {
-      return lengthExpression.constantValue(parent) * getElementAllocationLength();
+      return lengthExpression.constantValue(parent);
     } else {
-      return lengthExpression.defaultValue(parent) * getElementAllocationLength();
+      return lengthExpression.defaultValue(parent);
     }
   }
 
-  protected abstract long getElementAllocationLength();
+  public long getAllocationByteLength() {
+    return getAllocationLength() * getElementAllocationByteLength();
+  }
+
+  protected abstract long getElementAllocationByteLength();
 
   abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index);
 
   abstract long getByteLength(Pointer<?, ? extends Type<?>> pointer, long index, long length);
 
   @Override
-  public boolean isFixedLength() {
-    return lengthExpression.isConstant(parent) && isElementFixedLength();
+  public boolean isFixedByteLength() {
+    return isConstant() || (lengthExpression.isConstant(parent) && isElementFixedLength());
   }
 
   public abstract boolean isElementFixedLength();
@@ -169,7 +174,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -178,7 +183,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   public final void add(Pointer<?, ? extends Type<?>> pointer, long index, L value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -187,7 +192,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, T[] values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -196,7 +201,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   public final void add(Pointer<?, ? extends Type<?>> pointer, long index, List<T> values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -206,7 +211,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
 
   @Override
   public final void remove(Pointer<?, ? extends Type<?>> pointer) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length " + getClass().getSimpleName() + " at position " + getPosition());
     }
     callWithLengthChange(DEALLOCATED, pointer, -getLength(pointer),
@@ -222,7 +227,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   protected final void remove(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     if (reason != RESIZED_BY_LENGTH_FIELD) {
@@ -236,7 +241,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   protected final void remove(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     if (reason != RESIZED_BY_LENGTH_FIELD) {
@@ -269,7 +274,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
     callWithLengthChange(reason, pointer, length, () -> {
       callWithByteLengthChange(reason, pointer, () -> {
         checkIndexAllocate(pointer, index);
-        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), getElementAllocationLength() * length);
+        pointer.getByteArray().shiftBytesFor(getOffset(pointer, index), getElementAllocationByteLength() * length);
       });
     });
   }

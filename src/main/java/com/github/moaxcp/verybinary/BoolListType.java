@@ -90,7 +90,7 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.length).addBool(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.length).addBool(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -102,7 +102,7 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Boolean> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addBool(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.size()).addBool(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -120,7 +120,7 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -129,7 +129,7 @@ public final class BoolListType extends PrimitiveListType<BoolListType, Boolean,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, boolean[] values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     checkForConstantValue();

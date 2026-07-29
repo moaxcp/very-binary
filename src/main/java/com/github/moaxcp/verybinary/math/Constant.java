@@ -4,12 +4,20 @@ import com.github.moaxcp.verybinary.ComplexType;
 import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
 
-public sealed class Constant implements Expression permits BasicElementLengthOf {
+public final class Constant implements Expression {
 
-  private final long value;
+  final long value;
 
   Constant(long value) {
     this.value = value;
+  }
+
+  public static Constant constant(long value) {
+    return new Constant(value);
+  }
+
+  public long value() {
+    return value;
   }
 
   @Override
@@ -34,9 +42,7 @@ public sealed class Constant implements Expression permits BasicElementLengthOf 
 
   @Override
   public String toString() {
-    return "Constant{" +
-        "value=" + value +
-        '}';
+    return String.valueOf(value);
   }
 
   @Override

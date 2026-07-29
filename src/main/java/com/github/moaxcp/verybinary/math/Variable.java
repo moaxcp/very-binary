@@ -12,6 +12,10 @@ public final class Variable implements Expression {
     this.position = position;
   }
 
+  public static Variable variable(int position) {
+    return new Variable(position);
+  }
+
   public int position() {
     return position;
   }
@@ -75,9 +79,9 @@ public final class Variable implements Expression {
 
   @Override
   public String toString() {
-    return "ValueOf{" +
-        "position=" + position +
-        '}';
+    return "ValueOf(" +
+        position +
+        ')';
   }
 
   @Override

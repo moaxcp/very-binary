@@ -17,7 +17,7 @@ public sealed abstract class BasicListType<SELF extends ListType<SELF, T, L>, T,
   }
 
   @Override
-  public long getElementAllocationLength() {
+  public long getElementAllocationByteLength() {
     return basicTypeInfo.size();
   }
 

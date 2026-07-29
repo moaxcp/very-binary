@@ -17,7 +17,7 @@ public abstract sealed class BasicType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   @Override
-  public long getAllocationLength() {
+  public long getAllocationByteLength() {
     return basicTypeInfo.size();
   }
 
@@ -27,7 +27,7 @@ public abstract sealed class BasicType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   @Override
-  public final boolean isFixedLength() {
+  public final boolean isFixedByteLength() {
     return true;
   }
 

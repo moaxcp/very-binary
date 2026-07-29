@@ -5,8 +5,9 @@ import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
 
 import java.util.List;
+import java.util.StringJoiner;
 
-public final class Subtract implements Expression {
+public final class Subtract implements MultiExpression {
 
   private final List<Expression> expressions;
 
@@ -15,6 +16,21 @@ public final class Subtract implements Expression {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.of(expressions);
+  }
+
+  public Subtract(List<Expression> expressions) {
+    if (expressions == null || expressions.size() < 2) {
+      throw new IllegalArgumentException("expressions must have at least two elements");
+    }
+    this.expressions = expressions;
+  }
+
+  static Subtract subtract(Expression... expressions) {
+    return new Subtract(expressions);
+  }
+
+  static Expression simplify(Subtract sub) {
+    return sub;
   }
 
   public List<Expression> expressions() {
@@ -55,9 +71,15 @@ public final class Subtract implements Expression {
 
   @Override
   public String toString() {
-    return "Subtract{" +
-        "expressions=" + expressions +
-        '}';
+    StringJoiner joiner = new StringJoiner(" - ");
+    for (Expression expression : expressions) {
+      if (expression instanceof Multiply || expression instanceof Divide) {
+        joiner.add("(" + expression + ")");
+      } else {
+        joiner.add(expression.toString());
+      }
+    }
+    return joiner.toString();
   }
 
   @Override
@@ -70,6 +92,8 @@ public final class Subtract implements Expression {
 
   @Override
   public int hashCode() {
-    return expressions.hashCode();
+    return expressions.stream()
+        .mapToInt(Object::hashCode)
+        .sum();
   }
 }

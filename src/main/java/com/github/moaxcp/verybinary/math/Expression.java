@@ -1,45 +1,20 @@
 package com.github.moaxcp.verybinary.math;
 
-import com.github.moaxcp.verybinary.*;
+import com.github.moaxcp.verybinary.ComplexType;
+import com.github.moaxcp.verybinary.Pointer;
+import com.github.moaxcp.verybinary.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed interface Expression permits Constant, Divide, LengthOf, Multiply, Subtract, Sum, Variable {
-
-  static Constant constant(long value) {
-    return new Constant(value);
-  }
-
-  static Variable variable(int position) {
-    return new Variable(position);
-  }
-
-  static LengthOf basicElementLengthOf(int position) {
-    return new LengthOf(position);
-  }
-
-  static Sum sum(Expression... expressions) {
-    return new Sum(expressions);
-  }
-
-  static Subtract subtract(Expression... expressions) {
-    return new Subtract(expressions);
-  }
-
-  static Multiply multiply(Expression... expressions) {
-    return new Multiply(expressions);
-  }
-
-  static Divide divide(Expression... expressions) {
-    return new Divide(expressions);
-  }
+public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElement, Constant, LengthOf, MultiExpression, Variable {
 
   default List<Variable> findVariables(int position) {
     var variables = new ArrayList<Variable>();
     switch (this) {
       case LengthOf ignored -> {}
-      case BasicElementLengthOf ignored -> {}
+      case ByteLengthOf ignored -> {}
+      case ByteLengthOfBasicElement ignored -> {}
       case Constant ignored -> {}
       case Variable v -> {
         if (v.position() == position) {
@@ -52,6 +27,20 @@ public sealed interface Expression permits Constant, Divide, LengthOf, Multiply,
       case Divide div -> variables.addAll(div.findVariables(position));
     }
     return variables;
+  }
+
+  static boolean likeTerms(Expression first, Expression second) {
+    return switch (first) {
+      case LengthOf ignored -> first.equals(second);
+      case ByteLengthOf ignored -> first.equals(second);
+      case ByteLengthOfBasicElement ignored -> first.equals(second);
+      case Constant ignored -> true;
+      case Variable ignored -> first.equals(second);
+      case Multiply mul -> false;
+      case Divide div -> false;
+      case Sum sum -> false;
+      case Subtract sub -> false;
+    };
   }
 
   boolean isConstant(ComplexType<?> parent);

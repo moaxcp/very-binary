@@ -84,7 +84,7 @@ public sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> exten
   }
 
   public void remove(Pointer<?, ? extends Type<?>> pointer) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new UnsupportedOperationException("Cannot remove element from fixed length " + getClass().getSimpleName() + " at position " + getPosition());
     }
     callWithByteLengthChange(DEALLOCATED, pointer, () -> pointer.getByteArray().removeInt8(getOffset(pointer), getByteLength(pointer)));

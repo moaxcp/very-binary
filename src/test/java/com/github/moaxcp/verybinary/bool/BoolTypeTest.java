@@ -3,11 +3,11 @@ package com.github.moaxcp.verybinary.bool;
 import com.github.moaxcp.verybinary.BoolType;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.verybinary.BasicTypeInfo.BOOL;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
-import static com.github.moaxcp.verybinary.BasicTypeInfo.BOOL;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoolTypeTest {
@@ -33,41 +33,41 @@ public class BoolTypeTest {
   }
 
   @Test
-  void getAllocationLength() {
+  void getAllocationByteLength() {
     var type = structType()
         .bool()
         .build();
 
-    assertThat(type.getType(0).getAllocationLength()).isEqualTo(1);
+    assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(1);
   }
 
   @Test
-  void getAllocationLength_array() {
+  void getAllocationByteLength_array() {
     var type = structType()
         .int8()
         .boolArray(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength()).isEqualTo(0);
-    assertThat(type.getAllocationLength()).isEqualTo(1);
+    assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(0);
+    assertThat(type.getAllocationByteLength()).isEqualTo(1);
   }
 
   @Test
-  void getAllocationLength_array_with_constant_length() {
+  void getAllocationLength_array_with_constant_Byte_length() {
     var type = structType()
         .boolArray(constant(5))
         .build();
-    assertThat(type.getType(0).getAllocationLength()).isEqualTo(5);
-    assertThat(type.getAllocationLength()).isEqualTo(5);
+    assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(5);
+    assertThat(type.getAllocationByteLength()).isEqualTo(5);
   }
 
   @Test
-  void getAllocationLength_array_with_constant_length_field() {
+  void getAllocationLength_array_with_constant_Byte_length_field() {
     var type = structType()
         .primitive().constant((byte) 5).int8()
         .boolArray(0)
         .build();
-    assertThat(type.getType(1).getAllocationLength()).isEqualTo(5);
-    assertThat(type.getAllocationLength()).isEqualTo(6);
+    assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(5);
+    assertThat(type.getAllocationByteLength()).isEqualTo(6);
   }
 
   @Test
@@ -120,44 +120,44 @@ public class BoolTypeTest {
   }
 
   @Test
-  void isFixedLength() {
+  void isFixedByteLength() {
     var struct = struct()
         .bool()
         .build();
 
-    assertThat(struct.getType(0).isFixedLength()).isTrue();
+    assertThat(struct.getType(0).isFixedByteLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
   @Test
-  void isFixedLengthArray_constant_length() {
+  void isFixedLengthArray_constant_Byte_length() {
     var struct = struct()
         .boolArray(constant(5))
         .build();
 
-    assertThat(struct.getType(0).isFixedLength()).isTrue();
+    assertThat(struct.getType(0).isFixedByteLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 
   @Test
-  void isFixedLengthArray_variable_length() {
+  void isFixedLengthArray_variable_Byte_length() {
     var struct = struct()
         .int8()
         .boolArray(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength()).isFalse();
+    assertThat(struct.getType(1).isFixedByteLength()).isFalse();
     assertThat(struct.isFixedLength()).isFalse();
   }
 
   @Test
-  void isFixedLengthArray_constant_length_field() {
+  void isFixedLengthArray_constant_Byte_length_field() {
     var struct = struct()
         .primitive().constant((byte) 5).int8()
         .boolArray(0)
         .build();
 
-    assertThat(struct.getType(1).isFixedLength()).isTrue();
+    assertThat(struct.getType(1).isFixedByteLength()).isTrue();
     assertThat(struct.isFixedLength()).isTrue();
   }
 

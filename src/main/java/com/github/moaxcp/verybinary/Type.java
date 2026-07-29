@@ -16,7 +16,7 @@ public sealed interface Type<SELF extends Type<SELF>> permits AbstractType, Comp
 
   long getOffset(Pointer<?, ? extends Type<?>> pointer);
 
-  long getAllocationLength();
+  long getAllocationByteLength();
 
   long getByteLength(Pointer<?, ? extends Type<?>> pointer);
 
@@ -25,7 +25,7 @@ public sealed interface Type<SELF extends Type<SELF>> permits AbstractType, Comp
    *
    * @return
    */
-  boolean isFixedLength();
+  boolean isFixedByteLength();
 
   void allocate(Pointer<?, ? extends Type<?>> pointer);
 

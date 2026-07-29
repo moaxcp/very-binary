@@ -5,8 +5,13 @@ import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
 
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
-public final class Sum implements Expression {
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+
+public final class Sum implements MultiExpression {
 
   private final List<Expression> expressions;
 
@@ -15,6 +20,25 @@ public final class Sum implements Expression {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.of(expressions);
+  }
+
+  public Sum(List<Expression> expressions) {
+    if (expressions.size() < 2) {
+      throw new IllegalArgumentException("Sum must have at least two expressions");
+    }
+    this.expressions = expressions;
+  }
+
+  static Sum sum(Expression... expressions) {
+    return new Sum(expressions);
+  }
+
+  static Sum sum(List<Expression> expressions) {
+    return new Sum(expressions);
+  }
+
+  static Expression simplify(Sum sum) {
+    return sum;
   }
 
   public List<Expression> expressions() {
@@ -43,21 +67,34 @@ public final class Sum implements Expression {
 
   @Override
   public String toString() {
-    return "Sum{" +
-        "expressions=" + expressions +
-        '}';
+    StringJoiner joiner = new StringJoiner(" + ");
+    for (Expression expression : expressions) {
+      if (expression instanceof Multiply || expression instanceof Divide) {
+        joiner.add("(" + expression + ")");
+      } else {
+        joiner.add(expression.toString());
+      }
+    }
+    return joiner.toString();
   }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
 
-    Sum subtract = (Sum) o;
-    return expressions.equals(subtract.expressions);
+    var other = ((Sum) o).expressions();
+    if (expressions == other) return true;
+    if (expressions.size() != other.size()) return false;
+    Map<Expression, Long> map1 = expressions.stream().collect(groupingBy(e -> e, counting()));
+    Map<Expression, Long> map2 = other.stream().collect(groupingBy(e -> e, counting()));
+
+    return map1.equals(map2);
   }
 
   @Override
   public int hashCode() {
-    return expressions.hashCode();
+    return expressions.stream()
+        .mapToInt(Object::hashCode)
+        .sum();
   }
 }

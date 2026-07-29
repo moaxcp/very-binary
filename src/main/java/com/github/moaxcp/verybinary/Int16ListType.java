@@ -7,13 +7,13 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.BasicTypeInfo.INT8;
+import static com.github.moaxcp.verybinary.BasicTypeInfo.INT16;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
 
 public final class Int16ListType extends PrimitiveListType<Int16ListType, Short, Int16List> {
 
   public Int16ListType(int position, @Nullable ComplexType<?> parent, @Nullable Int16List constantValue, Expression lengthExpression) {
-    super(position, parent, INT8, constantValue, lengthExpression);
+    super(position, parent, INT16, constantValue, lengthExpression);
   }
 
   @Override
@@ -91,7 +91,7 @@ public final class Int16ListType extends PrimitiveListType<Int16ListType, Short,
   private void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.length).addInt16(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.length).addInt16(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -103,7 +103,7 @@ public final class Int16ListType extends PrimitiveListType<Int16ListType, Short,
   protected void setUnchecked(ValueChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, List<Short> values) {
     if (!valueChangeListeners.isEmpty()) {
       var old = get(pointer).copy();
-      var bytes = new ByteArray(getElementAllocationLength() * values.size()).addInt16(0, values);
+      var bytes = new ByteArray(getElementAllocationByteLength() * values.size()).addInt16(0, values);
       pointer.getByteArray().replace(getOffset(pointer, index), getByteLength(pointer, index, getLength(pointer) - index), bytes, 0, bytes.getAllocated());
       var newValue = get(pointer).copy();
       notifyValueChange(reason, pointer, old, newValue);
@@ -121,7 +121,7 @@ public final class Int16ListType extends PrimitiveListType<Int16ListType, Short,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, short value) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException(getClass().getSimpleName() + " at position " + getPosition() + " is constant length: " + getLength(pointer) + " index: " + index);
     }
     checkForConstantValue();
@@ -130,7 +130,7 @@ public final class Int16ListType extends PrimitiveListType<Int16ListType, Short,
   }
 
   public void add(Pointer<?, ? extends Type<?>> pointer, long index, short[] values) {
-    if (isFixedLength()) {
+    if (isFixedByteLength()) {
       throw new IllegalStateException("Cannot add elements to fixed length array " + getClass().getSimpleName() + " at position " + getPosition() + " index: " + index);
     }
     checkForConstantValue();

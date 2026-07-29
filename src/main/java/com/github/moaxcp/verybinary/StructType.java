@@ -33,8 +33,8 @@ public final class StructType extends ValueType<StructType, Struct> implements C
   }
 
   @Override
-  public long getAllocationLength() {
-    return fields.stream().mapToLong(Type::getAllocationLength).sum();
+  public long getAllocationByteLength() {
+    return fields.stream().mapToLong(Type::getAllocationByteLength).sum();
   }
 
   public int getPositions() {
@@ -52,10 +52,10 @@ public final class StructType extends ValueType<StructType, Struct> implements C
   }
 
   @Override
-  public boolean isFixedLength() {
+  public boolean isFixedByteLength() {
       for (int i = 0; i < fields.size(); i++) {
         var type = fields.get(i);
-        if(!type.isFixedLength()) {
+        if(!type.isFixedByteLength()) {
           return false;
         }
       }

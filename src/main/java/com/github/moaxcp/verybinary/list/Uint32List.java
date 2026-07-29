@@ -1,15 +1,15 @@
 package com.github.moaxcp.verybinary.list;
 
 import com.github.moaxcp.verybinary.*;
+import com.github.moaxcp.verybinary.jdk.PrimitiveIterable;
 import com.github.moaxcp.verybinary.jdk.Uint32Consumer;
 import com.github.moaxcp.verybinary.jdk.Uint32Iterator;
-import com.github.moaxcp.verybinary.jdk.PrimitiveIterable;
 
 import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Expression.constant;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 
 public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, Long> implements PrimitiveIterable<Long, Uint32Consumer> {
 

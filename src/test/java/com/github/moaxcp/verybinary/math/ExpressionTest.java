@@ -1,9 +1,14 @@
-package com.github.moaxcp.verybinary;
+package com.github.moaxcp.verybinary.math;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.verybinary.math.Expression.*;
 import static com.github.moaxcp.verybinary.Builders.struct;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Divide.divide;
+import static com.github.moaxcp.verybinary.math.Multiply.multiply;
+import static com.github.moaxcp.verybinary.math.Subtract.subtract;
+import static com.github.moaxcp.verybinary.math.Sum.sum;
+import static com.github.moaxcp.verybinary.math.Variable.variable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpressionTest {

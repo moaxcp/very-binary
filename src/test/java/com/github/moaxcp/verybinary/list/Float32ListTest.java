@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Float32ListTest {
   @Test
   void testGetFloat32() {
-    Struct struct = struct(structType().float32Array(constant(2)).build())
+    Struct struct = struct(structType().float32List(constant(2)).build())
         .build()
         .setFloat32(0, 1.1f, 2.2f);
 
@@ -22,7 +22,7 @@ class Float32ListTest {
 
   @Test
   void testSetAndGet() {
-    Struct struct = struct(structType().float32Array(constant(2)).build())
+    Struct struct = struct(structType().float32List(constant(2)).build())
         .build();
 
     Float32List list = struct.getFloat32Array(0);
@@ -35,7 +35,7 @@ class Float32ListTest {
 
   @Test
   void testIteration() {
-    Struct struct = struct(structType().float32Array(constant(3)).build())
+    Struct struct = struct(structType().float32List(constant(3)).build())
         .build()
         .setFloat32(0, 1.0f, 2.0f, 3.0f);
 

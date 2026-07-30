@@ -79,7 +79,7 @@ public class GetInt8TypeTest {
   @Test
   void getInt8_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
+        .basic().constant((byte) 5).int8()
         .build();
 
     assertThat(struct.getInt8(0)).isEqualTo((byte) 5);
@@ -100,7 +100,7 @@ public class GetInt8TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).get(struct, 0))
@@ -112,7 +112,7 @@ public class GetInt8TypeTest {
   void getInt8Array() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class GetInt8TypeTest {
   void getInt8Array_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt8(1, -1))
@@ -136,7 +136,7 @@ public class GetInt8TypeTest {
   void getInt8Array_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -150,7 +150,7 @@ public class GetInt8TypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt8(1, 0))
@@ -161,7 +161,7 @@ public class GetInt8TypeTest {
   @Test
   void getInt8Array_constant() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThat(struct.getInt8(0, 3)).isEqualTo((byte) 5);

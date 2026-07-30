@@ -14,7 +14,7 @@ public class RemoveBoolTypeTest {
   void remove() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -27,7 +27,7 @@ public class RemoveBoolTypeTest {
   void remove_position_negative() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -39,7 +39,7 @@ public class RemoveBoolTypeTest {
   void remove_position_greater_than_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -52,7 +52,7 @@ public class RemoveBoolTypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -75,7 +75,7 @@ public class RemoveBoolTypeTest {
   void remove_index_0() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true);
@@ -89,7 +89,7 @@ public class RemoveBoolTypeTest {
   void remove_index_1() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
     struct.addBool(1, true);
     struct.addBool(1, false);
@@ -103,7 +103,7 @@ public class RemoveBoolTypeTest {
   void remove_index_negative() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -116,7 +116,7 @@ public class RemoveBoolTypeTest {
   void remove_index_greater_than_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -140,7 +140,7 @@ public class RemoveBoolTypeTest {
   @Test
   void remove_fixed_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -151,7 +151,7 @@ public class RemoveBoolTypeTest {
   @Test
   void remove_index_fixed_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))
@@ -163,7 +163,7 @@ public class RemoveBoolTypeTest {
   void remove_index_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true, true, true, true);
@@ -176,7 +176,7 @@ public class RemoveBoolTypeTest {
   void remove_index_length_negative() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true, true, true, true);
@@ -190,7 +190,7 @@ public class RemoveBoolTypeTest {
   void remove_index_length_greater_than_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true, true, true, true);
@@ -203,7 +203,7 @@ public class RemoveBoolTypeTest {
   @Test
   void remove_index_length_fixed() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2, 2))

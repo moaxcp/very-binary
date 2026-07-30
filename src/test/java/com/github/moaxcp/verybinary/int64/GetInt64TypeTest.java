@@ -79,7 +79,7 @@ public class GetInt64TypeTest {
   @Test
   void getInt64_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .basic().constant(5L).int64()
         .build();
 
     assertThat(struct.getInt64(0)).isEqualTo(5L);
@@ -111,7 +111,7 @@ public class GetInt64TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).get(struct, 0))
@@ -123,7 +123,7 @@ public class GetInt64TypeTest {
   void getInt64Array() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
@@ -135,7 +135,7 @@ public class GetInt64TypeTest {
   void getInt64Array_negative() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt64(1, -1))
@@ -147,7 +147,7 @@ public class GetInt64TypeTest {
   void getInt64Array_greater_than_length() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
@@ -161,7 +161,7 @@ public class GetInt64TypeTest {
     var struct = struct()
         .allocated()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt64(1, 0))
@@ -172,7 +172,7 @@ public class GetInt64TypeTest {
   @Test
   void getInt64Array_constant() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThat(struct.getInt64(0, 3)).isEqualTo(5L);

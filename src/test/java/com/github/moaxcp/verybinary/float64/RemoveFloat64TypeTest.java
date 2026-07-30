@@ -13,7 +13,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -26,7 +26,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_position_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -38,7 +38,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_position_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -51,7 +51,7 @@ public class RemoveFloat64TypeTest {
     var struct = struct()
         .allocated()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -74,7 +74,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_with_index_0() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     struct.addFloat64(1, 3.0d);
@@ -90,7 +90,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_with_index_1() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
     struct.addFloat64(1, 3.0d);
     struct.addFloat64(1, 2.0d);
@@ -104,7 +104,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_with_index_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -117,7 +117,7 @@ public class RemoveFloat64TypeTest {
   void removeFloat64_with_index_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -141,7 +141,7 @@ public class RemoveFloat64TypeTest {
   @Test
   void removeFloat64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveFloat64TypeTest {
   @Test
   void removeFloat64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2))

@@ -12,7 +12,7 @@ public class RemoveInt32TypeTest {
   void removeInt32() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .fromBytes(ba().int32(2, 1, 2))
         .build();
 
@@ -25,7 +25,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_position_negative() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -37,7 +37,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_position_greater_than_length() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -50,7 +50,7 @@ public class RemoveInt32TypeTest {
     var struct = struct()
         .allocated()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -73,7 +73,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_with_index_0() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     struct.addInt32(1, 1);
@@ -87,7 +87,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_with_index_1() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
     struct.addInt32(1, 1);
     struct.addInt32(1, 2);
@@ -101,7 +101,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_with_index_negative() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .fromBytes(ba().int32(2, 1, 2))
         .build();
 
@@ -114,7 +114,7 @@ public class RemoveInt32TypeTest {
   void removeInt32_with_index_greater_than_length() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .fromBytes(ba().int32(2, 1, 2))
         .build();
 
@@ -138,7 +138,7 @@ public class RemoveInt32TypeTest {
   @Test
   void removeInt32Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -149,7 +149,7 @@ public class RemoveInt32TypeTest {
   @Test
   void removeInt32Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

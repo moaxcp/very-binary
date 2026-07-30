@@ -69,7 +69,7 @@ public class SetFloat64TypeTest {
   @Test
   void setFloat64_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .basic().constant(3.0d).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
@@ -81,7 +81,7 @@ public class SetFloat64TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).set(struct, 0, Double.valueOf(2.0d)))
@@ -93,7 +93,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .float64()
         .fromBytes(ba().float64(2).float64(5).float64(3).float64(4))
         .build();
@@ -109,7 +109,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .float64()
         .fromBytes(ba().float64(2).float64(2).float64(3).float64(4))
         .build();
@@ -123,7 +123,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .float64()
         .fromBytes(ba().float64(2).float64(2).float64(3).float64(4))
         .build();
@@ -140,7 +140,7 @@ public class SetFloat64TypeTest {
     var struct = struct()
         .allocated()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, 0, 2.0d))
@@ -161,7 +161,7 @@ public class SetFloat64TypeTest {
   @Test
   void setFloat64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
@@ -173,7 +173,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array_constant_value() {
     var struct = struct()
         .float64()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 
@@ -186,7 +186,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array_constant_value_same() {
     var struct = struct()
         .float64()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 
@@ -199,7 +199,7 @@ public class SetFloat64TypeTest {
   void setFloat64Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     struct.setFloat64(0, 2.0d);

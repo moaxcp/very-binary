@@ -79,7 +79,7 @@ public class GetInt32TypeTest {
   @Test
   void getInt32_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .basic().constant(5).int32()
         .build();
 
     assertThat(struct.getInt32(0)).isEqualTo(5);
@@ -100,7 +100,7 @@ public class GetInt32TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).get(struct, 0))
@@ -112,7 +112,7 @@ public class GetInt32TypeTest {
   void getInt32Array() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .fromBytes(ba().int32(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class GetInt32TypeTest {
   void getInt32Array_negative() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt32(1, -1))
@@ -136,7 +136,7 @@ public class GetInt32TypeTest {
   void getInt32Array_greater_than_length() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .fromBytes(ba().int32(2, 1, 2))
         .build();
 
@@ -150,7 +150,7 @@ public class GetInt32TypeTest {
     var struct = struct()
         .allocated()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt32(1, 0))
@@ -161,7 +161,7 @@ public class GetInt32TypeTest {
   @Test
   void getInt32Array_constant() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThat(struct.getInt32(0, 3)).isEqualTo(5);

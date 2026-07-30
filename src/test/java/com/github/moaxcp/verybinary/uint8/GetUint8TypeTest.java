@@ -78,7 +78,7 @@ public class GetUint8TypeTest {
   @Test
   void getUint8_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).uint8()
+        .basic().constant((short) 5).uint8()
         .build();
 
     assertThat(struct.getUint8(0)).isEqualTo((short) 5);
@@ -99,7 +99,7 @@ public class GetUint8TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).get(struct, 0))
@@ -111,7 +111,7 @@ public class GetUint8TypeTest {
   void getUint8Array() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -123,7 +123,7 @@ public class GetUint8TypeTest {
   void getUint8Array_negative() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getUint8(1, -1))
@@ -135,7 +135,7 @@ public class GetUint8TypeTest {
   void getUint8Array_greater_than_length() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -149,7 +149,7 @@ public class GetUint8TypeTest {
     var struct = struct()
         .allocated()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getUint8(1, 0))
@@ -160,7 +160,7 @@ public class GetUint8TypeTest {
   @Test
   void getUint8Array_constant() {
     var struct = struct()
-        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThat(struct.getUint8(0, 3)).isEqualTo((byte) 5);

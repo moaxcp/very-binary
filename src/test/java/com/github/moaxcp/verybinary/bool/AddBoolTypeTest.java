@@ -17,7 +17,7 @@ public class AddBoolTypeTest {
   void add() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, Boolean.TRUE))
@@ -29,7 +29,7 @@ public class AddBoolTypeTest {
   void add_index() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, Boolean.TRUE))
@@ -41,19 +41,19 @@ public class AddBoolTypeTest {
   void add_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, new Boolean[]{true, false}))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, T[]) not supported for BoolListType. Use addBool(Pointer, boolean[]) instead.");
+        .hasMessage("add(Pointer, long, T[]) not supported for BoolListType. Use addBool(Pointer, long, boolean[]) instead.");
   }
 
   @Test
   void add_index_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(1)).add(struct, 0, new Boolean[]{true, false}))
@@ -65,7 +65,7 @@ public class AddBoolTypeTest {
   void addBoolArray_with_list() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, List.of(true, false));
@@ -77,7 +77,7 @@ public class AddBoolTypeTest {
   void addBool() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -91,7 +91,7 @@ public class AddBoolTypeTest {
   void addBool_position_negative() {
     var struct = struct()
         .bool()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -104,7 +104,7 @@ public class AddBoolTypeTest {
   void addBool_position_greater_than_length() {
     var struct = struct()
         .bool()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -118,7 +118,7 @@ public class AddBoolTypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, true))
@@ -130,7 +130,7 @@ public class AddBoolTypeTest {
   void addBool_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, true))
@@ -142,7 +142,7 @@ public class AddBoolTypeTest {
   void addBool_constant_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, false))
@@ -153,7 +153,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, false))
@@ -175,7 +175,7 @@ public class AddBoolTypeTest {
   void addBool_index() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -189,7 +189,7 @@ public class AddBoolTypeTest {
   void addBool_index_negative() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -202,7 +202,7 @@ public class AddBoolTypeTest {
   void addBool_index_greater_than_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .fromBytes(new byte[] {2, 1, 0})
         .build();
 
@@ -216,7 +216,7 @@ public class AddBoolTypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, 0, true))
@@ -249,7 +249,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_index_length_constant() {
     var struct = struct()
-        .primitive().lengthExpression(constant(5)).bool()
+        .basic().lengthExpression(constant(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
@@ -260,7 +260,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_index_constant() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))
@@ -272,7 +272,7 @@ public class AddBoolTypeTest {
   void addBool_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true, false, true, false, true);
@@ -284,7 +284,7 @@ public class AddBoolTypeTest {
   void addBool_array_constant() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, true, true, true, true, true))
@@ -296,7 +296,7 @@ public class AddBoolTypeTest {
   void addBool_array_constant_bad_values() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true}).bool()
+        .basic().constant(new boolean[]{true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(1, false, false, false, false, false))
@@ -307,7 +307,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_array_constant_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, true, false, true, false, true))
@@ -319,7 +319,7 @@ public class AddBoolTypeTest {
   void addBool_array_index() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.addBool(1, true, true, true);

@@ -32,7 +32,7 @@ public final class Float64List extends PrimitiveList<Float64List, Float64ListTyp
 
   public static StructType getFloat64ListStructType(long length) {
     return structType()
-        .float64Array(constant(length))
+        .float64List(constant(length))
         .build();
   }
 

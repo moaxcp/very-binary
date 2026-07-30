@@ -69,7 +69,7 @@ public class SetInt32TypeTest {
   @Test
   void setInt32_constant() {
     var struct = struct()
-        .primitive().constant(5).int32()
+        .basic().constant(5).int32()
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 2))
@@ -81,7 +81,7 @@ public class SetInt32TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).set(struct, 0, Integer.valueOf(2)))
@@ -93,7 +93,7 @@ public class SetInt32TypeTest {
   void setInt32Array() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .int32()
         .fromBytes(ba().int32(1, 2, 3))
         .build();
@@ -109,7 +109,7 @@ public class SetInt32TypeTest {
   void setInt32Array_negative() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .int32()
         .fromBytes(ba().int32(1, 2, 3))
         .build();
@@ -123,7 +123,7 @@ public class SetInt32TypeTest {
   void setInt32Array_greater_than_length() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .int32()
         .fromBytes(ba().int32(1, 2, 3))
         .build();
@@ -138,7 +138,7 @@ public class SetInt32TypeTest {
     var struct = struct()
         .allocated()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(1, 0, 2))
@@ -159,7 +159,7 @@ public class SetInt32TypeTest {
   @Test
   void setInt32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .build();
 
     assertThatThrownBy(() -> struct.setInt32(0, 3, 2))
@@ -171,7 +171,7 @@ public class SetInt32TypeTest {
   void setInt32Array_constant_value() {
     var struct = struct()
         .int32()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .fromBytes(ba().int32(2, 5, 5))
         .build();
 
@@ -184,7 +184,7 @@ public class SetInt32TypeTest {
   void setInt32Array_constant_value_same() {
     var struct = struct()
         .int32()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
         .fromBytes(ba().int32(2, 5, 5))
         .build();
 
@@ -197,7 +197,7 @@ public class SetInt32TypeTest {
   void setInt32Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .int32()
-        .int32Array(0)
+        .int32List(0)
         .build();
 
     struct.setInt32(0, 2);

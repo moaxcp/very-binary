@@ -25,7 +25,7 @@ public class VariableTest {
   @Test
   public void testVariableInt8_constant() {
     var struct = struct()
-        .primitive().constant(25).int8()
+        .basic().constant(25).int8()
         .build();
 
     var expression = variable(0);

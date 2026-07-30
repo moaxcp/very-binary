@@ -32,7 +32,7 @@ public final class Int8List extends PrimitiveList<Int8List, Int8ListType, Byte> 
 
   public static StructType getInt8ListStructType(long length) {
     return structType()
-        .int8Array(constant(length))
+        .int8List(constant(length))
         .build();
   }
 

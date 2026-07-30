@@ -13,7 +13,7 @@ public class AddInt8TypeTest {
   void addInt8Wrapper() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).add(struct, Byte.valueOf((byte) 1)))
@@ -25,7 +25,7 @@ public class AddInt8TypeTest {
   void addInt8Wrapper_with_index() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).add(struct, 0, Byte.valueOf((byte) 1)))
@@ -37,7 +37,7 @@ public class AddInt8TypeTest {
   void addInt8() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -51,7 +51,7 @@ public class AddInt8TypeTest {
   void addInt8_position_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -64,7 +64,7 @@ public class AddInt8TypeTest {
   void addInt8_position_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -78,7 +78,7 @@ public class AddInt8TypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
     assertThatThrownBy(() -> struct.addInt8(1, (byte) 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -88,7 +88,7 @@ public class AddInt8TypeTest {
   @Test
   void addInt8Array_constant() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
@@ -110,7 +110,7 @@ public class AddInt8TypeTest {
   void addInt8_with_index() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class AddInt8TypeTest {
   void addInt8_with_index_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -137,7 +137,7 @@ public class AddInt8TypeTest {
   void addInt8_with_index_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -151,7 +151,7 @@ public class AddInt8TypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(1, 0, (byte) 3))
@@ -173,7 +173,7 @@ public class AddInt8TypeTest {
   @Test
   void addInt8Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))

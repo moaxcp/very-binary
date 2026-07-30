@@ -32,7 +32,7 @@ public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolea
 
   public static StructType getBoolListStructType(long length) {
     return structType()
-        .boolArray(constant(length))
+        .boolList(constant(length))
         .build();
   }
 

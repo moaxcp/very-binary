@@ -54,8 +54,8 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
-  public StructTypePrimitiveSubBuilder<SELF> primitive() {
-    return new StructTypePrimitiveSubBuilder<>((SELF) this, fields.size());
+  public StructTypeBasicSubBuilder<SELF> basic() {
+    return new StructTypeBasicSubBuilder<>((SELF) this, fields.size());
   }
 
   public StructTypePadSubBuilder<SELF> pad() {
@@ -87,137 +87,137 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return (SELF) this;
   }
 
-  public SELF boolArray() {
-    return primitive().lengthField(fields.size() - 1).bool();
+  public SELF boolList() {
+    return basic().lengthField(fields.size() - 1).bool();
   }
 
-  public SELF boolArray(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).bool();
+  public SELF boolList(int lengthPosition) {
+    return basic().lengthField(lengthPosition).bool();
   }
 
-  public SELF boolArray(Expression expression) {
-    return primitive().lengthExpression(expression).bool();
+  public SELF boolList(Expression expression) {
+    return basic().lengthExpression(expression).bool();
   }
 
   public SELF int8() {
-    return primitive().int8();
+    return basic().int8();
   }
 
-  public SELF int8Array() {
-    return primitive().lengthExpression(Constant.constant(0)).int8();
+  public SELF int8List() {
+    return basic().lengthExpression(Constant.constant(0)).int8();
   }
 
-  public SELF int8Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).int8();
+  public SELF int8List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).int8();
   }
 
-  public SELF int8Array(Expression expression) {
-    return primitive().lengthExpression(expression).int8();
+  public SELF int8List(Expression expression) {
+    return basic().lengthExpression(expression).int8();
   }
 
   public SELF uint8() {
-    return primitive().uint8();
+    return basic().uint8();
   }
-  public SELF uint8Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).uint8();
+  public SELF uint8List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).uint8();
   }
 
-  public SELF uint8Array(Expression expression) {
-    return primitive().lengthExpression(expression).uint8();
+  public SELF uint8List(Expression expression) {
+    return basic().lengthExpression(expression).uint8();
   }
 
   public SELF int16() {
-    return primitive().int16();
+    return basic().int16();
   }
 
-  public SELF int16Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).int16();
+  public SELF int16List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).int16();
   }
 
-  public SELF int16Array(Expression expression) {
-    return primitive().lengthExpression(expression).int16();
+  public SELF int16List(Expression expression) {
+    return basic().lengthExpression(expression).int16();
   }
 
   public SELF uint16() {
-    return primitive().uint16();
+    return basic().uint16();
   }
 
-  public SELF uint16Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).uint16();
+  public SELF uint16List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).uint16();
   }
 
-  public SELF uint16Array(Expression expression) {
-    return primitive().lengthExpression(expression).uint16();
+  public SELF uint16List(Expression expression) {
+    return basic().lengthExpression(expression).uint16();
   }
 
   public SELF int32() {
-    return primitive().int32();
+    return basic().int32();
   }
 
-  public SELF int32Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).int32();
+  public SELF int32List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).int32();
   }
 
-  public SELF int32Array(Expression expression) {
-    return primitive().lengthExpression(expression).int32();
+  public SELF int32List(Expression expression) {
+    return basic().lengthExpression(expression).int32();
   }
   public SELF uint32() {
-    return primitive().uint32();
+    return basic().uint32();
   }
 
-  public SELF uint32Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).uint32();
+  public SELF uint32List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).uint32();
   }
 
-  public SELF uint32Array(Expression expression) {
-    return primitive().lengthExpression(expression).uint32();
+  public SELF uint32List(Expression expression) {
+    return basic().lengthExpression(expression).uint32();
   }
 
   public SELF int64() {
-    return primitive().int64();
+    return basic().int64();
   }
 
-  public SELF int64Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).int64();
+  public SELF int64List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).int64();
   }
 
-  public SELF int64Array(Expression expression) {
-    return primitive().lengthExpression(expression).int64();
+  public SELF int64List(Expression expression) {
+    return basic().lengthExpression(expression).int64();
   }
 
   public SELF uint64() {
-    return primitive().uint64();
+    return basic().uint64();
   }
-  public SELF uint64Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).uint64();
+  public SELF uint64List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).uint64();
   }
 
-  public SELF uint64Array(Expression expression) {
-    return primitive().lengthExpression(expression).uint64();
+  public SELF uint64List(Expression expression) {
+    return basic().lengthExpression(expression).uint64();
   }
 
   public SELF float32() {
-    return primitive().float32();
+    return basic().float32();
   }
 
-  public SELF float32Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).float32();
+  public SELF float32List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).float32();
   }
 
-  public SELF float32Array(Expression expression) {
-    return primitive().lengthExpression(expression).float32();
+  public SELF float32List(Expression expression) {
+    return basic().lengthExpression(expression).float32();
   }
 
   public SELF float64() {
-    return primitive().float64();
+    return basic().float64();
   }
 
-  public SELF float64Array(int lengthPosition) {
-    return primitive().lengthField(lengthPosition).float64();
+  public SELF float64List(int lengthPosition) {
+    return basic().lengthField(lengthPosition).float64();
   }
 
-  public SELF float64Array(Expression expression) {
-    return primitive().lengthExpression(expression).float64();
+  public SELF float64List(Expression expression) {
+    return basic().lengthExpression(expression).float64();
   }
 
   public SELF pad(long length) {
@@ -236,11 +236,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size()).from(type).end();
   }
 
-  public ChildStructTypeBuilder<SELF> structArray(int lengthPosition) {
+  public ChildStructTypeBuilder<SELF> structList(int lengthPosition) {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthField(lengthPosition);
   }
 
-  public SELF structArray(StructType type) {
+  public SELF structList(StructType type) {
     var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
         .constant(type.getConstantValue());
 
@@ -250,7 +250,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return builder.end();
   }
 
-  public SELF structArray(int lengthPosition, StructType type) {
+  public SELF structList(int lengthPosition, StructType type) {
     var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
         .lengthField(lengthPosition)
         .constant(type.getConstantValue());
@@ -261,11 +261,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return builder.end();
   }
 
-  public SELF structArray(Expression lengthExpression) {
+  public SELF structList(Expression lengthExpression) {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthExpression(lengthExpression).end();
   }
 
-  public SELF structArray(Expression lengthExpression, StructType type) {
+  public SELF structList(Expression lengthExpression, StructType type) {
     var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
         .lengthExpression(lengthExpression)
         .constant(type.getConstantValue());

@@ -13,7 +13,7 @@ public class AddUint16TypeTest {
   void addUint16Wrapper() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, Integer.valueOf(1)))
@@ -25,7 +25,7 @@ public class AddUint16TypeTest {
   void addUint16Wrapper_with_index() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
@@ -37,7 +37,7 @@ public class AddUint16TypeTest {
   void addUint16() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -51,7 +51,7 @@ public class AddUint16TypeTest {
   void addUint16_position_negative() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -64,7 +64,7 @@ public class AddUint16TypeTest {
   void addUint16_position_greater_than_length() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -78,7 +78,7 @@ public class AddUint16TypeTest {
     var struct = struct()
         .allocated()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
     assertThatThrownBy(() -> struct.addUint16(1, 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -88,7 +88,7 @@ public class AddUint16TypeTest {
   @Test
   void addUint16Array_constant() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 3))
@@ -110,7 +110,7 @@ public class AddUint16TypeTest {
   void addUint16_with_index() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class AddUint16TypeTest {
   void addUint16_with_index_negative() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -137,7 +137,7 @@ public class AddUint16TypeTest {
   void addUint16_with_index_greater_than_length() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -151,7 +151,7 @@ public class AddUint16TypeTest {
     var struct = struct()
         .allocated()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
     assertThatThrownBy(() -> struct.addUint16(1, 0, 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -171,7 +171,7 @@ public class AddUint16TypeTest {
   @Test
   void addUint16Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 0, 3))

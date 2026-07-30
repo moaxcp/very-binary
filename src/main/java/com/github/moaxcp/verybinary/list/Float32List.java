@@ -32,7 +32,7 @@ public final class Float32List extends PrimitiveList<Float32List, Float32ListTyp
 
   public static StructType getFloat32ListStructType(long length) {
     return structType()
-        .float32Array(constant(length))
+        .float32List(constant(length))
         .build();
   }
 

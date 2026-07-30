@@ -13,7 +13,7 @@ public class AddFloat32TypeTest {
   void addFloat32Wrapper() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
@@ -25,7 +25,7 @@ public class AddFloat32TypeTest {
   void addFloat32Wrapper_with_index() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
@@ -37,7 +37,7 @@ public class AddFloat32TypeTest {
   void addFloat32() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2, 4, 3))
         .build();
 
@@ -51,7 +51,7 @@ public class AddFloat32TypeTest {
   void addFloat32_position_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba())
         .build();
 
@@ -64,7 +64,7 @@ public class AddFloat32TypeTest {
   void addFloat32_position_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba())
         .build();
 
@@ -78,7 +78,7 @@ public class AddFloat32TypeTest {
     var struct = struct()
         .allocated()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
     assertThatThrownBy(() -> struct.addFloat32(1, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -88,7 +88,7 @@ public class AddFloat32TypeTest {
   @Test
   void addFloat32Array_constant() {
     var struct = struct()
-        .primitive().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
+        .basic().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 5.0f))
@@ -110,7 +110,7 @@ public class AddFloat32TypeTest {
   void addFloat32_with_index() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
@@ -124,7 +124,7 @@ public class AddFloat32TypeTest {
   void addFloat32_with_index_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
@@ -137,7 +137,7 @@ public class AddFloat32TypeTest {
   void addFloat32_with_index_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float64(2).float64(2).float64(3))
         .build();
 
@@ -151,7 +151,7 @@ public class AddFloat32TypeTest {
     var struct = struct()
         .allocated()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(1, 0, 3.0f))
@@ -184,7 +184,7 @@ public class AddFloat32TypeTest {
   @Test
   void addFloat32Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
+        .basic().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 2, 4.0f))

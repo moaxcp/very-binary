@@ -13,7 +13,7 @@ public class Int8ListTypeTest {
   @Test
   void testInt8List() {
     Struct struct = struct()
-        .int8Array(constant(3))
+        .int8List(constant(3))
         .build();
 
     struct.setInt8(0, (byte) 1, (byte) 2, (byte) 3);
@@ -29,7 +29,7 @@ public class Int8ListTypeTest {
   @Test
   void testAddInt8() {
     Struct struct = struct()
-        .int8Array() // length 0
+        .int8List() // length 0
         .build();
 
     struct.addInt8(0, (byte) 5);
@@ -42,7 +42,7 @@ public class Int8ListTypeTest {
   @Test
   void testRawList() {
     Struct struct = struct()
-        .int8Array(constant(2))
+        .int8List(constant(2))
         .build();
 
     struct.setInt8(0, List.of((byte) 100, (byte) 101));

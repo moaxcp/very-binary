@@ -11,10 +11,10 @@ import java.util.List;
 import static com.github.moaxcp.verybinary.math.ByteLengthOfBasicElement.lengthOfBasicElement;
 import static com.github.moaxcp.verybinary.math.Divide.divide;
 
-public final class PrimitiveBuilder {
+public final class BasicTypeBuilder {
 
-  public static PrimitiveBuilder primitive() {
-    return new PrimitiveBuilder();
+  public static BasicTypeBuilder primitive() {
+    return new BasicTypeBuilder();
   }
 
   private int position = -1;
@@ -28,7 +28,7 @@ public final class PrimitiveBuilder {
   @Nullable
   private Expression byteLengthExpression;
 
-  public PrimitiveBuilder position(int position) {
+  public BasicTypeBuilder position(int position) {
     this.position = position;
     return this;
   }
@@ -37,32 +37,32 @@ public final class PrimitiveBuilder {
     return position;
   }
 
-  public PrimitiveBuilder byteLengthListener(ByteLengthListener byteLengthListener) {
+  public BasicTypeBuilder byteLengthListener(ByteLengthListener byteLengthListener) {
     byteLengthListeners.add(byteLengthListener);
     return this;
   }
 
-  public PrimitiveBuilder arrayLengthListener(LengthListener lengthListener) {
+  public BasicTypeBuilder arrayLengthListener(LengthListener lengthListener) {
     lengthListeners.add(lengthListener);
     return this;
   }
 
-  public PrimitiveBuilder valueListener(ValueChangeListener valueListener) {
+  public BasicTypeBuilder valueListener(ValueChangeListener valueListener) {
     valueChangeListeners.add(valueListener);
     return this;
   }
 
-  public PrimitiveBuilder constant(Object constantValue) {
+  public BasicTypeBuilder constant(Object constantValue) {
     this.constantValue = constantValue;
     return this;
   }
 
-  public PrimitiveBuilder lengthExpression(Expression lengthExpression) {
+  public BasicTypeBuilder lengthExpression(Expression lengthExpression) {
     this.lengthExpression = lengthExpression;
     return this;
   }
 
-  public PrimitiveBuilder byteLengthExpression(Expression byteLengthExpression) {
+  public BasicTypeBuilder byteLengthExpression(Expression byteLengthExpression) {
     this.byteLengthExpression = byteLengthExpression;
     return this;
   }

@@ -15,7 +15,7 @@ public class Float64ListTypeTest {
   @Test
   void testGetSet() {
     Struct struct = struct(structType()
-        .float64Array(constant(2))
+        .float64List(constant(2))
         .build())
         .build();
 
@@ -29,7 +29,7 @@ public class Float64ListTypeTest {
   @Test
   void testGetArray() {
     Struct struct = struct(structType()
-        .float64Array(constant(2))
+        .float64List(constant(2))
         .build())
         .build();
 
@@ -41,7 +41,7 @@ public class Float64ListTypeTest {
   @Test
   void testGetList() {
     Struct struct = struct(structType()
-        .float64Array(constant(2))
+        .float64List(constant(2))
         .build())
         .build();
 
@@ -54,7 +54,7 @@ public class Float64ListTypeTest {
   @Test
   void testAdd() {
     Struct struct = struct(structType()
-        .float64Array(constant(0))
+        .float64List(constant(0))
         .build())
         .build();
 
@@ -67,7 +67,7 @@ public class Float64ListTypeTest {
   @Test
   void testFloat64List() {
     Struct struct = struct(structType()
-        .float64Array(constant(2))
+        .float64List(constant(2))
         .build())
         .build();
 

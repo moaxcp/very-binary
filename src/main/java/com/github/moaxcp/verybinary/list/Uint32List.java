@@ -32,7 +32,7 @@ public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, 
 
   public static StructType getUint32ListStructType(long length) {
     return structType()
-        .uint32Array(constant(length))
+        .uint32List(constant(length))
         .build();
   }
 

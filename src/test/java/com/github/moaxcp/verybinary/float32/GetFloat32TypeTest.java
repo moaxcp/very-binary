@@ -69,7 +69,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32_constant() {
     var struct = struct()
-        .primitive().constant(3.0f).float32()
+        .basic().constant(3.0f).float32()
         .build();
 
     assertThat(struct.getFloat32(0)).isEqualTo(3.0f);
@@ -90,7 +90,7 @@ public class GetFloat32TypeTest {
   void getFloat32_index() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2, 4, 3))
         .build();
 
@@ -102,7 +102,7 @@ public class GetFloat32TypeTest {
   void getFloat32_index_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getFloat32(1, -1))
@@ -114,7 +114,7 @@ public class GetFloat32TypeTest {
   void getFloat32_index_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2, 4, 3))
         .build();
 
@@ -128,7 +128,7 @@ public class GetFloat32TypeTest {
     var struct = struct()
         .allocated()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getFloat32(1, 0))
@@ -139,7 +139,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32_index_constant() {
     var struct = struct()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThat(struct.getFloat32(0, 2)).isEqualTo(3.0f);
@@ -148,7 +148,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32Array() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -158,7 +158,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32Array_sub() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -168,7 +168,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32Array_sub_index_negative() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -180,7 +180,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32Array_sub_index_over() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -192,7 +192,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32List() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -202,7 +202,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32List_sub() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -212,7 +212,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32List_sub_index_negative() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 
@@ -224,7 +224,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32List_sub_index_over() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .fromBytes(ba().float32(5.5f, 5.5f, 5.5f, 5.5f, 5.5f))
         .build();
 

@@ -32,7 +32,7 @@ public class Uint32TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .uint32Array(constant(5))
+        .uint32List(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

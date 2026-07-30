@@ -13,7 +13,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
@@ -26,7 +26,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_position_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -38,7 +38,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_position_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -51,7 +51,7 @@ public class RemoveFloat32TypeTest {
     var struct = struct()
         .allocated()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -74,7 +74,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_with_index_0() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     struct.addFloat32(1, 3.0f);
@@ -90,7 +90,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_with_index_1() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
     struct.addFloat32(1, 3.0f);
     struct.addFloat32(1, 2.0f);
@@ -104,7 +104,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_with_index_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
@@ -117,7 +117,7 @@ public class RemoveFloat32TypeTest {
   void removeFloat32_with_index_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .fromBytes(ba().float32(2).float32(2).float32(3))
         .build();
 
@@ -141,7 +141,7 @@ public class RemoveFloat32TypeTest {
   @Test
   void removeFloat32Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveFloat32TypeTest {
   @Test
   void removeFloat32Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2))

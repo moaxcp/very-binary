@@ -12,7 +12,7 @@ public class RemoveInt64TypeTest {
   void removeInt64() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
@@ -25,7 +25,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_position_negative() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -37,7 +37,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_position_greater_than_length() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -50,7 +50,7 @@ public class RemoveInt64TypeTest {
     var struct = struct()
         .allocated()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -73,7 +73,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_with_index_0() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     struct.addInt64(1, 1L);
@@ -87,7 +87,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_with_index_1() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
     struct.addInt64(1, 1L);
     struct.addInt64(1, 2L);
@@ -101,7 +101,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_with_index_negative() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
@@ -114,7 +114,7 @@ public class RemoveInt64TypeTest {
   void removeInt64_with_index_greater_than_length() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .fromBytes(ba().int64(2, 1, 2))
         .build();
 
@@ -138,7 +138,7 @@ public class RemoveInt64TypeTest {
   @Test
   void removeInt64Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -149,7 +149,7 @@ public class RemoveInt64TypeTest {
   @Test
   void removeInt64Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

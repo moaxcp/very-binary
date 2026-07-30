@@ -32,7 +32,7 @@ public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Sho
 
   public static StructType getUint8ListStructType(long length) {
     return structType()
-        .uint8Array(constant(length))
+        .uint8List(constant(length))
         .build();
   }
 

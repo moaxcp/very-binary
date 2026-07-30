@@ -32,7 +32,7 @@ public final class Int16List extends PrimitiveList<Int16List, Int16ListType, Sho
 
   public static StructType getInt16ListStructType(long length) {
     return structType()
-        .int16Array(constant(length))
+        .int16List(constant(length))
         .build();
   }
 

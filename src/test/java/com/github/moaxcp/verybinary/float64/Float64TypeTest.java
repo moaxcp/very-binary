@@ -32,7 +32,7 @@ public class Float64TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .float64Array(constant(3))
+        .float64List(constant(3))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

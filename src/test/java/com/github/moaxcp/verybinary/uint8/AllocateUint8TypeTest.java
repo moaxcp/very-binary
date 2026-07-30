@@ -20,7 +20,7 @@ public class AllocateUint8TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).uint8()
+        .basic().constant((short) 5).uint8()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint8(5));
@@ -30,7 +30,7 @@ public class AllocateUint8TypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint8(0));
@@ -39,8 +39,8 @@ public class AllocateUint8TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).uint8()
-        .uint8Array(0)
+        .basic().constant((short) 5).uint8()
+        .uint8List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint8(5, 0, 0, 0, 0, 0));

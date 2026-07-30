@@ -19,7 +19,7 @@ public class AllocateInt64TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .basic().constant(5L).int64()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(5));
@@ -29,7 +29,7 @@ public class AllocateInt64TypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(0));
@@ -38,8 +38,8 @@ public class AllocateInt64TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
-        .int64Array(0)
+        .basic().constant(5L).int64()
+        .int64List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(5, 0, 0, 0, 0, 0));
@@ -48,8 +48,8 @@ public class AllocateInt64TypeTest {
   @Test
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
-        .primitive().constant(new long[]{6, 6, 6, 6, 6}).int64()
+        .basic().constant(5L).int64()
+        .basic().constant(new long[]{6, 6, 6, 6, 6}).int64()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int64(5, 6, 6, 6, 6, 6));

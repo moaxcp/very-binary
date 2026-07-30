@@ -67,7 +67,7 @@ public class StructTypeTest {
         .struct()
           .lengthField(0)
           .int8()
-          .primitive().lengthExpression(constant(5)).int16()
+          .basic().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
@@ -81,7 +81,7 @@ public class StructTypeTest {
         .struct()
           .lengthExpression(constant(5))
           .int8()
-          .primitive().lengthExpression(constant(5)).int16()
+          .basic().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
@@ -91,11 +91,11 @@ public class StructTypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length_field() {
     var struct = structType()
-        .primitive().constant((byte) 5).int8()
+        .basic().constant((byte) 5).int8()
         .struct()
           .lengthField(0)
           .int8()
-          .primitive().lengthExpression(constant(5)).int16()
+          .basic().lengthExpression(constant(5)).int16()
           .end()
         .build();
 
@@ -106,12 +106,12 @@ public class StructTypeTest {
   void getByteLength() {
     var type = structType()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .build();
 
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .int8()
         .struct(type)
         .fromBytes(ba().int8(3).int8(1, 2, 3).int8(4)
@@ -125,9 +125,9 @@ public class StructTypeTest {
   void getByteLength_array_with_length_field() {
     var struct = struct()
         .int8()
-        .structArray(0)
-          .primitive().constant(5).int16()
-          .boolArray(0)
+        .structList(0)
+          .basic().constant(5).int16()
+          .boolList(0)
           .end()
         .build();
 
@@ -139,12 +139,12 @@ public class StructTypeTest {
   void getByteLength_array_constant_length() {
     var inner = structType()
         .int16()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     var struct = struct()
         .int8()
-        .structArray(constant(2), inner)
+        .structList(constant(2), inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, false, true)
@@ -159,12 +159,12 @@ public class StructTypeTest {
   void getByteLength_array_constant_length_field() {
     var inner = structType()
         .int16()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     var struct = struct()
-        .primitive().constant(2).int8()
-        .structArray(0, inner)
+        .basic().constant(2).int8()
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, false, true)
@@ -179,12 +179,12 @@ public class StructTypeTest {
   void getByteLength_array_index() {
     var inner = structType()
         .int16()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     var struct = struct()
-        .primitive().constant(2).int8()
-        .structArray(0, inner)
+        .basic().constant(2).int8()
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, false, true)
@@ -199,12 +199,12 @@ public class StructTypeTest {
   void getByteLength_array_index_length() {
     var inner = structType()
         .int16()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     var struct = struct()
-        .primitive().constant(4).int8()
-        .structArray(0, inner)
+        .basic().constant(4).int8()
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(4)
             .int16(3).bool(true, false, true)
@@ -220,13 +220,13 @@ public class StructTypeTest {
   @Test
   void isFixedLength_constant_Byte_length() {
     var inner = structType()
-        .primitive().constant(3).int16()
-        .primitive().constant(true).lengthField(0).bool()
+        .basic().constant(3).int16()
+        .basic().constant(true).lengthField(0).bool()
         .build();
 
     var struct = struct()
         .int8()
-        .structArray(constant(2), inner)
+        .structList(constant(2), inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, true, true)
@@ -240,12 +240,12 @@ public class StructTypeTest {
   void isFixedLength_variable_Byte_length() {
     var inner = structType()
         .int16()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     var struct = struct()
-        .primitive().constant(2).int8()
-        .structArray(0, inner)
+        .basic().constant(2).int8()
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, false, true)
@@ -258,13 +258,13 @@ public class StructTypeTest {
   @Test
   void isFixedLength_constant_Byte_length_field() {
     var inner = structType()
-        .primitive().constant(3).int16()
-        .primitive().constant(new boolean[]{true, true, true}).bool()
+        .basic().constant(3).int16()
+        .basic().constant(new boolean[]{true, true, true}).bool()
         .build();
 
     var struct = struct()
-        .primitive().constant(2).int8()
-        .structArray(0, inner)
+        .basic().constant(2).int8()
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, true, true)
@@ -277,13 +277,13 @@ public class StructTypeTest {
   @Test
   void setting_length_field_extends_array() {
     var inner = structType()
-        .primitive().int16()
-        .primitive().lengthField(0).bool()
+        .basic().int16()
+        .basic().lengthField(0).bool()
         .build();
 
     var struct = struct()
         .int8()
-        .structArray(0, inner)
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, true, true)
@@ -304,13 +304,13 @@ public class StructTypeTest {
   void setting_length_field_extends_array_with_constant_values() {
     var inner = structType()
         .constant(ba().int16(3).bool(true, true, true))
-        .primitive().int16()
-        .primitive().lengthField(0).bool()
+        .basic().int16()
+        .basic().lengthField(0).bool()
         .build();
 
     var struct = struct()
         .int8()
-        .structArray(0, inner)
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, true, true)
@@ -339,25 +339,25 @@ public class StructTypeTest {
     var innerArray = structListType().int8().lengthExpression(constant(2)).build();
     var struct = struct()
         .int8()
-        .int8Array(constant(2))
+        .int8List(constant(2))
         .uint8()
-        .uint8Array(constant(2))
+        .uint8List(constant(2))
         .int16()
-        .int16Array(constant(2))
+        .int16List(constant(2))
         .uint16()
-        .uint16Array(constant(2))
+        .uint16List(constant(2))
         .int32()
-        .int32Array(constant(2))
+        .int32List(constant(2))
         .uint32()
-        .uint32Array(constant(2))
+        .uint32List(constant(2))
         .int64()
-        .int64Array(constant(2))
+        .int64List(constant(2))
         .uint64()
-        .uint64Array(constant(2))
+        .uint64List(constant(2))
         .float32()
-        .float32Array(constant(2))
+        .float32List(constant(2))
         .float64()
-        .float64Array(constant(2))
+        .float64List(constant(2))
         .struct(inner)
         .structList(innerArray)
         .build()
@@ -391,25 +391,25 @@ public class StructTypeTest {
   void AllTypes() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .uint8()
-        .uint8Array(2)
+        .uint8List(2)
         .int16()
-        .int16Array(4)
+        .int16List(4)
         .uint16()
-        .uint16Array(6)
+        .uint16List(6)
         .int32()
-        .int32Array(8)
+        .int32List(8)
         .uint32()
-        .uint32Array(10)
+        .uint32List(10)
         .int64()
-        .int64Array(12)
+        .int64List(12)
         .uint64()
-        .uint64Array(14)
+        .uint64List(14)
         .float32()
-        .float32Array(16)
+        .float32List(16)
         .float64()
-        .float64Array(18)
+        .float64List(18)
         .fromBytes(new byte[] {2, -20, -21,
             2, 20, 21,
             0, 2, -1, -20, -1, -21,
@@ -460,10 +460,10 @@ public class StructTypeTest {
     var struct = struct()
         .int8()
         .int16()
-        .int8Array(1)
+        .int8List(1)
         .struct()
             .int16()
-            .int16Array(0)
+            .int16List(0)
             .end()
         .fromBytes(new byte[] {1, 0, 2, 1, 2, 0, 3, 0, 1, 0, 2, 0, 3})
         .build();

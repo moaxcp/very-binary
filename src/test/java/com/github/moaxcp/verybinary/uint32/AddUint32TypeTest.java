@@ -14,7 +14,7 @@ public class AddUint32TypeTest {
   void addUint32Wrapper() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint32ListType) struct.getType(1)).add(struct, Long.valueOf(1)))
@@ -26,7 +26,7 @@ public class AddUint32TypeTest {
   void addUint32Wrapper_with_index() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint32ListType) struct.getType(1)).add(struct, 0, Long.valueOf(1)))
@@ -38,7 +38,7 @@ public class AddUint32TypeTest {
   void addUint32() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -52,7 +52,7 @@ public class AddUint32TypeTest {
   void addUint32_position_negative() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -65,7 +65,7 @@ public class AddUint32TypeTest {
   void addUint32_position_greater_than_length() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -79,7 +79,7 @@ public class AddUint32TypeTest {
     var struct = struct()
         .allocated()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
     assertThatThrownBy(() -> struct.addUint32(1, 3L))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -89,7 +89,7 @@ public class AddUint32TypeTest {
   @Test
   void addUint32Array_constant() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.addUint32(0, 3L))
@@ -111,7 +111,7 @@ public class AddUint32TypeTest {
   void addUint32_with_index() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -125,7 +125,7 @@ public class AddUint32TypeTest {
   void addUint32_with_index_negative() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -138,7 +138,7 @@ public class AddUint32TypeTest {
   void addUint32_with_index_greater_than_length() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .fromBytes(ba().uint32(2, 1, 2))
         .build();
 
@@ -152,7 +152,7 @@ public class AddUint32TypeTest {
     var struct = struct()
         .allocated()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addUint32(1, 0, 3L))
@@ -174,7 +174,7 @@ public class AddUint32TypeTest {
   @Test
   void addUint32Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.addUint32(0, 3, 3L))

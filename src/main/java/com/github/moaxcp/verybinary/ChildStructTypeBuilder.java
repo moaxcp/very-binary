@@ -45,9 +45,9 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
     return this;
   }
 
-  public ChildStructTypeBuilder<PARENT> structArray(int lengthPosition, StructType type) {
+  public ChildStructTypeBuilder<PARENT> structList(int lengthPosition, StructType type) {
     lengthField(lengthPosition);
-    return structArray(type);
+    return structList(type);
   }
 
   public StructListType toStructListType() {

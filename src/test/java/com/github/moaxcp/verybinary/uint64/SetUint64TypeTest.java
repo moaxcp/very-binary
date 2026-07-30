@@ -59,7 +59,7 @@ public class SetUint64TypeTest {
   @Test
   void set_constant() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).uint64()
+        .basic().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.set(0, BigInteger.valueOf(2)))
@@ -71,7 +71,7 @@ public class SetUint64TypeTest {
   void setArray() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .uint64()
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
@@ -87,7 +87,7 @@ public class SetUint64TypeTest {
   void setArray_negative() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .uint64()
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
@@ -101,7 +101,7 @@ public class SetUint64TypeTest {
   void setArray_greater_than_length() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .uint64()
         .fromBytes(ba().uint64(1, 2, 3))
         .build();
@@ -120,7 +120,7 @@ public class SetUint64TypeTest {
     var struct = struct()
         .allocated()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.set(1, 0, BigInteger.valueOf(5)))
@@ -141,7 +141,7 @@ public class SetUint64TypeTest {
   @Test
   void setArray_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.set(0, 3, BigInteger.valueOf(2)))
@@ -153,7 +153,7 @@ public class SetUint64TypeTest {
   void setArray_constant_value() {
     var struct = struct()
         .uint64()
-        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
@@ -166,7 +166,7 @@ public class SetUint64TypeTest {
   void setArray_constant_value_same() {
     var struct = struct()
         .uint64()
-        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
@@ -179,7 +179,7 @@ public class SetUint64TypeTest {
   void setArray_set_length_field_without_adding_to_array() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
 
     struct.set(0, BigInteger.valueOf(2));

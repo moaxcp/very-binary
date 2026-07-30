@@ -19,7 +19,7 @@ public class AllocateUint16TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(5).uint16()
+        .basic().constant(5).uint16()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint16(5));
@@ -29,7 +29,7 @@ public class AllocateUint16TypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint16(0));
@@ -38,8 +38,8 @@ public class AllocateUint16TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5).uint16()
-        .uint16Array(0)
+        .basic().constant(5).uint16()
+        .uint16List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint16(5, 0, 0, 0, 0, 0));

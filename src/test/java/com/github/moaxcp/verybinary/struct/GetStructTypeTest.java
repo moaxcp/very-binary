@@ -15,7 +15,7 @@ public class GetStructTypeTest {
         .int8()
         .struct()
           .int8()
-          .int8Array(0)
+          .int8List(0)
           .end()
         .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
@@ -23,7 +23,7 @@ public class GetStructTypeTest {
     assertThat(struct.getStruct(1))
         .isEqualTo(struct()
             .int8()
-            .int8Array(0)
+            .int8List(0)
             .fromBytes(ba().int8(2, 3, 3))
             .build());
   }
@@ -34,7 +34,7 @@ public class GetStructTypeTest {
         .int8()
         .struct()
           .int8()
-          .int8Array(0)
+          .int8List(0)
           .end()
         .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
@@ -50,7 +50,7 @@ public class GetStructTypeTest {
         .int8()
         .struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .end()
         .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
@@ -64,7 +64,7 @@ public class GetStructTypeTest {
   void get_allocated() {
     var inner = structType()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     var struct = struct()
@@ -80,7 +80,7 @@ public class GetStructTypeTest {
   void get_not_allocated() {
     var inner = structType()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     var struct = struct()
@@ -97,13 +97,13 @@ public class GetStructTypeTest {
   @Test
   void get_index() {
     var inner = structType()
-        .primitive().int16()
-        .primitive().lengthField(0).bool()
+        .basic().int16()
+        .basic().lengthField(0).bool()
         .build();
 
     var struct = struct()
         .int8()
-        .structArray(0, inner)
+        .structList(0, inner)
         .fromBytes(ba()
             .int8(2)
             .int16(3).bool(true, false, true)

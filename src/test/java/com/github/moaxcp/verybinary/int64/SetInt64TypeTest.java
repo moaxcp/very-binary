@@ -69,7 +69,7 @@ public class SetInt64TypeTest {
   @Test
   void setInt64_constant() {
     var struct = struct()
-        .primitive().constant(5L).int64()
+        .basic().constant(5L).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 2L))
@@ -81,7 +81,7 @@ public class SetInt64TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2L)))
@@ -93,7 +93,7 @@ public class SetInt64TypeTest {
   void setInt64Array() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .int64()
         .fromBytes(ba().int64(1, 2, 3))
         .build();
@@ -109,7 +109,7 @@ public class SetInt64TypeTest {
   void setInt64Array_negative() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .int64()
         .fromBytes(ba().int64(1, 2, 3))
         .build();
@@ -123,7 +123,7 @@ public class SetInt64TypeTest {
   void setInt64Array_greater_than_length() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .int64()
         .fromBytes(ba().int64(1, 2, 3))
         .build();
@@ -142,7 +142,7 @@ public class SetInt64TypeTest {
     var struct = struct()
         .allocated()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(1, 0, 2L))
@@ -163,7 +163,7 @@ public class SetInt64TypeTest {
   @Test
   void setInt64Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
@@ -175,7 +175,7 @@ public class SetInt64TypeTest {
   void setInt64Array_constant_value() {
     var struct = struct()
         .int64()
-        .primitive().constant(new long[]{5, 5}).int64()
+        .basic().constant(new long[]{5, 5}).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 
@@ -188,7 +188,7 @@ public class SetInt64TypeTest {
   void setInt64Array_constant_value_same() {
     var struct = struct()
         .int64()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 
@@ -201,7 +201,7 @@ public class SetInt64TypeTest {
   void setInt64Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .int64()
-        .int64Array(0)
+        .int64List(0)
         .build();
 
     struct.setInt64(0, 2);

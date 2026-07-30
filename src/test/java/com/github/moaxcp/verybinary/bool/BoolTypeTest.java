@@ -45,7 +45,7 @@ public class BoolTypeTest {
   void getAllocationByteLength_array() {
     var type = structType()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
     assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(0);
     assertThat(type.getAllocationByteLength()).isEqualTo(1);
@@ -54,7 +54,7 @@ public class BoolTypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length() {
     var type = structType()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
     assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(5);
     assertThat(type.getAllocationByteLength()).isEqualTo(5);
@@ -63,8 +63,8 @@ public class BoolTypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length_field() {
     var type = structType()
-        .primitive().constant((byte) 5).int8()
-        .boolArray(0)
+        .basic().constant((byte) 5).int8()
+        .boolList(0)
         .build();
     assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(5);
     assertThat(type.getAllocationByteLength()).isEqualTo(6);
@@ -83,7 +83,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_constant_length() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0)).isEqualTo(BOOL.size() * 5);
@@ -93,8 +93,8 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_constant_length_field() {
     var struct = struct()
-        .primitive().constant((short) 5).int8()
-        .boolArray(0)
+        .basic().constant((short) 5).int8()
+        .boolList(0)
         .build();
 
     assertThat(struct.getByteLength(1)).isEqualTo(BOOL.size() * 5);
@@ -104,7 +104,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_with_index() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2)).isEqualTo(1);
@@ -113,7 +113,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_with_index_length() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2, 2)).isEqualTo(2);
@@ -132,7 +132,7 @@ public class BoolTypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();
@@ -143,7 +143,7 @@ public class BoolTypeTest {
   void isFixedLengthArray_variable_Byte_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThat(struct.getType(1).isFixedByteLength()).isFalse();
@@ -153,8 +153,8 @@ public class BoolTypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length_field() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
-        .boolArray(0)
+        .basic().constant((byte) 5).int8()
+        .boolList(0)
         .build();
 
     assertThat(struct.getType(1).isFixedByteLength()).isTrue();
@@ -165,7 +165,7 @@ public class BoolTypeTest {
   void setting_length_field_extends_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.setInt8(0, 5);
@@ -176,7 +176,7 @@ public class BoolTypeTest {
   void setting_length_field_extends_array_with_constant_values() {
     var struct = struct()
         .int8()
-        .primitive().lengthField(0).bool()
+        .basic().lengthField(0).bool()
         .build();
 
     struct.setInt8(0, 5);
@@ -187,7 +187,7 @@ public class BoolTypeTest {
   void setting_byte_length_field_extends_array() {
     var struct = struct()
         .int8()
-        .primitive().byteLengthField(0).bool()
+        .basic().byteLengthField(0).bool()
         .build();
 
     struct.setInt8(0, 5);
@@ -199,7 +199,7 @@ public class BoolTypeTest {
   void setting_byte_length_field_extends_array_with_constant_values() {
     var struct = struct()
         .int8()
-        .primitive().byteLengthField(0).bool()
+        .basic().byteLengthField(0).bool()
         .build();
 
     struct.setInt8(0, 5);

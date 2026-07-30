@@ -79,7 +79,7 @@ public class GetInt16TypeTest {
   @Test
   void getInt16_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).int16()
+        .basic().constant((short) 5).int16()
         .build();
 
     assertThat(struct.getInt16(0)).isEqualTo((short) 5);
@@ -100,7 +100,7 @@ public class GetInt16TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int16ListType) struct.getType(1)).get(struct, 0))
@@ -112,7 +112,7 @@ public class GetInt16TypeTest {
   void getInt16Array() {
     var struct = struct()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .fromBytes(ba().int16(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class GetInt16TypeTest {
   void getInt16Array_negative() {
     var struct = struct()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt16(1, -1))
@@ -136,7 +136,7 @@ public class GetInt16TypeTest {
   void getInt16Array_greater_than_length() {
     var struct = struct()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .fromBytes(ba().int16(2, 1, 2))
         .build();
 
@@ -150,7 +150,7 @@ public class GetInt16TypeTest {
     var struct = struct()
         .allocated()
         .int16()
-        .int16Array(0)
+        .int16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getInt16(1, 0))
@@ -161,7 +161,7 @@ public class GetInt16TypeTest {
   @Test
   void getInt16Array_constant() {
     var struct = struct()
-        .primitive().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
         .build();
 
     assertThat(struct.getInt16(0, 3)).isEqualTo((short) 5);

@@ -70,7 +70,7 @@ public class SetUint32TypeTest {
   @Test
   void setUint32_constant() {
     var struct = struct()
-        .primitive().constant(5L).uint32()
+        .basic().constant(5L).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 2L))
@@ -82,7 +82,7 @@ public class SetUint32TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint32ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2)))
@@ -94,7 +94,7 @@ public class SetUint32TypeTest {
   void setUint32Array() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .uint32()
         .fromBytes(ba().uint32(1, 2, 3))
         .build();
@@ -110,7 +110,7 @@ public class SetUint32TypeTest {
   void setUint32Array_negative() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .uint32()
         .fromBytes(ba().uint32(1, 2, 3))
         .build();
@@ -124,7 +124,7 @@ public class SetUint32TypeTest {
   void setUint32Array_greater_than_length() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .uint32()
         .fromBytes(ba().uint32(1, 2, 3))
         .build();
@@ -143,7 +143,7 @@ public class SetUint32TypeTest {
     var struct = struct()
         .allocated()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(1, 0, 2L))
@@ -164,7 +164,7 @@ public class SetUint32TypeTest {
   @Test
   void setUint32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 3, 2L))
@@ -176,7 +176,7 @@ public class SetUint32TypeTest {
   void setUint32Array_constant_value() {
     var struct = struct()
         .uint32()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .fromBytes(ba().uint32(2, 5, 5))
         .build();
 
@@ -189,7 +189,7 @@ public class SetUint32TypeTest {
   void setUint32Array_constant_value_same() {
     var struct = struct()
         .uint32()
-        .primitive().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
         .fromBytes(ba().uint32(2, 5, 5))
         .build();
 
@@ -202,7 +202,7 @@ public class SetUint32TypeTest {
   void setUint32Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     struct.setUint32(0, 2);

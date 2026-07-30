@@ -68,7 +68,7 @@ public class SetUint8TypeTest {
   @Test
   void setUint8_constant() {
     var struct = struct()
-        .primitive().constant((short) 5).uint8()
+        .basic().constant((short) 5).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
@@ -80,7 +80,7 @@ public class SetUint8TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
@@ -92,7 +92,7 @@ public class SetUint8TypeTest {
   void setUint8Array() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .uint8()
         .fromBytes(ba().uint8(1, 2, 3))
         .build();
@@ -108,7 +108,7 @@ public class SetUint8TypeTest {
   void setUint8Array_negative() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .uint8()
         .fromBytes(ba().uint8(1, 2, 3))
         .build();
@@ -122,7 +122,7 @@ public class SetUint8TypeTest {
   void setUint8Array_greater_than_length() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .uint8()
         .fromBytes(ba().uint8(1, 2, 3))
         .build();
@@ -141,7 +141,7 @@ public class SetUint8TypeTest {
     var struct = struct()
         .allocated()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(1, 0, (byte) 2))
@@ -162,7 +162,7 @@ public class SetUint8TypeTest {
   @Test
   void setUint8Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
@@ -174,7 +174,7 @@ public class SetUint8TypeTest {
   void setUint8Array_constant_value() {
     var struct = struct()
         .uint8()
-        .primitive().constant(new short[]{5, 5}).uint8()
+        .basic().constant(new short[]{5, 5}).uint8()
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 
@@ -187,7 +187,7 @@ public class SetUint8TypeTest {
   void setUint8Array_constant_value_same() {
     var struct = struct()
         .uint8()
-        .primitive().constant(new short[]{5, 5}).uint8()
+        .basic().constant(new short[]{5, 5}).uint8()
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 
@@ -200,7 +200,7 @@ public class SetUint8TypeTest {
   void setUint8Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     struct.setUint8(0, 2);

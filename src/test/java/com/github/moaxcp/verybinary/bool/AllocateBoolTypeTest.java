@@ -20,7 +20,7 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_with_constant_true() {
     var struct = struct()
-        .primitive().constant(true).bool()
+        .basic().constant(true).bool()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().bool(true));
@@ -29,7 +29,7 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_with_constant_false() {
     var struct = struct()
-        .primitive().constant(false).bool()
+        .basic().constant(false).bool()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().bool(false));
@@ -39,7 +39,7 @@ public class AllocateBoolTypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(0));
@@ -48,8 +48,8 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5).int8()
-        .boolArray(0)
+        .basic().constant(5).int8()
+        .boolList(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
@@ -58,8 +58,8 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_array_length_field_constant() {
     var struct = struct()
-        .primitive().constant(5).int8()
-        .boolArray(0)
+        .basic().constant(5).int8()
+        .boolList(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
@@ -68,8 +68,8 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_byte_length_field_constant() {
     var struct = struct()
-        .primitive().constant(5).int8()
-        .primitive().byteLengthField(0).bool()
+        .basic().constant(5).int8()
+        .basic().byteLengthField(0).bool()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5).bool(false, false, false, false, false));
@@ -78,7 +78,7 @@ public class AllocateBoolTypeTest {
   @Test
   void allocate_array_constant() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().bool(true, true, true, true, true));

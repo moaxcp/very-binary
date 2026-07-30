@@ -27,7 +27,7 @@ public class SetBoolTypeTest {
   @Test
   void set_index() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, 0, TRUE))
@@ -83,7 +83,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_constant() {
     var struct = struct()
-        .primitive().constant(true).bool()
+        .basic().constant(true).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, false))
@@ -95,7 +95,7 @@ public class SetBoolTypeTest {
   void setBool_index() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .bool()
         .fromBytes(new byte[] {1, 1, 0})
         .build();
@@ -111,7 +111,7 @@ public class SetBoolTypeTest {
   void setBool_index_negative() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .bool()
         .fromBytes(new byte[] {1, 1, 0})
         .build();
@@ -125,7 +125,7 @@ public class SetBoolTypeTest {
   void setBool_index_greater_than_length() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .bool()
         .fromBytes(new byte[] {1, 1, 0})
         .build();
@@ -144,7 +144,7 @@ public class SetBoolTypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     assertThatThrownBy(() -> struct.setBool(1, 0, true))
@@ -166,7 +166,7 @@ public class SetBoolTypeTest {
   void setBool_index_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .fromBytes(ba().int8(2).bool(true, true))
         .build();
 
@@ -179,7 +179,7 @@ public class SetBoolTypeTest {
   void setBool_index_constant_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new boolean[]{true, true}).bool()
+        .basic().constant(new boolean[]{true, true}).bool()
         .fromBytes(new byte[] {2, 1, 1})
         .build();
 
@@ -191,7 +191,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 3, false))
@@ -203,7 +203,7 @@ public class SetBoolTypeTest {
   void setBool_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.setInt8(0, 5);
@@ -215,7 +215,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_array_length_constant() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
     struct.setBool(0, true, false, true, false, true);
 
@@ -225,8 +225,8 @@ public class SetBoolTypeTest {
   @Test
   void setBool_array_length_field_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
-        .boolArray(0)
+        .basic().constant((byte) 5).int8()
+        .boolList(0)
         .build();
     struct.setBool(1, true, false, true, false, true);
 
@@ -237,7 +237,7 @@ public class SetBoolTypeTest {
   void setBool_index_array() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
 
     struct.setInt8(0, 5);
@@ -249,7 +249,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_length_constant() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
     struct.setBool(0, 2, true, true);
 
@@ -259,8 +259,8 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_length_field_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
-        .boolArray(0)
+        .basic().constant((byte) 5).int8()
+        .boolList(0)
         .build();
     struct.setBool(1, 2, true, true);
 
@@ -270,7 +270,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_with_index_negative() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, -1, true, false))
@@ -281,7 +281,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_with_index_greater_than_length() {
     var struct = struct()
-        .boolArray(constant(5))
+        .boolList(constant(5))
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 5, true, false))
@@ -292,7 +292,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_constant() {
     var struct = struct()
-        .primitive().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 1, false, false))

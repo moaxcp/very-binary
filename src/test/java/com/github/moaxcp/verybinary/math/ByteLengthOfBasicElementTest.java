@@ -10,7 +10,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void boolConstantTest() {
     var struct = struct()
-        .boolArray(constant(10))
+        .boolList(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -25,7 +25,7 @@ public class ByteLengthOfBasicElementTest {
   void boolTest() {
     var struct = struct()
         .int8()
-        .boolArray(0)
+        .boolList(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -40,7 +40,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void int8ConstantTest() {
     var struct = struct()
-        .int8Array(constant(10))
+        .int8List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -55,7 +55,7 @@ public class ByteLengthOfBasicElementTest {
   void int8Test() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -70,7 +70,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void int16ConstantTest() {
     var struct = struct()
-        .int16Array(constant(10))
+        .int16List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -85,7 +85,7 @@ public class ByteLengthOfBasicElementTest {
   void int16Test() {
     var struct = struct()
         .int8()
-        .int16Array(0)
+        .int16List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -100,7 +100,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void int32ConstantTest() {
     var struct = struct()
-        .int32Array(constant(10))
+        .int32List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -115,7 +115,7 @@ public class ByteLengthOfBasicElementTest {
   void int32Test() {
     var struct = struct()
         .int8()
-        .int32Array(0)
+        .int32List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -130,7 +130,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void int64ConstantTest() {
     var struct = struct()
-        .int64Array(constant(10))
+        .int64List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -145,7 +145,7 @@ public class ByteLengthOfBasicElementTest {
   void int64Test() {
     var struct = struct()
         .int8()
-        .int64Array(0)
+        .int64List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -160,7 +160,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void uint8ConstantTest() {
     var struct = struct()
-        .uint8Array(constant(10))
+        .uint8List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -175,7 +175,7 @@ public class ByteLengthOfBasicElementTest {
   void uint8Test() {
     var struct = struct()
         .int8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -190,7 +190,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void uint16ConstantTest() {
     var struct = struct()
-        .uint16Array(constant(10))
+        .uint16List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -205,7 +205,7 @@ public class ByteLengthOfBasicElementTest {
   void uint16Test() {
     var struct = struct()
         .int8()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -220,7 +220,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void uint32ConstantTest() {
     var struct = struct()
-        .uint32Array(constant(10))
+        .uint32List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -235,7 +235,7 @@ public class ByteLengthOfBasicElementTest {
   void uint32Test() {
     var struct = struct()
         .int8()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -250,7 +250,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void uint64ConstantTest() {
     var struct = struct()
-        .uint64Array(constant(10))
+        .uint64List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -265,7 +265,7 @@ public class ByteLengthOfBasicElementTest {
   void uint64Test() {
     var struct = struct()
         .int8()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -280,7 +280,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void float32ConstantTest() {
     var struct = struct()
-        .float32Array(constant(10))
+        .float32List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -295,7 +295,7 @@ public class ByteLengthOfBasicElementTest {
   void float32Test() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
     struct.setInt8(0, 25);
 
@@ -310,7 +310,7 @@ public class ByteLengthOfBasicElementTest {
   @Test
   void float64ConstantTest() {
     var struct = struct()
-        .float64Array(constant(10))
+        .float64List(constant(10))
         .build();
 
     var expression = lengthOfBasicElement(0);
@@ -325,7 +325,7 @@ public class ByteLengthOfBasicElementTest {
   void float64Test() {
     var struct = struct()
         .int8()
-        .float64Array(0)
+        .float64List(0)
         .build();
     struct.setInt8(0, 25);
 

@@ -19,7 +19,7 @@ public class AllocateFloat64TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .basic().constant(3.0d).float64()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(3));
@@ -29,7 +29,7 @@ public class AllocateFloat64TypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float64(0));
@@ -38,8 +38,8 @@ public class AllocateFloat64TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
-        .float64Array(0)
+        .basic().constant(3.0d).float64()
+        .float64List(0)
         .build();
 
     // 3.0d then three zeros
@@ -49,8 +49,8 @@ public class AllocateFloat64TypeTest {
   @Test
   void allocate_array_with_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
-        .primitive().constant(new double[]{2, 2, 2}).float64()
+        .basic().constant(3.0d).float64()
+        .basic().constant(new double[]{2, 2, 2}).float64()
         .build();
 
     // 3.0d then 3 elements of 2.0d

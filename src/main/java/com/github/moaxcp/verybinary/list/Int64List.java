@@ -32,7 +32,7 @@ public final class Int64List extends PrimitiveList<Int64List, Int64ListType, Lon
 
   public static StructType getInt64ListStructType(long length) {
     return structType()
-        .int64Array(constant(length))
+        .int64List(constant(length))
         .build();
   }
 

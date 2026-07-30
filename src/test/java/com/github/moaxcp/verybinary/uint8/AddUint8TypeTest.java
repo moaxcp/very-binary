@@ -13,7 +13,7 @@ public class AddUint8TypeTest {
   void addUint8Wrapper() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
@@ -25,7 +25,7 @@ public class AddUint8TypeTest {
   void addUint8Wrapper_with_index() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
@@ -37,7 +37,7 @@ public class AddUint8TypeTest {
   void addUint8() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -51,7 +51,7 @@ public class AddUint8TypeTest {
   void addUint8_position_negative() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -64,7 +64,7 @@ public class AddUint8TypeTest {
   void addUint8_position_greater_than_length() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -78,7 +78,7 @@ public class AddUint8TypeTest {
     var struct = struct()
         .allocated()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
     assertThatThrownBy(() -> struct.addUint8(1, (byte) 3))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -88,7 +88,7 @@ public class AddUint8TypeTest {
   @Test
   void addUint8Array_constant() {
     var struct = struct()
-        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
@@ -110,7 +110,7 @@ public class AddUint8TypeTest {
   void addUint8_with_index() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class AddUint8TypeTest {
   void addUint8_with_index_negative() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -137,7 +137,7 @@ public class AddUint8TypeTest {
   void addUint8_with_index_greater_than_length() {
     var struct = struct()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .fromBytes(ba().uint8(2, 1, 2))
         .build();
 
@@ -151,7 +151,7 @@ public class AddUint8TypeTest {
     var struct = struct()
         .allocated()
         .uint8()
-        .uint8Array(0)
+        .uint8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(1, 0, (byte) 3))
@@ -173,7 +173,7 @@ public class AddUint8TypeTest {
   @Test
   void addUint8Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))

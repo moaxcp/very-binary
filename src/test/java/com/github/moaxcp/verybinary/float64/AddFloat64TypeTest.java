@@ -13,7 +13,7 @@ public class AddFloat64TypeTest {
   void addFloat64Wrapper() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, Double.valueOf(1.0d)))
@@ -25,7 +25,7 @@ public class AddFloat64TypeTest {
   void addFloat64Wrapper_with_index() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, 0, Double.valueOf(1.0d)))
@@ -37,7 +37,7 @@ public class AddFloat64TypeTest {
   void addFloat64() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2).float64(2).float64(3))
         .build();
 
@@ -51,7 +51,7 @@ public class AddFloat64TypeTest {
   void addFloat64_position_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -64,7 +64,7 @@ public class AddFloat64TypeTest {
   void addFloat64_position_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -78,7 +78,7 @@ public class AddFloat64TypeTest {
     var struct = struct()
         .allocated()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
     assertThatThrownBy(() -> struct.addFloat64(1, 3.0d))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -88,7 +88,7 @@ public class AddFloat64TypeTest {
   @Test
   void addFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
@@ -110,7 +110,7 @@ public class AddFloat64TypeTest {
   void addFloat64_with_index() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2).float64(2).float64(3))
         .build();
 
@@ -124,7 +124,7 @@ public class AddFloat64TypeTest {
   void addFloat64_with_index_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -137,7 +137,7 @@ public class AddFloat64TypeTest {
   void addFloat64_with_index_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -151,7 +151,7 @@ public class AddFloat64TypeTest {
     var struct = struct()
         .allocated()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(1, 0, 3.0d))
@@ -173,7 +173,7 @@ public class AddFloat64TypeTest {
   @Test
   void addFloat64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))

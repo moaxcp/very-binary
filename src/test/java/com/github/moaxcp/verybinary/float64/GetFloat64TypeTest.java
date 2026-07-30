@@ -79,7 +79,7 @@ public class GetFloat64TypeTest {
   @Test
   void getFloat64_constant() {
     var struct = struct()
-        .primitive().constant(3.0d).float64()
+        .basic().constant(3.0d).float64()
         .build();
 
     assertThat(struct.getFloat64(0)).isEqualTo(3.0d);
@@ -100,7 +100,7 @@ public class GetFloat64TypeTest {
   void getArrayWrapper() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).get(struct, 0))
@@ -112,7 +112,7 @@ public class GetFloat64TypeTest {
   void getFloat64Array() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -124,7 +124,7 @@ public class GetFloat64TypeTest {
   void getFloat64Array_negative() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getFloat64(1, -1))
@@ -136,7 +136,7 @@ public class GetFloat64TypeTest {
   void getFloat64Array_greater_than_length() {
     var struct = struct()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .fromBytes(ba().float64(2, 3, 2))
         .build();
 
@@ -150,7 +150,7 @@ public class GetFloat64TypeTest {
     var struct = struct()
         .allocated()
         .float64()
-        .float64Array(0)
+        .float64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getFloat64(1, 0))
@@ -161,7 +161,7 @@ public class GetFloat64TypeTest {
   @Test
   void getFloat64Array_constant() {
     var struct = struct()
-        .primitive().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(new double[]{3, 3, 3}).float64()
         .build();
 
     assertThat(struct.getFloat64(0, 2)).isEqualTo(3.0d);

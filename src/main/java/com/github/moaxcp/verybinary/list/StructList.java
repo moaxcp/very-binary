@@ -12,7 +12,7 @@ public final class StructList extends BinaryList<StructList, StructListType, Str
 
   public static StructType getStructListStructType(long length, StructType type) {
     return structType()
-        .structArray(constant(length), type)
+        .structList(constant(length), type)
         .build();
   }
 

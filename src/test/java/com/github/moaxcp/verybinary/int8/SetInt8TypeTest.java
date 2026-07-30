@@ -69,7 +69,7 @@ public class SetInt8TypeTest {
   @Test
   void setInt8_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
+        .basic().constant((byte) 5).int8()
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
@@ -81,7 +81,7 @@ public class SetInt8TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).set(struct, 0, Byte.valueOf((byte) 2)))
@@ -93,7 +93,7 @@ public class SetInt8TypeTest {
   void setInt8Array() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .int8()
         .fromBytes(ba().int8(1, 2, 3))
         .build();
@@ -109,7 +109,7 @@ public class SetInt8TypeTest {
   void setInt8Array_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .int8()
         .fromBytes(ba().int8(1, 2, 3))
         .build();
@@ -123,7 +123,7 @@ public class SetInt8TypeTest {
   void setInt8Array_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .int8()
         .fromBytes(ba().int8(1, 2, 3))
         .build();
@@ -142,7 +142,7 @@ public class SetInt8TypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(1, 0, (byte) 2))
@@ -163,7 +163,7 @@ public class SetInt8TypeTest {
   @Test
   void setInt8Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
@@ -175,7 +175,7 @@ public class SetInt8TypeTest {
   void setInt8Array_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .fromBytes(ba().int8(2, 5, 5))
         .build();
 
@@ -188,7 +188,7 @@ public class SetInt8TypeTest {
   void setInt8Array_constant_value_same() {
     var struct = struct()
         .int8()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .fromBytes(ba().int8(2, 5, 5))
         .build();
 
@@ -201,7 +201,7 @@ public class SetInt8TypeTest {
   void setInt8Array_set_length_field_adds_to_array() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     struct.setInt8(0, (byte) 2);
@@ -214,7 +214,7 @@ public class SetInt8TypeTest {
   void setInt8Array_set_length_field_removes_from_array() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(3).int8(1).int8(2).int8(3))
         .build();
 

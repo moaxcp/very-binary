@@ -20,7 +20,7 @@ public class AllocateUint32TypeTest {
   @Test
   void allocate_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).uint32()
+        .basic().constant(5L).uint32()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint32(5));
@@ -30,7 +30,7 @@ public class AllocateUint32TypeTest {
   void allocate_empty_array() {
     var struct = struct()
         .uint32()
-        .uint32Array(0)
+        .uint32List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint32(0));
@@ -39,8 +39,8 @@ public class AllocateUint32TypeTest {
   @Test
   void allocate_array_length_with_constant() {
     var struct = struct()
-        .primitive().constant(5L).uint32()
-        .uint32Array(0)
+        .basic().constant(5L).uint32()
+        .uint32List(0)
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint32(5, 0, 0, 0, 0, 0));

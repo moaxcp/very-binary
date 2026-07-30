@@ -17,7 +17,7 @@ public class Uint64TypeTest {
   void copy() {
     var type = structType()
         .uint64()
-        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
         .align(2)
         .build();
     var copy = type.copy(15, null);
@@ -47,7 +47,7 @@ public class Uint64TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .uint64Array(constant(5))
+        .uint64List(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

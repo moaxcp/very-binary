@@ -69,7 +69,7 @@ public class GetUint64TypeTest {
   @Test
   void getUint64_constant() {
     var struct = struct()
-        .primitive().constant(BigInteger.valueOf(5)).uint64()
+        .basic().constant(BigInteger.valueOf(5)).uint64()
         .build();
 
     assertThat(struct.getUint64(0)).isEqualTo(BigInteger.valueOf(5));
@@ -90,7 +90,7 @@ public class GetUint64TypeTest {
   void getUint64Array() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -102,7 +102,7 @@ public class GetUint64TypeTest {
   void getUint64Array_negative() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getUint64(1, -1))
@@ -114,7 +114,7 @@ public class GetUint64TypeTest {
   void getUint64Array_greater_than_length() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(1, 2))
         .build();
 
@@ -128,7 +128,7 @@ public class GetUint64TypeTest {
     var struct = struct()
         .allocated()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.getUint64(1, 0))
@@ -139,7 +139,7 @@ public class GetUint64TypeTest {
   @Test
   void getUint64Array_constant() {
     var struct = struct()
-        .primitive().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThat(struct.getUint64(0, 3)).isEqualTo(BigInteger.valueOf(5));

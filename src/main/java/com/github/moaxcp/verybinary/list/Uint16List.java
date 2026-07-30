@@ -32,7 +32,7 @@ public final class Uint16List extends PrimitiveList<Uint16List, Uint16ListType, 
 
   public static StructType getUint16ListStructType(long length) {
     return structType()
-        .uint16Array(constant(length))
+        .uint16List(constant(length))
         .build();
   }
 

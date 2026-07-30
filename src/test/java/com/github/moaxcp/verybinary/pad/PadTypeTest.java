@@ -44,17 +44,17 @@ public class PadTypeTest {
         Arguments.of(struct().float32(), FLOAT32.size()),
         Arguments.of(struct().float64(), FLOAT64.size()),
         Arguments.of(struct().struct().int8().end(), INT8.size()),
-        Arguments.of(struct().int8Array(constant(5)), INT8.size() * 5),
-        Arguments.of(struct().int16Array(constant(5)), INT16.size() * 5),
-        Arguments.of(struct().int32Array(constant(5)), INT32.size() * 5),
-        Arguments.of(struct().int64Array(constant(5)), INT64.size() * 5),
-        Arguments.of(struct().uint8Array(constant(5)), UINT8.size() * 5),
-        Arguments.of(struct().uint16Array(constant(5)), UINT16.size() * 5),
-        Arguments.of(struct().uint32Array(constant(5)), UINT32.size() * 5),
-        Arguments.of(struct().uint64Array(constant(5)), UINT64.size() * 5),
-        Arguments.of(struct().float32Array(constant(5)), FLOAT32.size() * 5),
-        Arguments.of(struct().float64Array(constant(5)), FLOAT64.size() * 5),
-        Arguments.of(struct().struct().int8Array(constant(5)).end(), INT8.size() * 5)
+        Arguments.of(struct().int8List(constant(5)), INT8.size() * 5),
+        Arguments.of(struct().int16List(constant(5)), INT16.size() * 5),
+        Arguments.of(struct().int32List(constant(5)), INT32.size() * 5),
+        Arguments.of(struct().int64List(constant(5)), INT64.size() * 5),
+        Arguments.of(struct().uint8List(constant(5)), UINT8.size() * 5),
+        Arguments.of(struct().uint16List(constant(5)), UINT16.size() * 5),
+        Arguments.of(struct().uint32List(constant(5)), UINT32.size() * 5),
+        Arguments.of(struct().uint64List(constant(5)), UINT64.size() * 5),
+        Arguments.of(struct().float32List(constant(5)), FLOAT32.size() * 5),
+        Arguments.of(struct().float64List(constant(5)), FLOAT64.size() * 5),
+        Arguments.of(struct().struct().int8List(constant(5)).end(), INT8.size() * 5)
     );
   }
 
@@ -69,21 +69,21 @@ public class PadTypeTest {
 
   static Stream<Arguments> structVariableProvider() {
     return Stream.of(
-        Arguments.of(struct().int8().int8Array(0).align(5).build().addInt8(1, (byte) 8), 1 + 1 + 4),
-        Arguments.of(struct().int8().int16Array(0).align(5).build().addInt16(1, (short) 8), 1 + 2 + 3),
-        Arguments.of(struct().int8().int32Array(0).align(5).build().addInt32(1, 8), 1 + 4 + 1),
-        Arguments.of(struct().int8().int64Array(0).align(5).build().addInt64(1, 8), 1 + 8 + 2),
-        Arguments.of(struct().int8().uint8Array(0).align(5).build().addUint8(1, (short) 8), 1 + 1 + 4),
-        Arguments.of(struct().int8().uint16Array(0).align(5).build().addUint16(1, 8), 1 + 2 + 3),
-        Arguments.of(struct().int8().uint32Array(0).align(5).build().addUint32(1, 8), 1 + 4 + 1),
-        Arguments.of(struct().int8().uint64Array(0).align(5).build().addUint64(1, BigInteger.valueOf(8)), 1 + 8 + 2),
-        Arguments.of(struct().int8().float32Array(0).align(5).build().addFloat32(1, 8f), 1 + 4 + 1),
-        Arguments.of(struct().int8().float64Array(0).align(5).build().addFloat64(1, 8d), 1 + 8 + 2),
+        Arguments.of(struct().int8().int8List(0).align(5).build().addInt8(1, (byte) 8), 1 + 1 + 4),
+        Arguments.of(struct().int8().int16List(0).align(5).build().addInt16(1, (short) 8), 1 + 2 + 3),
+        Arguments.of(struct().int8().int32List(0).align(5).build().addInt32(1, 8), 1 + 4 + 1),
+        Arguments.of(struct().int8().int64List(0).align(5).build().addInt64(1, 8), 1 + 8 + 2),
+        Arguments.of(struct().int8().uint8List(0).align(5).build().addUint8(1, (short) 8), 1 + 1 + 4),
+        Arguments.of(struct().int8().uint16List(0).align(5).build().addUint16(1, 8), 1 + 2 + 3),
+        Arguments.of(struct().int8().uint32List(0).align(5).build().addUint32(1, 8), 1 + 4 + 1),
+        Arguments.of(struct().int8().uint64List(0).align(5).build().addUint64(1, BigInteger.valueOf(8)), 1 + 8 + 2),
+        Arguments.of(struct().int8().float32List(0).align(5).build().addFloat32(1, 8f), 1 + 4 + 1),
+        Arguments.of(struct().int8().float64List(0).align(5).build().addFloat64(1, 8d), 1 + 8 + 2),
         Arguments.of(struct()
-            .primitive().constant((byte) 64).int8()
+            .basic().constant((byte) 64).int8()
             .struct()
-              .primitive().constant((byte) 6).int8()
-              .primitive().constant(new byte[]{8, 8, 8, 8, 8, 8}).int8()
+              .basic().constant((byte) 6).int8()
+              .basic().constant(new byte[]{8, 8, 8, 8, 8, 8}).int8()
               .end()
             .align(5)
             .build(), 1 + 1 + 6 + 3)
@@ -122,7 +122,7 @@ public class PadTypeTest {
   void isFixedByteLengthAlignArray() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .align(4)
         .build();
 
@@ -132,7 +132,7 @@ public class PadTypeTest {
   @Test
   void isFixedByteLengthAlignArrayConstant() {
     var struct = struct()
-        .int8Array(constant(8))
+        .int8List(constant(8))
         .align(4)
         .build();
 

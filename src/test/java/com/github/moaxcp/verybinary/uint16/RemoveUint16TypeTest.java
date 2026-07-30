@@ -13,7 +13,7 @@ public class RemoveUint16TypeTest {
   void removeUint16() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -26,7 +26,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_position_negative() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -38,7 +38,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_position_greater_than_length() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -51,7 +51,7 @@ public class RemoveUint16TypeTest {
     var struct = struct()
         .allocated()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -74,7 +74,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_with_index_0() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     struct.addUint16(1, 1);
@@ -90,7 +90,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_with_index_1() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
     struct.addUint16(1, 1);
     struct.addUint16(1, 2);
@@ -104,7 +104,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_with_index_negative() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -117,7 +117,7 @@ public class RemoveUint16TypeTest {
   void removeUint16_with_index_greater_than_length() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .fromBytes(ba().uint16(2, 1, 2))
         .build();
 
@@ -141,7 +141,7 @@ public class RemoveUint16TypeTest {
   @Test
   void removeUint16Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveUint16TypeTest {
   @Test
   void removeUint16Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

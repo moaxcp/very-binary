@@ -15,7 +15,7 @@ public class AddUint64TypeTest {
   void addUint64() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -29,7 +29,7 @@ public class AddUint64TypeTest {
   void addUint64_position_negative() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -42,7 +42,7 @@ public class AddUint64TypeTest {
   void addUint64_position_greater_than_length() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -56,7 +56,7 @@ public class AddUint64TypeTest {
     var struct = struct()
         .allocated()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
     assertThatThrownBy(() -> struct.addUint64(1, BigInteger.valueOf(3)))
         .isInstanceOf(IndexOutOfBoundsException.class)
@@ -66,7 +66,7 @@ public class AddUint64TypeTest {
   @Test
   void addUint64Array_constant() {
     var struct = struct()
-        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
@@ -88,7 +88,7 @@ public class AddUint64TypeTest {
   void addUint64_with_index() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -102,7 +102,7 @@ public class AddUint64TypeTest {
   void addUint64_with_index_negative() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -115,7 +115,7 @@ public class AddUint64TypeTest {
   void addUint64_with_index_greater_than_length() {
     var struct = struct()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .fromBytes(ba().uint64(2, 1, 2))
         .build();
 
@@ -129,7 +129,7 @@ public class AddUint64TypeTest {
     var struct = struct()
         .allocated()
         .uint64()
-        .uint64Array(0)
+        .uint64List(0)
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(1, 0, BigInteger.valueOf(3)))
@@ -151,7 +151,7 @@ public class AddUint64TypeTest {
   @Test
   void addUint64Array_with_index_constant() {
     var struct = struct()
-        .primitive().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, 3, BigInteger.valueOf(3)))

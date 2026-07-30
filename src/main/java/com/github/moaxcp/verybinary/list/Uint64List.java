@@ -27,7 +27,7 @@ public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, Big
 
   public static StructType getUint64ListStructType(long length) {
     return structType()
-        .uint64Array(constant(length))
+        .uint64List(constant(length))
         .build();
   }
 

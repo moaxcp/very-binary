@@ -13,7 +13,7 @@ public class RemoveInt8TypeTest {
   void removeInt8() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -26,7 +26,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_position_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(-1))
@@ -38,7 +38,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_position_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(2))
@@ -51,7 +51,7 @@ public class RemoveInt8TypeTest {
     var struct = struct()
         .allocated()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     assertThatThrownBy(() -> struct.remove(1))
@@ -74,7 +74,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_with_index_0() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
 
     struct.addInt8(1, (byte) 1);
@@ -90,7 +90,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_with_index_1() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .build();
     struct.addInt8(1, (byte) 1);
     struct.addInt8(1, (byte) 2);
@@ -104,7 +104,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_with_index_negative() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -117,7 +117,7 @@ public class RemoveInt8TypeTest {
   void removeInt8_with_index_greater_than_length() {
     var struct = struct()
         .int8()
-        .int8Array(0)
+        .int8List(0)
         .fromBytes(ba().int8(2, 1, 2))
         .build();
 
@@ -141,7 +141,7 @@ public class RemoveInt8TypeTest {
   @Test
   void removeInt8Array_fixed_length() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveInt8TypeTest {
   @Test
   void removeInt8Array_fixed_length_with_index() {
     var struct = struct()
-        .primitive().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

@@ -32,7 +32,7 @@ public class Int8TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .int8Array(constant(5))
+        .int8List(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

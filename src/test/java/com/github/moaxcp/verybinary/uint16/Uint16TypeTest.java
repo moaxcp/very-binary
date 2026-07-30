@@ -32,8 +32,8 @@ public class Uint16TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .primitive().lengthExpression(constant(5)).uint16()
-        .uint16Array(constant(5))
+        .basic().lengthExpression(constant(5)).uint16()
+        .uint16List(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

@@ -45,7 +45,7 @@ public class Float32TypeTest {
   void getAllocationByteLength_array() {
     var type = structType()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
     assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(0);
   }
@@ -53,7 +53,7 @@ public class Float32TypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length() {
     var type = structType()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
     assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(20);
     assertThat(type.getAllocationByteLength()).isEqualTo(20);
@@ -62,8 +62,8 @@ public class Float32TypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length_field() {
     var type = structType()
-        .primitive().constant((byte) 5).int8()
-        .float32Array(0)
+        .basic().constant((byte) 5).int8()
+        .float32List(0)
         .build();
     assertThat(type.getType(1).getAllocationByteLength()).isEqualTo(20);
     assertThat(type.getAllocationByteLength()).isEqualTo(21);
@@ -82,7 +82,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_constant_length() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0)).isEqualTo(FLOAT32.size() * 5);
@@ -92,8 +92,8 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_with_length_field() {
     var struct = struct()
-        .primitive().constant((short) 5).int8()
-        .float32Array(0)
+        .basic().constant((short) 5).int8()
+        .float32List(0)
         .build();
 
     assertThat(struct.getByteLength(1)).isEqualTo(FLOAT32.size() * 5);
@@ -103,7 +103,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_with_index() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2)).isEqualTo(4);
@@ -112,7 +112,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_with_index_length() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2, 2)).isEqualTo(8);
@@ -131,7 +131,7 @@ public class Float32TypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();
@@ -142,7 +142,7 @@ public class Float32TypeTest {
   void isFixedLengthArray_variable_Byte_length() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThat(struct.getType(1).isFixedByteLength()).isFalse();
@@ -152,8 +152,8 @@ public class Float32TypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length_field() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
-        .float32Array(0)
+        .basic().constant((byte) 5).int8()
+        .float32List(0)
         .build();
 
     assertThat(struct.getType(1).isFixedByteLength()).isTrue();
@@ -164,7 +164,7 @@ public class Float32TypeTest {
   void setting_length_field_extends_array() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     struct.setInt8(0, 5);

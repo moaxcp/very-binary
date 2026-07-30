@@ -69,7 +69,7 @@ public class SetUint16TypeTest {
   @Test
   void setUint16_constant() {
     var struct = struct()
-        .primitive().constant(5).uint16()
+        .basic().constant(5).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.setUint16(0, 2))
@@ -81,7 +81,7 @@ public class SetUint16TypeTest {
   void setArrayWrapper() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).set(struct, 0, Integer.valueOf(2)))
@@ -93,7 +93,7 @@ public class SetUint16TypeTest {
   void setUint16Array() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .uint16()
         .fromBytes(ba().uint16(1, 2, 3))
         .build();
@@ -109,7 +109,7 @@ public class SetUint16TypeTest {
   void setUint16Array_negative() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .uint16()
         .fromBytes(ba().uint16(1, 2, 3))
         .build();
@@ -123,7 +123,7 @@ public class SetUint16TypeTest {
   void setUint16Array_greater_than_length() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .uint16()
         .fromBytes(ba().uint16(1, 2, 3))
         .build();
@@ -142,7 +142,7 @@ public class SetUint16TypeTest {
     var struct = struct()
         .allocated()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setUint16(1, 0, 2))
@@ -163,7 +163,7 @@ public class SetUint16TypeTest {
   @Test
   void setUint16Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.setUint16(0, 3, 2))
@@ -175,7 +175,7 @@ public class SetUint16TypeTest {
   void setUint16Array_constant_value() {
     var struct = struct()
         .uint16()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .fromBytes(ba().uint16(2, 5, 5))
         .build();
 
@@ -188,7 +188,7 @@ public class SetUint16TypeTest {
   void setUint16Array_constant_value_same() {
     var struct = struct()
         .uint16()
-        .primitive().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
         .fromBytes(ba().uint16(2, 5, 5))
         .build();
 
@@ -201,7 +201,7 @@ public class SetUint16TypeTest {
   void setUint16Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .uint16()
-        .uint16Array(0)
+        .uint16List(0)
         .build();
 
     struct.setUint16(0, 2);

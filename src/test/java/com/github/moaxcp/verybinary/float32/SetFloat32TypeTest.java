@@ -59,7 +59,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_constant() {
     var struct = struct()
-        .primitive().constant(3.0f).float32()
+        .basic().constant(3.0f).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
@@ -71,7 +71,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .float32()
         .fromBytes(ba().float32(1, 4, 3))
         .build();
@@ -87,7 +87,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_negative() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .float32()
         .fromBytes(ba().float32(1, 4))
         .build();
@@ -101,7 +101,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_greater_than_length() {
     var struct = struct()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .float32()
         .fromBytes(ba().float32(1, 4, 2))
         .build();
@@ -116,7 +116,7 @@ public class SetFloat32TypeTest {
     var struct = struct()
         .allocated()
         .float32()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, 0, 2.0f))
@@ -138,7 +138,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_constant_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .fromBytes(ba().int8(1).float32(3, 3))
         .build();
 
@@ -151,7 +151,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_constant_value_value_bad_value() {
     var struct = struct()
         .int8()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .fromBytes(ba().int8(2).float32(3, 3))
         .build();
 
@@ -163,7 +163,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32Array_constant_value_and_length() {
     var struct = struct()
-        .primitive().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(new float[]{3, 3, 3}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 2.0f))
@@ -175,7 +175,7 @@ public class SetFloat32TypeTest {
   void setFloat32_array() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     struct.setInt8(0, 5);
@@ -187,7 +187,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_array_length_constant() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     struct.setFloat32(0, 5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
@@ -198,8 +198,8 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_array_length_field_constant() {
     var struct = struct()
-        .primitive().constant(5).int8()
-        .float32Array(0)
+        .basic().constant(5).int8()
+        .float32List(0)
         .build();
 
     struct.setFloat32(1, 5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
@@ -211,7 +211,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_array() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     struct.setInt8(0, 5);
@@ -223,7 +223,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_length_constant() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     struct.setFloat32(0, 2, 3.5f, 4.5f);
@@ -234,8 +234,8 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_length_field_constant() {
     var struct = struct()
-        .primitive().constant((byte) 5).int8()
-        .float32Array(0)
+        .basic().constant((byte) 5).int8()
+        .float32List(0)
         .build();
 
     struct.setFloat32(1, 2, 3.5f, 4.5f);
@@ -246,7 +246,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_with_index_negative() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, -1, 2.0f, 3.0f))
@@ -257,7 +257,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_with_index_greater_than_length() {
     var struct = struct()
-        .float32Array(constant(5))
+        .float32List(constant(5))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 5, 2.0f, 3.0f))
@@ -268,7 +268,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_constant() {
     var struct = struct()
-        .primitive().constant(new float[]{5, 5, 5, 5, 5}).float32()
+        .basic().constant(new float[]{5, 5, 5, 5, 5}).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 3.5f, 4.5f))
@@ -280,7 +280,7 @@ public class SetFloat32TypeTest {
   void setFloat32Array_set_length_field_extends_array() {
     var struct = struct()
         .int8()
-        .float32Array(0)
+        .float32List(0)
         .build();
 
     struct.setInt8(0, 2);

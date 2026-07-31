@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int64List.toInt64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).add(struct, Long.valueOf(1L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Long) not supported for Int64ListType. Use add(Pointer, long) instead.");
+        .hasMessage("add(Pointer, T) not supported for Int64ListType. Use addInt64(Pointer, long) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddInt64TypeTest {
 
     assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).add(struct, 0, Long.valueOf(1L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Long) not supported for Int64ListType. Use add(Pointer, long, long) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Int64ListType. Use addInt64(Pointer, long, long) instead.");
   }
 
   @Test
@@ -88,7 +89,7 @@ public class AddInt64TypeTest {
   @Test
   void addInt64Array_constant() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3L))
@@ -173,7 +174,7 @@ public class AddInt64TypeTest {
   @Test
   void addInt64Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
         .build();
 
     assertThatThrownBy(() -> struct.addInt64(0, 3, 3L))

@@ -2,7 +2,17 @@ package com.github.moaxcp.verybinary.math;
 
 import com.github.moaxcp.verybinary.*;
 
-import java.math.BigInteger;
+import static com.github.moaxcp.verybinary.math.BoolValue.boolValue;
+import static com.github.moaxcp.verybinary.math.Float32Value.float32Value;
+import static com.github.moaxcp.verybinary.math.Float64Value.float64Value;
+import static com.github.moaxcp.verybinary.math.Int16Value.int16Value;
+import static com.github.moaxcp.verybinary.math.Int32Value.int32Value;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
+import static com.github.moaxcp.verybinary.math.Uint16Value.uint16Value;
+import static com.github.moaxcp.verybinary.math.Uint32Value.uint32Value;
+import static com.github.moaxcp.verybinary.math.Uint64Value.uint64Value;
+import static com.github.moaxcp.verybinary.math.Uint8Value.uint8Value;
 
 public final class Variable implements Expression {
 
@@ -26,50 +36,44 @@ public final class Variable implements Expression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
     return switch (parent.getType(position)) {
-      case Int8Type t -> t.getInt8ConstantValue();
-      case Int16Type t -> t.getInt16ConstantValue();
-      case Int32Type t -> t.getInt32ConstantValue();
-      case Int64Type t -> t.getInt64ConstantValue();
-      case Uint8Type t -> t.getUint8ConstantValue();
-      case Uint16Type t -> t.getUint16ConstantValue();
-      case Uint32Type t -> t.getUint32ConstantValue();
-      case Uint64Type t -> t.getConstantValue().longValue();
-      case Float32Type t -> (long) t.getFloat32ConstantValue();
-      case Float64Type t -> (long) t.getFloat64ConstantValue();
+      case Int8Type t -> int8Value(t.getInt8ConstantValue());
+      case Int16Type t -> int16Value(t.getInt16ConstantValue());
+      case Int32Type t -> int32Value(t.getInt32ConstantValue());
+      case Int64Type t -> int64Value(t.getInt64ConstantValue());
+      case Uint8Type t -> uint8Value(t.getUint8ConstantValue());
+      case Uint16Type t -> uint16Value(t.getUint16ConstantValue());
+      case Uint32Type t -> uint32Value(t.getUint32ConstantValue());
+      case Uint64Type t -> uint64Value(t.getConstantValue());
+      case Float32Type t -> float32Value(t.getFloat32ConstantValue());
+      case Float64Type t -> float64Value(t.getFloat64ConstantValue());
       default -> throw new IllegalArgumentException("cannot evaluate " + parent + parent.getClass().getSimpleName());
     };
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    return ((LengthType<?, ?>) parent.getType(position)).defaultLengthValue();
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    return int64Value(((LengthType<?, ?>) parent.getType(position)).defaultLengthValue());
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
+  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
     var type = switch (pointer) {
       case Struct struct -> struct.getType(position);
     };
     return switch (type) {
-      case Int8Type i8 -> i8.getInt8(pointer);
-      case Uint8Type u8 -> u8.getUint8(pointer);
-      case Int16Type i16 -> i16.getInt16(pointer);
-      case Uint16Type u16 -> u16.getUint16(pointer);
-      case Int32Type i32 -> i32.getInt32(pointer);
-      case Uint32Type u32 -> u32.getUint32(pointer);
-      case Int64Type i64 -> i64.getInt64(pointer);
-      case Uint64Type u64 -> {
-        var value = u64.get(pointer);
-        if (value.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-          throw new IllegalArgumentException("cannot convert " + value + " to long");
-        }
-        yield value.longValue();
-      }
-      case Float32Type f32 -> (long) f32.getFloat32(pointer);
-      case Float64Type f32 -> (long) f32.getFloat64(pointer);
-      case BoolType ignored -> throw new IllegalArgumentException("cannot evaluate boolean type");
+      case Int8Type i8 -> int8Value(i8.getInt8(pointer));
+      case Uint8Type u8 -> uint8Value(u8.getUint8(pointer));
+      case Int16Type i16 -> int16Value(i16.getInt16(pointer));
+      case Uint16Type u16 -> uint16Value(u16.getUint16(pointer));
+      case Int32Type i32 -> int32Value(i32.getInt32(pointer));
+      case Uint32Type u32 -> uint32Value(u32.getUint32(pointer));
+      case Int64Type i64 -> int64Value(i64.getInt64(pointer));
+      case Uint64Type u64 -> uint64Value(u64.get(pointer));
+      case Float32Type f32 -> float32Value(f32.getFloat32(pointer));
+      case Float64Type f64 -> float64Value(f64.getFloat64(pointer));
+      case BoolType b -> boolValue(b.getBool(pointer));
       case ComplexType<?> ignored -> throw new IllegalArgumentException("cannot evaluate complex type");
       case PadType ignored -> throw new IllegalArgumentException("cannot evaluate pad type");
       case ListType ignored -> throw new IllegalArgumentException("cannot evaluate indexed value type");

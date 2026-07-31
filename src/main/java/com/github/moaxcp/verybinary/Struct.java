@@ -218,7 +218,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return ((BoolType) structType.getType(position)).getBool(this);
   }
 
-  public Struct set(int position, boolean b) {
+  public Struct setBool(int position, boolean b) {
     ((BoolType) structType.getType(position)).set(this, b);
     return this;
   }
@@ -227,7 +227,7 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     return ((BoolListType) structType.getType(position)).getBool(this, index);
   }
 
-  public Struct set(int position, long index, boolean b) {
+  public Struct setBool(int position, long index, boolean b) {
     ((BoolListType) structType.getType(position)).set(this, index, b);
     return this;
   }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int32List.toInt32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -161,7 +162,7 @@ public class GetInt32TypeTest {
   @Test
   void getInt32Array_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(toInt32List(new int[]{5, 5, 5, 5, 5})).int32()
         .build();
 
     assertThat(struct.getInt32(0, 3)).isEqualTo(5);

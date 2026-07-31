@@ -1,6 +1,7 @@
 package com.github.moaxcp.verybinary.int8;
 
 import com.github.moaxcp.verybinary.Struct;
+import com.github.moaxcp.verybinary.list.Int8List;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,13 +30,14 @@ public class Int8ListTypeTest {
   @Test
   void testAddInt8() {
     Struct struct = struct()
-        .int8List() // length 0
+        .int8()
+        .int8List(0)
         .build();
 
-    struct.addInt8(0, (byte) 5);
-    struct.addInt8(0, (byte) 6);
+    struct.addInt8(1, (byte) 5);
+    struct.addInt8(1, (byte) 6);
 
-    com.github.moaxcp.verybinary.list.Int8List list = struct.get(0);
+    Int8List list = struct.get(1);
     assertThat(list).containsExactly((byte) 5, (byte) 6);
   }
 

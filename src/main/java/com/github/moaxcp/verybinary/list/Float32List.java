@@ -13,7 +13,7 @@ import static com.github.moaxcp.verybinary.math.Constant.constant;
 
 public final class Float32List extends PrimitiveList<Float32List, Float32ListType, Float> implements PrimitiveIterable<Float, Float32Consumer> {
 
-  public static Float32List toFloat32List(float[] values) {
+  public static Float32List toFloat32List(float... values) {
     return getFloat32ListStruct(values)
         .getFloat32Array(0);
   }

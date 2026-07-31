@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int64List.toInt64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class SetInt64TypeTest {
 
     assertThatThrownBy(() -> ((Int64Type) struct.getType(0)).set(struct, Long.valueOf(2L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Long) not supported for Int64Type. Use set(Pointer, long) instead.");
+        .hasMessage("setUnchecked(Pointer, Long) not supported for Int64Type. Use setUnchecked(Pointer, long) instead.");
   }
 
   @Test
@@ -73,20 +74,20 @@ public class SetInt64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 2L))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int64Type at position 0 is constant value");
   }
 
   @Test
   void setArrayWrapper() {
     var struct = struct()
-        .int64()
+        .basic().constant(1L).int64()
         .int64List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int64ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2L)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Long) not supported for Int64ListType. Use set(Pointer, long, long) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Int64ListType. Use setInt64(Pointer, long, long) instead.");
   }
 
   @Test
@@ -163,7 +164,7 @@ public class SetInt64TypeTest {
   @Test
   void setInt64Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
@@ -175,20 +176,20 @@ public class SetInt64TypeTest {
   void setInt64Array_constant_value() {
     var struct = struct()
         .int64()
-        .basic().constant(new long[]{5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5})).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setInt64(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64ListType at position 1 is constant index: 1 value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int64ListType at position 1 is constant value");
   }
 
   @Test
   void setInt64Array_constant_value_same() {
     var struct = struct()
         .int64()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
         .fromBytes(ba().int64(2, 5, 5))
         .build();
 

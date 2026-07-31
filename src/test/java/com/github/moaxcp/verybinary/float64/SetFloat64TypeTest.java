@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
+import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +20,7 @@ public class SetFloat64TypeTest {
 
     assertThatThrownBy(() -> ((Float64Type) struct.getType(0)).set(struct, Double.valueOf(2.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Double) not supported for Float64Type. Use set(Pointer, double) instead.");
+        .hasMessage("setUnchecked(Pointer, Double) not supported for Float64Type. Use setUnchecked(Pointer, double) instead.");
   }
 
   @Test
@@ -73,20 +75,19 @@ public class SetFloat64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64Type at position 0 is constant value: 2.0 constant: 3.0");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float64Type at position 0 is constant value");
   }
 
   @Test
   void setArrayWrapper() {
     var struct = struct()
-        .float64()
-        .float64List(0)
+        .float64List(constant(1))
         .build();
 
-    assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).set(struct, 0, Double.valueOf(2.0d)))
+    assertThatThrownBy(() -> ((Float64ListType) struct.getType(0)).set(struct, 0, Double.valueOf(2.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Double) not supported for Float64ListType. Use set(Pointer, long, double) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Float64ListType. Use setFloat64(Pointer, long, double) instead.");
   }
 
   @Test
@@ -161,32 +162,32 @@ public class SetFloat64TypeTest {
   @Test
   void setFloat64Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(3, 3, 3)).float64()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(0, 2, 2.0d))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64ListType at position 0 is constant index: 2 value: 2.0 constant: [3.0, 3.0, 3.0]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float64ListType at position 0 is constant value");
   }
 
   @Test
   void setFloat64Array_constant_value() {
     var struct = struct()
         .float64()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(3, 3, 3)).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float64ListType at position 1 is constant index: 1 value: 2.0 constant: [3.0, 3.0, 3.0]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float64ListType at position 1 is constant value");
   }
 
   @Test
   void setFloat64Array_constant_value_same() {
     var struct = struct()
         .float64()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(new double[]{3, 3, 3})).float64()
         .fromBytes(ba().float64(2, 3, 3))
         .build();
 

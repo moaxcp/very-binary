@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -63,8 +64,8 @@ public class SetFloat32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32Type at position 0 is constant value: 2.0 constant: 3.0");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float32Type at position 0 is constant value");
   }
 
   @Test
@@ -94,7 +95,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(1, -1, 2.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: -1 length: 1");
+        .hasMessage("Float32ListType at position 1 index: -1 length: 1");
   }
 
   @Test
@@ -108,7 +109,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(1, 2, 2.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: 2 length: 1");
+        .hasMessage("Float32ListType at position 1 index: 2 length: 1");
   }
 
   @Test
@@ -138,7 +139,7 @@ public class SetFloat32TypeTest {
   void setFloat32_index_constant_value() {
     var struct = struct()
         .int8()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .fromBytes(ba().int8(1).float32(3, 3))
         .build();
 
@@ -151,24 +152,24 @@ public class SetFloat32TypeTest {
   void setFloat32_index_constant_value_value_bad_value() {
     var struct = struct()
         .int8()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .fromBytes(ba().int8(2).float32(3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 1 is constant index: 1 value: 2.0 constant: [3.0, 3.0, 3.0]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float32ListType at position 1 is constant value");
   }
 
   @Test
   void setFloat32Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 2.0f))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: 2.0 constant: [3.0, 3.0, 3.0]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float32ListType at position 0 is constant value");
   }
 
   @Test
@@ -251,7 +252,7 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, -1, 2.0f, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: -1 end: 1");
+        .hasMessage("Float32ListType at position 0 length: 5 start: -1 end: 1");
   }
 
   @Test
@@ -262,18 +263,18 @@ public class SetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.setFloat32(0, 5, 2.0f, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("Float32ListType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
   void setFloat32_index_array_constant() {
     var struct = struct()
-        .basic().constant(new float[]{5, 5, 5, 5, 5}).float32()
+        .basic().constant(toFloat32List(new float[]{5, 5, 5, 5, 5})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 2, 3.5f, 4.5f))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant index: 2 value: [3.5, 4.5] constant: [5.0, 5.0, 5.0, 5.0, 5.0]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Float32ListType at position 0 is constant value");
   }
 
   @Test

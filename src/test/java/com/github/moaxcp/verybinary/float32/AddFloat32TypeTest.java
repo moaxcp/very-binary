@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Float) not supported for Float32ArrayType. Use add(Pointer, float) instead.");
+        .hasMessage("add(Pointer, T) not supported for Float32ListType. Use addFloat32(Pointer, float) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> ((Float32ListType) struct.getType(1)).add(struct, 0, Float.valueOf(1.0f)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Float) not supported for Float32ArrayType. Use add(Pointer, long, float) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Float32ListType. Use addFloat32(Pointer, long, float) instead.");
   }
 
   @Test
@@ -88,12 +89,12 @@ public class AddFloat32TypeTest {
   @Test
   void addFloat32Array_constant() {
     var struct = struct()
-        .basic().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
+        .basic().constant(toFloat32List(new float[]{3.0f, 3.0f, 3.0f})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 5.0f))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant length: 3 index: 3");
+        .hasMessage("Float32ListType at position 0 is constant length: 3 index: 3");
   }
 
   @Test
@@ -130,7 +131,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(1, -1, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: -1 new length: 3");
+        .hasMessage("Float32ListType at position 1 index: -1 new length: 3");
   }
 
   @Test
@@ -143,7 +144,7 @@ public class AddFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.addFloat32(1, 3, 3.0f))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: 3 new length: 3");
+        .hasMessage("Float32ListType at position 1 index: 3 new length: 3");
   }
 
   @Test
@@ -184,11 +185,11 @@ public class AddFloat32TypeTest {
   @Test
   void addFloat32Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new float[]{3.0f, 3.0f, 3.0f}).float32()
+        .basic().constant(toFloat32List(new float[]{3.0f, 3.0f, 3.0f})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 2, 4.0f))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Float32ArrayType at position 0 is constant length: 3 index: 2");
+        .hasMessage("Float32ListType at position 0 is constant length: 3 index: 2");
   }
 }

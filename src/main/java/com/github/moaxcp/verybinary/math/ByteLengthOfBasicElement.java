@@ -2,6 +2,8 @@ package com.github.moaxcp.verybinary.math;
 
 import com.github.moaxcp.verybinary.*;
 
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
+
 public final class ByteLengthOfBasicElement implements Expression {
 
   private final int position;
@@ -24,18 +26,18 @@ public final class ByteLengthOfBasicElement implements Expression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
-    return ((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size();
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
+    return int64Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    return ((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size();
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    return int64Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    return ((BasicListType<?, ?, ?>) ((ComplexPointer<?, ?>) pointer).getType(position)).getBasicTypeInfo().size();
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    return int64Value(((BasicListType<?, ?, ?>) ((ComplexPointer<?, ?>) pointer).getType(position)).getBasicTypeInfo().size());
   }
 
   @Override

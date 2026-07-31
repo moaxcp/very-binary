@@ -8,6 +8,8 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
+import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
 import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,22 +48,22 @@ public class Float64ListTypeTest {
         .build();
 
     struct.setFloat64(0, List.of(3.3, 4.4));
-    struct.getFloat64List(0).get(0);
 
-    assertThat(struct.getFloat64List(0)).containsExactly(3.3, 4.4);
+    assertThat(struct.getFloat64List(0)).isEqualTo(toFloat64List(3.3, 4.4));
   }
 
   @Test
   void testAdd() {
     Struct struct = struct(structType()
-        .float64List(constant(0))
+        .int8()
+        .float64List(0)
         .build())
         .build();
 
-    struct.addFloat64(0, 5.5);
-    struct.addFloat64(0, 6.6);
+    struct.addFloat64(1, 5.5);
+    struct.addFloat64(1, 6.6);
 
-    assertThat(struct.getFloat64RawArray(0)).containsExactly(5.5, 6.6);
+    assertThat(struct.getFloat64RawArray(1)).containsExactly(5.5, 6.6);
   }
 
   @Test

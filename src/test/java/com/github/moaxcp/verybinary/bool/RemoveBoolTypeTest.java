@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.BoolList.toBoolList;
 import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -133,14 +134,13 @@ public class RemoveBoolTypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void remove_fixed_length() {
     var struct = struct()
-        .basic().constant(new boolean[]{true, true, true, true, true}).bool()
+        .basic().constant(toBoolList(new boolean[]{true, true, true, true, true})).bool()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))

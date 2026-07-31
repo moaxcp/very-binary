@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int8List.toInt8List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateInt8TypeTest {
@@ -49,7 +50,7 @@ public class AllocateInt8TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .basic().constant((byte) 5).int8()
-        .basic().constant(new byte[]{6, 6, 6, 6, 6}).int8()
+        .basic().constant(toInt8List(new byte[]{6, 6, 6, 6, 6})).int8()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(5, 6, 6, 6, 6, 6));

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int8List.toInt8List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).add(struct, Byte.valueOf((byte) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Byte) not supported for Int8ListType. Use add(Pointer, byte) instead.");
+        .hasMessage("add(Pointer, T) not supported for Int8ListType. Use addInt8(Pointer, byte) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddInt8TypeTest {
 
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).add(struct, 0, Byte.valueOf((byte) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Byte) not supported for Int8ListType. Use add(Pointer, long, byte) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Int8ListType. Use addInt8(Pointer, long, byte) instead.");
   }
 
   @Test
@@ -88,7 +89,7 @@ public class AddInt8TypeTest {
   @Test
   void addInt8Array_constant() {
     var struct = struct()
-        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, (byte) 3))
@@ -173,7 +174,7 @@ public class AddInt8TypeTest {
   @Test
   void addInt8Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
         .build();
 
     assertThatThrownBy(() -> struct.addInt8(0, 3, (byte) 3))

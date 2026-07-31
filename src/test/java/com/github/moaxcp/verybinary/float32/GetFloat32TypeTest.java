@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -107,7 +108,7 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: -1 length: 0");
+        .hasMessage("Float32ListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -120,7 +121,7 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Float32ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -139,7 +140,7 @@ public class GetFloat32TypeTest {
   @Test
   void getFloat32_index_constant() {
     var struct = struct()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .build();
 
     assertThat(struct.getFloat32(0, 2)).isEqualTo(3.0f);
@@ -174,7 +175,7 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32Array(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: -2 end: 0");
+        .hasMessage("Float32ListType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -186,7 +187,7 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32Array(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("Float32ListType at position 0 length: 5 start: 5 end: 7");
   }
 
   @Test
@@ -218,7 +219,7 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32List(0, -2, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: -2 end: 0");
+        .hasMessage("Float32ListType at position 0 length: 5 start: -2 end: 0");
   }
 
   @Test
@@ -230,6 +231,6 @@ public class GetFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.getFloat32List(0, 5, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 0 length: 5 start: 5 end: 7");
+        .hasMessage("Float32ListType at position 0 length: 5 start: 5 end: 7");
   }
 }

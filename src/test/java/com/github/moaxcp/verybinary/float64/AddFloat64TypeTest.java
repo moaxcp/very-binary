@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, Double.valueOf(1.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Double) not supported for Float64ListType. Use add(Pointer, double) instead.");
+        .hasMessage("add(Pointer, T) not supported for Float64ListType. Use addFloat64(Pointer, double) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddFloat64TypeTest {
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(1)).add(struct, 0, Double.valueOf(1.0d)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Double) not supported for Float64ListType. Use add(Pointer, long, double) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Float64ListType. Use addFloat64(Pointer, long, double) instead.");
   }
 
   @Test
@@ -88,7 +89,7 @@ public class AddFloat64TypeTest {
   @Test
   void addFloat64Array_constant() {
     var struct = struct()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(new double[]{3, 3, 3})).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 4.0d))
@@ -173,7 +174,7 @@ public class AddFloat64TypeTest {
   @Test
   void addFloat64Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(new double[]{3, 3, 3})).float64()
         .build();
 
     assertThatThrownBy(() -> struct.addFloat64(0, 2, 4.0d))

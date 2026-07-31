@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int16List.toInt16List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -134,14 +135,13 @@ public class RemoveInt16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void removeInt16Array_fixed_length() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveInt16TypeTest {
   @Test
   void removeInt16Array_fixed_length_with_index() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

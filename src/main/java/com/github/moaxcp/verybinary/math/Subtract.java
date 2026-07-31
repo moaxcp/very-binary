@@ -43,28 +43,28 @@ public final class Subtract implements MultiExpression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
-    long result = expressions.get(0).constantValue(parent);
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).constantValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result -= expressions.get(i).constantValue(parent);
+      result = result.subtract((ArithmeticValue) expressions.get(i).constantValue(parent));
     }
     return result;
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    long result = expressions.get(0).defaultValue(parent);
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).defaultValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result -= expressions.get(i).defaultValue(parent);
+      result = result.subtract((ArithmeticValue) expressions.get(i).defaultValue(parent));
     }
     return result;
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    long result = expressions.get(0).evaluate(pointer);
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    var result = (ArithmeticValue) expressions.get(0).evaluate(pointer);
     for (int i = 1; i < expressions.size(); i++) {
-      result -= expressions.get(i).evaluate(pointer);
+      result = result.subtract((ArithmeticValue) expressions.get(i).evaluate(pointer));
     }
     return result;
   }

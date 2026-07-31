@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -110,7 +111,7 @@ public class RemoveFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, -1))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: -1 length: 2");
+        .hasMessage("Float32ListType at position 1 index: -1 length: 2");
   }
 
   @Test
@@ -123,7 +124,7 @@ public class RemoveFloat32TypeTest {
 
     assertThatThrownBy(() -> struct.remove(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Float32ArrayType at position 1 index: 2 length: 2");
+        .hasMessage("Float32ListType at position 1 index: 2 length: 2");
   }
 
   @Test
@@ -134,29 +135,28 @@ public class RemoveFloat32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void removeFloat32Array_fixed_length() {
     var struct = struct()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length Float32ArrayType at position 0");
+        .hasMessage("Cannot remove element from fixed length Float32ListType at position 0");
   }
 
   @Test
   void removeFloat32Array_fixed_length_with_index() {
     var struct = struct()
-        .basic().constant(new float[]{3, 3, 3}).float32()
+        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("Cannot remove element from fixed length array Float32ArrayType at position 0 index: 2");
+        .hasMessage("Cannot remove element from fixed length array Float32ListType at position 0 index: 2");
   }
 }

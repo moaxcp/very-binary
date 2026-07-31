@@ -56,11 +56,12 @@ public final class Multiply implements MultiExpression {
         case Divide d -> newExpressions.add(Divide.distribute(new Divide(d.expressions().stream()
             .map(term -> multiplyBy(first, term))
             .toList())));
-        case Constant constant -> newExpressions.add(multiplyBy(first, constant));
+        case ArithmeticValue constant -> newExpressions.add(multiplyBy(first, constant));
         case Variable variable -> newExpressions.add(multiplyBy(first, variable));
         case LengthOf lengthOf -> newExpressions.add(multiplyBy(first, lengthOf));
         case ByteLengthOf byteLengthOf -> newExpressions.add(multiplyBy(first, byteLengthOf));
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> newExpressions.add(multiplyBy(first, byteLengthOfBasicElement));
+        case BoolValue ignored -> throw new UnsupportedOperationException("BoolValue not supported");
       }
     }
     if (newExpressions.size() == 1) {
@@ -81,6 +82,7 @@ public final class Multiply implements MultiExpression {
       case LengthOf lengthOf -> new Multiply(List.of(first, lengthOf));
       case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
       case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));
+      case Value value -> null;
     };
   }
 
@@ -121,28 +123,28 @@ public final class Multiply implements MultiExpression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
-    long result = expressions.get(0).constantValue(parent);
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).constantValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result *= expressions.get(i).constantValue(parent);
+      result = result.multiply((ArithmeticValue) expressions.get(i).constantValue(parent));
     }
     return result;
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    long result = expressions.get(0).defaultValue(parent);
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).defaultValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result *= expressions.get(i).defaultValue(parent);
+      result = result.multiply((ArithmeticValue) expressions.get(i).defaultValue(parent));
     }
     return result;
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    long result = expressions.get(0).evaluate(pointer);
+  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    var result = (ArithmeticValue) expressions.get(0).evaluate(pointer);
     for (int i = 1; i < expressions.size(); i++) {
-      result *= expressions.get(i).evaluate(pointer);
+      result = result.multiply((ArithmeticValue) expressions.get(i).evaluate(pointer));
     }
     return result;
   }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int64List.toInt64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -172,7 +173,7 @@ public class GetInt64TypeTest {
   @Test
   void getInt64Array_constant() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).int64()
+        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
         .build();
 
     assertThat(struct.getInt64(0, 3)).isEqualTo(5L);

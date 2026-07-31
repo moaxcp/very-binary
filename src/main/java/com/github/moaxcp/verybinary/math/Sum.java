@@ -51,18 +51,18 @@ public final class Sum implements MultiExpression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
-    return expressions.stream().mapToLong(e -> e.constantValue(parent)).sum();
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
+    return expressions.stream().map(e -> (ArithmeticValue) e.constantValue(parent)).reduce(ArithmeticValue::sum).orElse(ArithmeticValue.ZERO);
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    return expressions.stream().mapToLong(e -> e.defaultValue(parent)).sum();
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    return expressions.stream().map(e -> (ArithmeticValue) e.defaultValue(parent)).reduce(ArithmeticValue::sum).orElse(ArithmeticValue.ZERO);
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    return expressions.stream().mapToLong(e -> e.evaluate(pointer)).sum();
+  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    return expressions.stream().map(e -> (ArithmeticValue) e.evaluate(pointer)).reduce(ArithmeticValue::sum).orElse(ArithmeticValue.ZERO);
   }
 
   @Override

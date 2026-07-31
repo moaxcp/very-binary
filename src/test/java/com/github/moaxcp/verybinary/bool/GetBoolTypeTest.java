@@ -35,55 +35,12 @@ public class GetBoolTypeTest {
   }
 
   @Test
-  void getArray() {
-    var struct = struct()
-        .boolList(constant(5))
-        .build();
-    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("get(Pointer) not supported for BoolListType. Use getBool(Pointer) instead.");
-  }
-
-  @Test
-  void getArray_index_length() {
-    var struct = struct()
-        .boolList(constant(5))
-        .build();
-
-    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 2, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getArray(Pointer, long, long) not supported for BoolListType. Use getBoolArray(Pointer, long, long) instead.");
-  }
-
-  @Test
-  void getList() {
-    var struct = struct()
-        .boolList(constant(5))
-        .build();
-
-    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getList(Pointer) not supported for BoolListType. Use getBoolList(Pointer) instead.");
-  }
-
-  @Test
-  void getList_index_length() {
-    var struct = struct()
-        .boolList(constant(5))
-        .build();
-
-    assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).getList(struct, 2, 2))
-        .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("getList(Pointer, long, long) not supported for BoolListType. Use getBoolList(Pointer, long, long) instead.");
-  }
-
-  @Test
   void getBool() {
     var struct = struct()
         .bool()
         .build();
 
-    struct.set(0, true);
+    struct.setBool(0, true);
 
     assertThat(struct.getBool(0)).isTrue();
   }

@@ -45,28 +45,28 @@ public final class Divide implements MultiExpression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
-    long result = expressions.get(0).constantValue(parent);
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).constantValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result /= expressions.get(i).constantValue(parent);
+      result = result.divide((ArithmeticValue) expressions.get(i).constantValue(parent));
     }
     return result;
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
-    long result = expressions.get(0).defaultValue(parent);
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+    var result = (ArithmeticValue) expressions.get(0).defaultValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result /= expressions.get(i).defaultValue(parent);
+      result = result.divide((ArithmeticValue) expressions.get(i).defaultValue(parent));
     }
     return result;
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    long result = expressions.get(0).evaluate(pointer);
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    var result = (ArithmeticValue) expressions.get(0).evaluate(pointer);
     for (int i = 1; i < expressions.size(); i++) {
-      result /= expressions.get(i).evaluate(pointer);
+      result = result.divide((ArithmeticValue) expressions.get(i).evaluate(pointer));
     }
     return result;
   }
@@ -95,11 +95,12 @@ public final class Divide implements MultiExpression {
             .map(e -> divideBy(e, newDenominator))
             .toList());
         case Divide divide -> distribute(divide(Stream.concat(divide.expressions().stream(), Stream.of(newDenominator)).toList()));
-        case Constant constant -> divideBy(constant, denominator);
+        case ArithmeticValue value -> divideBy(value, denominator);
         case Variable variable -> divideBy(variable, denominator);
         case LengthOf lengthOf -> divideBy(lengthOf, denominator);
         case ByteLengthOf byteLengthOf -> divideBy(byteLengthOf, denominator);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> divideBy(byteLengthOfBasicElement, denominator);
+        case BoolValue boolValue -> throw new UnsupportedOperationException("BoolValue not supported");
       };
     }
     return denominator;
@@ -116,8 +117,8 @@ public final class Divide implements MultiExpression {
       return divide(numerator, denominator);
     } else if (numerator instanceof Variable) {
       return divide(numerator, denominator);
-    } else if (numerator instanceof Constant) {
-      if (denominator instanceof Constant) {
+    } else if (numerator instanceof Value) {
+      if (denominator instanceof Value) {
         return divide(numerator, denominator);
       } else if (denominator instanceof Divide d) {
         return divide(Stream.concat(Stream.of(numerator), d.expressions().stream()).toList());
@@ -130,23 +131,23 @@ public final class Divide implements MultiExpression {
     var newExpressions = new ArrayList<Expression>();
     for (int i = 0; i < d.expressions().size(); i++) {
       var expression = d.expressions().get(i);
-      if (expression instanceof Constant c) {
-        if (!(d.expressions().get(i + 1) instanceof Constant)) {
-          newExpressions.add(c);
+      if (expression instanceof ArithmeticValue v) {
+        if (!(d.expressions().get(i + 1) instanceof Value)) {
+          newExpressions.add(v);
           continue;
         }
-        var value = c.value();
+        var value = v;
         for (int j = i + 1; j < d.expressions().size(); j++) {
           var other = d.expressions().get(j);
-          if (other instanceof Constant nc) {
-            value /= nc.value();
+          if (other instanceof ArithmeticValue nv) {
+            value = value.divide(nv);
             i = j;
           } else {
             i = j - 1;
             break;
           }
         }
-        newExpressions.add(new Constant(value));
+        newExpressions.add(value);
       } else if (expression instanceof Sum sum) {
         newExpressions.add(Sum.simplify(sum));
       } else if (expression instanceof Subtract sub) {

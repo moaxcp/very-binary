@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int32List.toInt32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).add(struct, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Integer) not supported for Int32ListType. Use add(Pointer, int) instead.");
+        .hasMessage("add(Pointer, T) not supported for Int32ListType. Use addInt32(Pointer, int) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddInt32TypeTest {
 
     assertThatThrownBy(() -> ((Int32ListType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Integer) not supported for Int32ListType. Use add(Pointer, long, int) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Int32ListType. Use addInt32(Pointer, long, int) instead.");
   }
 
   @Test
@@ -88,7 +89,7 @@ public class AddInt32TypeTest {
   @Test
   void addInt32Array_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(toInt32List(new int[]{5, 5, 5, 5, 5})).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3))
@@ -173,7 +174,7 @@ public class AddInt32TypeTest {
   @Test
   void addInt32Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).int32()
+        .basic().constant(toInt32List(new int[]{5, 5, 5, 5, 5})).int32()
         .build();
 
     assertThatThrownBy(() -> struct.addInt32(0, 3, 3))

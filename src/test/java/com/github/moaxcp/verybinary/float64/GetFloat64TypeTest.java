@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -161,7 +162,7 @@ public class GetFloat64TypeTest {
   @Test
   void getFloat64Array_constant() {
     var struct = struct()
-        .basic().constant(new double[]{3, 3, 3}).float64()
+        .basic().constant(toFloat64List(new double[]{3, 3, 3})).float64()
         .build();
 
     assertThat(struct.getFloat64(0, 2)).isEqualTo(3.0d);

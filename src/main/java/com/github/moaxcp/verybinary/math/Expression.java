@@ -7,7 +7,7 @@ import com.github.moaxcp.verybinary.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElement, Constant, LengthOf, MultiExpression, Variable {
+public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElement, Constant, LengthOf, MultiExpression, Value, Variable {
 
   default List<Variable> findVariables(int position) {
     var variables = new ArrayList<Variable>();
@@ -25,6 +25,8 @@ public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElemen
       case Subtract sub -> variables.addAll(sub.findVariables(position));
       case Multiply mul -> variables.addAll(mul.findVariables(position));
       case Divide div -> variables.addAll(div.findVariables(position));
+      case Value value -> {
+      }
     }
     return variables;
   }
@@ -40,14 +42,15 @@ public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElemen
       case Divide div -> false;
       case Sum sum -> false;
       case Subtract sub -> false;
+      case Value value -> false;
     };
   }
 
   boolean isConstant(ComplexType<?> parent);
 
-  long constantValue(ComplexType<?> parent);
+  Value constantValue(ComplexType<?> parent);
 
-  long defaultValue(ComplexType<?> parent);
+  Value defaultValue(ComplexType<?> parent);
 
-  long evaluate(Pointer<?, ? extends Type<?>> pointer);
+  Value evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

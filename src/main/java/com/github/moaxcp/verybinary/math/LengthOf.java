@@ -2,6 +2,8 @@ package com.github.moaxcp.verybinary.math;
 
 import com.github.moaxcp.verybinary.*;
 
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
+
 public final class LengthOf implements Expression {
 
   private final int position;
@@ -25,20 +27,20 @@ public final class LengthOf implements Expression {
   }
 
   @Override
-  public long constantValue(ComplexType<?> parent) {
+  public ArithmeticValue constantValue(ComplexType<?> parent) {
     var type = (ListType<?, ?, ?>) parent.getType(position);
-    return type.getAllocationLength();
+    return int64Value(type.getAllocationLength());
   }
 
   @Override
-  public long defaultValue(ComplexType<?> parent) {
+  public ArithmeticValue defaultValue(ComplexType<?> parent) {
     var type = (ListType<?, ?, ?>) parent.getType(position);
-    return type.getAllocationLength();
+    return int64Value(type.getAllocationLength());
   }
 
   @Override
-  public long evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    return ((ListType<?, ?, ?>)((ComplexPointer<?, ?>) pointer).getType(position)).getLength(pointer);
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    return int64Value(((ListType<?, ?, ?>)((ComplexPointer<?, ?>) pointer).getType(position)).getLength(pointer));
   }
 
   @Override

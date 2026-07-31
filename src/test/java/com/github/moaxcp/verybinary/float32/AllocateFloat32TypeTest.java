@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateFloat32TypeTest {
@@ -50,7 +51,7 @@ public class AllocateFloat32TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .basic().constant(3.0f).float32()
-        .basic().constant(new float[]{2, 2, 2}).float32()
+        .basic().constant(toFloat32List(new float[]{2, 2, 2})).float32()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().float32(3, 2, 2, 2));

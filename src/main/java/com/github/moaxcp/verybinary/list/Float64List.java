@@ -13,7 +13,7 @@ import static com.github.moaxcp.verybinary.math.Constant.constant;
 
 public final class Float64List extends PrimitiveList<Float64List, Float64ListType, Double> implements PrimitiveIterable<Double, DoubleConsumer> {
 
-  public static Float64List toFloat64List(double[] values) {
+  public static Float64List toFloat64List(double... values) {
     return getFloat64ListStruct(values)
         .getFloat64List(0);
   }

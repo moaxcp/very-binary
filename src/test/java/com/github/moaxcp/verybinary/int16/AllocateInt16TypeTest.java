@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int16List.toInt16List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateInt16TypeTest {
@@ -49,7 +50,7 @@ public class AllocateInt16TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .basic().constant((short) 5).int16()
-        .basic().constant(new short[]{6, 6, 6, 6, 6}).int16()
+        .basic().constant(toInt16List(new short[]{6, 6, 6, 6, 6})).int16()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().int16(5, 6, 6, 6, 6, 6));

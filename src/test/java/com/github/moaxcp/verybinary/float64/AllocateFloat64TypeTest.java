@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateFloat64TypeTest {
@@ -50,7 +51,7 @@ public class AllocateFloat64TypeTest {
   void allocate_array_with_constant() {
     var struct = struct()
         .basic().constant(3.0d).float64()
-        .basic().constant(new double[]{2, 2, 2}).float64()
+        .basic().constant(toFloat64List(new double[]{2, 2, 2})).float64()
         .build();
 
     // 3.0d then 3 elements of 2.0d

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int16List.toInt16List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class SetInt16TypeTest {
 
     assertThatThrownBy(() -> ((Int16Type) struct.getType(0)).set(struct, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Short) not supported for Int16Type. Use set(Pointer, short) instead.");
+        .hasMessage("setUnchecked(Pointer, Short) not supported for Int16Type. Use setUnchecked(Pointer, short) instead.");
   }
 
   @Test
@@ -73,20 +74,20 @@ public class SetInt16TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, (short) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int16Type at position 0 is constant value");
   }
 
   @Test
   void setArrayWrapper() {
     var struct = struct()
-        .int16()
+        .basic().constant(1).int16()
         .int16List(0)
         .build();
 
     assertThatThrownBy(() -> ((Int16ListType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Short) not supported for Int16ListType. Use set(Pointer, long, short) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Int16ListType. Use setInt16(Pointer, long, short) instead.");
   }
 
   @Test
@@ -163,32 +164,32 @@ public class SetInt16TypeTest {
   @Test
   void setInt16Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(0, 3, (short) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16ListType at position 0 is constant index: 3 value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int16ListType at position 0 is constant value");
   }
 
   @Test
   void setInt16Array_constant_value() {
     var struct = struct()
         .int16()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
         .fromBytes(ba().int16(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int16ListType at position 1 is constant index: 1 value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int16ListType at position 1 is constant value");
   }
 
   @Test
   void setInt16Array_constant_value_same() {
     var struct = struct()
         .int16()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).int16()
+        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
         .fromBytes(ba().int16(2, 5, 5))
         .build();
 

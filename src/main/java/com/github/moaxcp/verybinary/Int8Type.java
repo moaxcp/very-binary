@@ -71,4 +71,21 @@ public final class Int8Type extends PrimitiveType<Int8Type, Byte> implements Len
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     pointer.getByteArray().addInt8(getOffset(pointer), constantValueSet ? constantValue : 0);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    Int8Type int8Type = (Int8Type) o;
+    return constantValue == int8Type.constantValue && constantValueSet == int8Type.constantValueSet;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + constantValue;
+    result = 31 * result + Boolean.hashCode(constantValueSet);
+    return result;
+  }
 }

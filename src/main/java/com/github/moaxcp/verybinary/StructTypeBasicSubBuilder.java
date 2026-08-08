@@ -1,7 +1,7 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.BoolList;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 
 import static com.github.moaxcp.verybinary.math.Variable.variable;
 
@@ -43,12 +43,12 @@ public class StructTypeBasicSubBuilder<PARENT extends StructTypeBuilder<PARENT>>
     return this;
   }
 
-  public StructTypeBasicSubBuilder<PARENT> lengthExpression(Expression lengthExpression) {
+  public StructTypeBasicSubBuilder<PARENT> lengthExpression(ArithmeticExpression lengthExpression) {
     basicTypeBuilder.lengthExpression(lengthExpression);
     return this;
   }
 
-  public StructTypeBasicSubBuilder<PARENT> byteLengthExpression(Expression byteLengthExpression) {
+  public StructTypeBasicSubBuilder<PARENT> byteLengthExpression(ArithmeticExpression byteLengthExpression) {
     basicTypeBuilder.byteLengthExpression(byteLengthExpression);
     return this;
   }

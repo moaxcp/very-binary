@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.StructList;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public final class StructListType extends ListType<StructListType, Struct, Struc
    * @param lengthExpression
    * @param structType
    */
-  public StructListType(int position, @Nullable ComplexType<?> parent, @Nullable StructList constantValue, @Nullable Expression lengthExpression, StructType structType) {
+  public StructListType(int position, @Nullable ComplexType<?> parent, @Nullable StructList constantValue, @Nullable ArithmeticExpression lengthExpression, StructType structType) {
     super(position, parent, constantValue, lengthExpression);
     this.structType = structType;
     structType.addByteLengthListener((reason, pointer, previous, current) -> {
@@ -87,7 +87,7 @@ public final class StructListType extends ListType<StructListType, Struct, Struc
 
   @Override
   public boolean isElementFixedLength() {
-    return false;
+    return structType.isFixedByteLength();
   }
 
   @Override

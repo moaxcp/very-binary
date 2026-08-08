@@ -7,7 +7,7 @@ import com.github.moaxcp.verybinary.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElement, Constant, LengthOf, MultiExpression, Value, Variable {
+public sealed interface Expression<T extends Value<T>> permits ArithmeticExpression, MultiExpression, StructVariable, Value {
 
   default List<Variable> findVariables(int position) {
     var variables = new ArrayList<Variable>();
@@ -15,7 +15,7 @@ public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElemen
       case LengthOf ignored -> {}
       case ByteLengthOf ignored -> {}
       case ByteLengthOfBasicElement ignored -> {}
-      case Constant ignored -> {}
+      case Value ignored -> {}
       case Variable v -> {
         if (v.position() == position) {
           variables.add(v);
@@ -25,7 +25,9 @@ public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElemen
       case Subtract sub -> variables.addAll(sub.findVariables(position));
       case Multiply mul -> variables.addAll(mul.findVariables(position));
       case Divide div -> variables.addAll(div.findVariables(position));
-      case Value value -> {
+      case MultiExpression multiExpression -> {
+      }
+      case StructVariable structVariable -> {
       }
     }
     return variables;
@@ -36,21 +38,22 @@ public sealed interface Expression permits ByteLengthOf, ByteLengthOfBasicElemen
       case LengthOf ignored -> first.equals(second);
       case ByteLengthOf ignored -> first.equals(second);
       case ByteLengthOfBasicElement ignored -> first.equals(second);
-      case Constant ignored -> true;
+      case Value ignored -> true;
       case Variable ignored -> first.equals(second);
       case Multiply mul -> false;
       case Divide div -> false;
       case Sum sum -> false;
       case Subtract sub -> false;
-      case Value value -> false;
+      case EqualityExpression equalityExpression -> false;
+      case StructVariable structVariable -> false;
     };
   }
 
   boolean isConstant(ComplexType<?> parent);
 
-  Value constantValue(ComplexType<?> parent);
+  T constantValue(ComplexType<?> parent);
 
-  Value defaultValue(ComplexType<?> parent);
+  T defaultValue(ComplexType<?> parent);
 
-  Value evaluate(Pointer<?, ? extends Type<?>> pointer);
+  T evaluate(Pointer<?, ? extends Type<?>> pointer);
 }

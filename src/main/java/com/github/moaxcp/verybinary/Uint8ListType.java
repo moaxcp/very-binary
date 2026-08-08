@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.Uint8List;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint8ListType extends PrimitiveListType<Uint8ListType, Short, Uint8List> {
 
-  public Uint8ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint8List constantValue, Expression lengthExpression) {
+  public Uint8ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint8List constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, UINT8, constantValue, lengthExpression);
   }
 

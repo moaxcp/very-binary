@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.Float64List;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Float64ListType extends PrimitiveListType<Float64ListType, Double, Float64List> {
 
-  public Float64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Float64List constantValue, Expression lengthExpression) {
+  public Float64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Float64List constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, FLOAT64, constantValue, lengthExpression);
   }
 

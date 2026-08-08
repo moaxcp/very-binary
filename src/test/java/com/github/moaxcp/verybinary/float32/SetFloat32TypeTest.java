@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -136,19 +136,6 @@ public class SetFloat32TypeTest {
   }
 
   @Test
-  void setFloat32_index_constant_value() {
-    var struct = struct()
-        .int8()
-        .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
-        .fromBytes(ba().int8(1).float32(3, 3))
-        .build();
-
-    struct.setFloat32(1, 0, 3);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).float32(3, 3));
-  }
-
-  @Test
   void setFloat32_index_constant_value_value_bad_value() {
     var struct = struct()
         .int8()
@@ -188,7 +175,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_array_length_constant() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     struct.setFloat32(0, 5.5f, 5.5f, 5.5f, 5.5f, 5.5f);
@@ -224,7 +211,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_length_constant() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     struct.setFloat32(0, 2, 3.5f, 4.5f);
@@ -247,7 +234,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_with_index_negative() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, -1, 2.0f, 3.0f))
@@ -258,7 +245,7 @@ public class SetFloat32TypeTest {
   @Test
   void setFloat32_index_array_with_index_greater_than_length() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(0, 5, 2.0f, 3.0f))

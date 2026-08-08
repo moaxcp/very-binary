@@ -7,7 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -249,7 +249,7 @@ public class AddBoolTypeTest {
   @Test
   void addBool_index_length_constant() {
     var struct = struct()
-        .basic().lengthExpression(constant(5)).bool()
+        .basic().lengthExpression(int8Value(5)).bool()
         .build();
 
     assertThatThrownBy(() -> struct.addBool(0, 3, false))

@@ -7,7 +7,7 @@ import static com.github.moaxcp.verybinary.BasicTypeInfo.BOOL;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoolTypeTest {
@@ -54,7 +54,7 @@ public class BoolTypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length() {
     var type = structType()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
     assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(5);
     assertThat(type.getAllocationByteLength()).isEqualTo(5);
@@ -83,7 +83,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_constant_length() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0)).isEqualTo(BOOL.size() * 5);
@@ -104,7 +104,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_with_index() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2)).isEqualTo(1);
@@ -113,7 +113,7 @@ public class BoolTypeTest {
   @Test
   void getByteLength_array_with_index_length() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2, 2)).isEqualTo(2);
@@ -132,7 +132,7 @@ public class BoolTypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

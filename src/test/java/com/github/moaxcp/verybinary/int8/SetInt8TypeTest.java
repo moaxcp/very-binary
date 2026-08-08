@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Int8List.toInt8List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -73,8 +74,8 @@ public class SetInt8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, (byte) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int8Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int8Type at position 0 is constant value");
   }
 
   @Test
@@ -84,9 +85,11 @@ public class SetInt8TypeTest {
         .int8List(0)
         .build();
 
+    struct.addInt8(1, 1);
+
     assertThatThrownBy(() -> ((Int8ListType) struct.getType(1)).set(struct, 0, Byte.valueOf((byte) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Byte) not supported for Int8ListType. Use set(Pointer, long, byte) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Int8ListType. Use setInt8(Pointer, long, byte) instead.");
   }
 
   @Test
@@ -163,38 +166,25 @@ public class SetInt8TypeTest {
   @Test
   void setInt8Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int8ListType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int8ListType at position 0 is constant value");
   }
 
   @Test
   void setInt8Array_constant_value() {
     var struct = struct()
         .int8()
-        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
+        .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
         .fromBytes(ba().int8(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setInt8(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int8ListType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
-  }
-
-  @Test
-  void setInt8Array_constant_value_same() {
-    var struct = struct()
-        .int8()
-        .basic().constant(new byte[]{5, 5, 5, 5, 5}).int8()
-        .fromBytes(ba().int8(2, 5, 5))
-        .build();
-
-    struct.setInt8(1, 1, (byte) 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2, 5, 5));
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Int8ListType at position 1 is constant value");
   }
 
   @Test

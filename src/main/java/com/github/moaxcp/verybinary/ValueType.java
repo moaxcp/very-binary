@@ -95,4 +95,22 @@ public sealed abstract class ValueType<SELF extends ValueType<SELF, T>, T> exten
       listener.valueChanged(reason, pointer, oldValue, newValue);
     }
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    ValueType<?, ?> that = (ValueType<?, ?>) o;
+    return java.util.Objects.equals(constantValue, that.constantValue);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + java.util.Objects.hashCode(constantValue);
+    return result;
+  }
+
+
 }

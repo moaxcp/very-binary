@@ -7,33 +7,33 @@ import com.github.moaxcp.verybinary.Type;
 import java.util.List;
 import java.util.StringJoiner;
 
-public final class Subtract implements MultiExpression {
+public final class Subtract implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
-  private final List<Expression> expressions;
+  private final List<ArithmeticExpression> expressions;
 
-  Subtract(Expression... expressions) {
+  Subtract(ArithmeticExpression... expressions) {
     if (expressions == null || expressions.length < 2) {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.of(expressions);
   }
 
-  public Subtract(List<Expression> expressions) {
+  public Subtract(List<ArithmeticExpression> expressions) {
     if (expressions == null || expressions.size() < 2) {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = expressions;
   }
 
-  static Subtract subtract(Expression... expressions) {
+  static Subtract subtract(ArithmeticExpression... expressions) {
     return new Subtract(expressions);
   }
 
-  static Expression simplify(Subtract sub) {
+  static ArithmeticExpression simplify(Subtract sub) {
     return sub;
   }
 
-  public List<Expression> expressions() {
+  public List<ArithmeticExpression> expressions() {
     return expressions;
   }
 

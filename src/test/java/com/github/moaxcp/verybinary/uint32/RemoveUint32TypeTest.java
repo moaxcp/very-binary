@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint32List.toUint32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -135,14 +136,13 @@ public class RemoveUint32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void removeUint32Array_fixed_length() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(toUint32List(new long[]{5, 5, 5, 5, 5})).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -153,7 +153,7 @@ public class RemoveUint32TypeTest {
   @Test
   void removeUint32Array_fixed_length_with_index() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(toUint32List(new long[]{5, 5, 5, 5, 5})).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

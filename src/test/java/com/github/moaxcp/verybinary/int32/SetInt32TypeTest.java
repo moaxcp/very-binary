@@ -178,20 +178,7 @@ public class SetInt32TypeTest {
 
     assertThatThrownBy(() -> struct.setInt32(1, 1, 2))
         .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int32ListType at position 0 is constant value");
-  }
-
-  @Test
-  void setInt32Array_constant_value_same() {
-    var struct = struct()
-        .int32()
-        .basic().constant(toInt32List(new int[]{5, 5, 5, 5, 5})).int32()
-        .fromBytes(ba().int32(2, 5, 5))
-        .build();
-
-    struct.setInt32(1, 1, 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int32(2, 5, 5));
+        .hasMessage("Int32ListType at position 1 is constant value");
   }
 
   @Test

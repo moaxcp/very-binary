@@ -14,7 +14,7 @@ import static com.github.moaxcp.verybinary.math.Uint32Value.uint32Value;
 import static com.github.moaxcp.verybinary.math.Uint64Value.uint64Value;
 import static com.github.moaxcp.verybinary.math.Uint8Value.uint8Value;
 
-public final class Variable implements Expression {
+public final class Variable implements ArithmeticExpression {
 
   private final int position;
 
@@ -58,7 +58,7 @@ public final class Variable implements Expression {
   }
 
   @Override
-  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
     var type = switch (pointer) {
       case Struct struct -> struct.getType(position);
     };

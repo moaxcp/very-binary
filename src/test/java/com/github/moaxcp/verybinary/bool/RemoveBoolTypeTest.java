@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.list.BoolList.toBoolList;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -203,7 +203,7 @@ public class RemoveBoolTypeTest {
   @Test
   void remove_index_length_fixed() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 2, 2))

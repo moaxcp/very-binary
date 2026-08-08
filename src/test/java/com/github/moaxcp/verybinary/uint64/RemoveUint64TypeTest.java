@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint64List.toUint64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -134,14 +135,13 @@ public class RemoveUint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 0))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Field at postion 0 is not a ArrayValueType or ListValueType");
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
   void removeUint64Array_fixed_length() {
     var struct = struct()
-        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5)))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0))
@@ -152,7 +152,7 @@ public class RemoveUint64TypeTest {
   @Test
   void removeUint64Array_fixed_length_with_index() {
     var struct = struct()
-        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5)))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.remove(0, 3))

@@ -4,7 +4,7 @@ import com.github.moaxcp.verybinary.*;
 
 import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
-public final class LengthOf implements Expression {
+public final class LengthOf implements ArithmeticExpression {
 
   private final int position;
 

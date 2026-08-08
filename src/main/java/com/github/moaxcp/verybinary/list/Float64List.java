@@ -9,7 +9,7 @@ import java.util.function.DoubleConsumer;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Float64List extends PrimitiveList<Float64List, Float64ListType, Double> implements PrimitiveIterable<Double, DoubleConsumer> {
 
@@ -32,7 +32,7 @@ public final class Float64List extends PrimitiveList<Float64List, Float64ListTyp
 
   public static StructType getFloat64ListStructType(long length) {
     return structType()
-        .float64List(constant(length))
+        .float64List(int64Value(length))
         .build();
   }
 
@@ -85,6 +85,19 @@ public final class Float64List extends PrimitiveList<Float64List, Float64ListTyp
     var s = struct(getFloat64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getFloat64List(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getFloat64(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getFloat64(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

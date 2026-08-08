@@ -1,5 +1,7 @@
 package com.github.moaxcp.verybinary.math;
 
+import java.math.BigInteger;
+
 public final class Float64Value extends ArithmeticValue {
   final double value;
 
@@ -12,8 +14,49 @@ public final class Float64Value extends ArithmeticValue {
   }
 
   @Override
+  public boolean toBool() {
+    return value != 0;
+  }
+
+  @Override
+  public byte toByte() {
+    return (byte) value;
+  }
+
+  @Override
+  public short toShort() {
+    return (short) value;
+  }
+
+  @Override
+  public int toInt() {
+    return (int) value;
+  }
+
+  @Override
+  public long toLong() {
+    return (long) value;
+  }
+
+  @Override
+  public BigInteger toBigInteger() {
+    return BigInteger.valueOf((long) value);
+  }
+
+  @Override
+  public float toFloat() {
+    return (float) value;
+  }
+
+  @Override
+  public double toDouble() {
+    return value;
+  }
+
+  @Override
   public ArithmeticValue sum(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> float64Value(value + v.toDouble());
       case Float32Value v -> float64Value(value + v.value);
       case Float64Value v -> float64Value(value + v.value);
       case Int8Value v -> float64Value(value + v.value);
@@ -30,6 +73,7 @@ public final class Float64Value extends ArithmeticValue {
   @Override
   public ArithmeticValue subtract(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> float64Value(value - v.toDouble());
       case Float32Value v -> float64Value(value - v.value);
       case Float64Value v -> float64Value(value - v.value);
       case Int8Value v -> float64Value(value - v.value);
@@ -46,6 +90,7 @@ public final class Float64Value extends ArithmeticValue {
   @Override
   public ArithmeticValue multiply(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> float64Value(value * v.toDouble());
       case Float32Value v -> float64Value(value * v.value);
       case Float64Value v -> float64Value(value * v.value);
       case Int8Value v -> float64Value(value * v.value);
@@ -62,6 +107,7 @@ public final class Float64Value extends ArithmeticValue {
   @Override
   public ArithmeticValue divide(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> float64Value(value / v.toDouble());
       case Float32Value v -> float64Value(value / v.value);
       case Float64Value v -> float64Value(value / v.value);
       case Int8Value v -> float64Value(value / v.value);
@@ -73,5 +119,23 @@ public final class Float64Value extends ArithmeticValue {
       case Uint32Value v -> float64Value(value / v.value);
       case Uint64Value v -> float64Value(value / v.value.doubleValue());
     };
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(value);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Float64Value other = (Float64Value) o;
+    return value == other.value;
+  }
+
+  @Override
+  public int hashCode() {
+    return Double.hashCode(value);
   }
 }

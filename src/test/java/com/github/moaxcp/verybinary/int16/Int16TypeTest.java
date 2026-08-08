@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.BasicTypeInfo.INT16;
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Int16TypeTest {
@@ -31,7 +31,7 @@ public class Int16TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .int16List(constant(5))
+        .int16List(int8Value(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

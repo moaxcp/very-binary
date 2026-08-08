@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Float32List extends PrimitiveList<Float32List, Float32ListType, Float> implements PrimitiveIterable<Float, Float32Consumer> {
 
@@ -32,7 +32,7 @@ public final class Float32List extends PrimitiveList<Float32List, Float32ListTyp
 
   public static StructType getFloat32ListStructType(long length) {
     return structType()
-        .float32List(constant(length))
+        .float32List(int64Value(length))
         .build();
   }
 
@@ -85,6 +85,19 @@ public final class Float32List extends PrimitiveList<Float32List, Float32ListTyp
     var s = struct(getFloat32ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getFloat32Array(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getFloat32(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getFloat32(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

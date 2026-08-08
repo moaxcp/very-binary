@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint32List.toUint32List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,7 +20,7 @@ public class SetUint32TypeTest {
 
     assertThatThrownBy(() -> ((Uint32Type) struct.getType(0)).set(struct, Long.valueOf(2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Long) not supported for Uint32Type. Use set(Pointer, long) instead.");
+        .hasMessage("setUnchecked(Pointer, Long) not supported for Uint32Type. Use setUnchecked(Pointer, long) instead.");
   }
 
   @Test
@@ -74,8 +75,8 @@ public class SetUint32TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 2L))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint32Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint32Type at position 0 is constant value");
   }
 
   @Test
@@ -84,10 +85,11 @@ public class SetUint32TypeTest {
         .uint32()
         .uint32List(0)
         .build();
+    struct.addUint32(1, 1L);
 
     assertThatThrownBy(() -> ((Uint32ListType) struct.getType(1)).set(struct, 0, Long.valueOf(2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Long) not supported for Uint32ListType. Use set(Pointer, long, long) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Uint32ListType. Use setUint32(Pointer, long, long) instead.");
   }
 
   @Test
@@ -164,38 +166,25 @@ public class SetUint32TypeTest {
   @Test
   void setUint32Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(toUint32List(new long[]{5, 5, 5, 5, 5})).uint32()
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(0, 3, 2L))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint32ListType at position 0 is constant index: 3 value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint32ListType at position 0 is constant value");
   }
 
   @Test
   void setUint32Array_constant_value() {
     var struct = struct()
         .uint32()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
+        .basic().constant(toUint32List(new long[]{5, 5, 5, 5, 5})).uint32()
         .fromBytes(ba().uint32(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint32ListType at position 1 is constant index: 1 value: 2 constant: 5");
-  }
-
-  @Test
-  void setUint32Array_constant_value_same() {
-    var struct = struct()
-        .uint32()
-        .basic().constant(new long[]{5, 5, 5, 5, 5}).uint32()
-        .fromBytes(ba().uint32(2, 5, 5))
-        .build();
-
-    struct.setUint32(1, 1, 5L);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint32(2, 5, 5));
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint32ListType at position 1 is constant value");
   }
 
   @Test

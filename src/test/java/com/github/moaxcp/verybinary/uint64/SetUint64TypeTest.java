@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint64List.toUint64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -63,8 +64,8 @@ public class SetUint64TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.set(0, BigInteger.valueOf(2)))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint64Type at position 0 is constant value");
   }
 
   @Test
@@ -141,38 +142,25 @@ public class SetUint64TypeTest {
   @Test
   void setArray_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5)))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.set(0, 3, BigInteger.valueOf(2)))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64ListType at position 0 is constant index: 3 value: 2 constant: [5, 5, 5, 5, 5]");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint64ListType at position 0 is constant value");
   }
 
   @Test
   void setArray_constant_value() {
     var struct = struct()
         .uint64()
-        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5)))).uint64()
         .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.set(1, 1, BigInteger.valueOf(2)))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint64ListType at position 1 is constant index: 1 value: 2 constant: [5, 5, 5, 5, 5]");
-  }
-
-  @Test
-  void setArray_constant_value_same() {
-    var struct = struct()
-        .uint64()
-        .basic().constant(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5))).uint64()
-        .fromBytes(ba().uint64(2, 5, 5))
-        .build();
-
-    struct.set(1, 1, BigInteger.valueOf(5));
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint64(2, 5, 5));
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint64ListType at position 1 is constant value");
   }
 
   @Test

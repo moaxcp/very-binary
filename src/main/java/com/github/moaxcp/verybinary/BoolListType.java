@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.BoolList;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class BoolListType extends PrimitiveListType<BoolListType, Boolean, BoolList> {
 
-  public BoolListType(int position, @Nullable ComplexType<?> parent, @Nullable BoolList constantValue, Expression lengthExpression) {
+  public BoolListType(int position, @Nullable ComplexType<?> parent, @Nullable BoolList constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, BOOL, constantValue, lengthExpression);
   }
 

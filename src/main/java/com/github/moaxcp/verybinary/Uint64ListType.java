@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.Uint64List;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigInteger;
@@ -13,7 +13,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint64ListType extends BasicListType<Uint64ListType, BigInteger, Uint64List> {
 
-  public Uint64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint64List constantValue, Expression lengthExpression) {
+  public Uint64ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint64List constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, UINT64, constantValue, lengthExpression);
   }
 

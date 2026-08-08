@@ -2,9 +2,9 @@ package com.github.moaxcp.verybinary.math;
 
 import com.github.moaxcp.verybinary.*;
 
-import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 
-public final class ByteLengthOfBasicElement implements Expression {
+public final class ByteLengthOfBasicElement implements ArithmeticExpression {
 
   private final int position;
 
@@ -26,18 +26,18 @@ public final class ByteLengthOfBasicElement implements Expression {
   }
 
   @Override
-  public ArithmeticValue constantValue(ComplexType<?> parent) {
-    return int64Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
+  public Int8Value constantValue(ComplexType<?> parent) {
+    return int8Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
   }
 
   @Override
-  public ArithmeticValue defaultValue(ComplexType<?> parent) {
-    return int64Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
+  public Int8Value defaultValue(ComplexType<?> parent) {
+    return int8Value(((BasicListType<?, ?, ?>) parent.getType(position)).getBasicTypeInfo().size());
   }
 
   @Override
-  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    return int64Value(((BasicListType<?, ?, ?>) ((ComplexPointer<?, ?>) pointer).getType(position)).getBasicTypeInfo().size());
+  public Int8Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+    return int8Value(((BasicListType<?, ?, ?>) ((ComplexPointer<?, ?>) pointer).getType(position)).getBasicTypeInfo().size());
   }
 
   @Override

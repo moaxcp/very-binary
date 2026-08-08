@@ -10,12 +10,16 @@ import java.util.stream.Collectors;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, BigInteger> implements Iterable<BigInteger> {
 
   public static Uint64List toUint64List(long[] values) {
-    return getUint64ListStruct(Arrays.stream(values).mapToObj(BigInteger::valueOf).collect(Collectors.toList()))
+    return toUint64List(Arrays.stream(values).mapToObj(BigInteger::valueOf).collect(Collectors.toList()));
+  }
+
+  public static Uint64List toUint64List(List<BigInteger> values) {
+    return getUint64ListStruct(values)
         .getUint64List(0);
   }
 
@@ -27,7 +31,7 @@ public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, Big
 
   public static StructType getUint64ListStructType(long length) {
     return structType()
-        .uint64List(constant(length))
+        .uint64List(int64Value(length))
         .build();
   }
 
@@ -76,6 +80,19 @@ public final class Uint64List extends BinaryList<Uint64List, Uint64ListType, Big
     var s = struct(getUint64ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getUint64List(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = get(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(get(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

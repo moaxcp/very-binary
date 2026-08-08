@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint64List.toUint64List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AllocateUint64TypeTest {
@@ -52,7 +53,7 @@ public class AllocateUint64TypeTest {
   void allocate_array_length_and_array_with_constant() {
     var struct = struct()
         .basic().constant(BigInteger.valueOf(5)).uint64()
-        .basic().constant(List.of(BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6), BigInteger.valueOf(6)))).uint64()
         .build();
 
     assertThat(struct.getByteArray()).isEqualTo(ba().uint64(5, 6, 6, 6, 6, 6));

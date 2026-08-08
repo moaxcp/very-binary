@@ -9,33 +9,33 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
-public final class Divide implements MultiExpression {
+public final class Divide implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
-  private final List<Expression> expressions;
+  private final List<ArithmeticExpression> expressions;
 
-  Divide(Expression... expressions) {
+  Divide(ArithmeticExpression... expressions) {
     if (expressions == null || expressions.length < 2) {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.of(expressions);
   }
 
-  public Divide(List<? extends Expression> expressions) {
+  public Divide(List<? extends ArithmeticExpression> expressions) {
     if (expressions == null || expressions.size() < 2) {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.copyOf(expressions);
   }
 
-  public static Divide divide(Expression... expressions) {
+  public static Divide divide(ArithmeticExpression... expressions) {
     return new Divide(expressions);
   }
 
-  public static Divide divide(List<? extends Expression> expressions) {
+  public static Divide divide(List<? extends ArithmeticExpression> expressions) {
     return new Divide(expressions);
   }
 
-  public List<Expression> expressions() {
+  public List<ArithmeticExpression> expressions() {
     return expressions;
   }
 
@@ -46,32 +46,32 @@ public final class Divide implements MultiExpression {
 
   @Override
   public ArithmeticValue constantValue(ComplexType<?> parent) {
-    var result = (ArithmeticValue) expressions.get(0).constantValue(parent);
+    var result = expressions.get(0).constantValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result = result.divide((ArithmeticValue) expressions.get(i).constantValue(parent));
+      result = result.divide(expressions.get(i).constantValue(parent));
     }
     return result;
   }
 
   @Override
   public ArithmeticValue defaultValue(ComplexType<?> parent) {
-    var result = (ArithmeticValue) expressions.get(0).defaultValue(parent);
+    var result = expressions.get(0).defaultValue(parent);
     for (int i = 1; i < expressions.size(); i++) {
-      result = result.divide((ArithmeticValue) expressions.get(i).defaultValue(parent));
+      result = result.divide(expressions.get(i).defaultValue(parent));
     }
     return result;
   }
 
   @Override
   public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    var result = (ArithmeticValue) expressions.get(0).evaluate(pointer);
+    var result = expressions.get(0).evaluate(pointer);
     for (int i = 1; i < expressions.size(); i++) {
-      result = result.divide((ArithmeticValue) expressions.get(i).evaluate(pointer));
+      result = result.divide(expressions.get(i).evaluate(pointer));
     }
     return result;
   }
 
-  public static Expression distribute(Divide divide) {
+  public static ArithmeticExpression distribute(Divide divide) {
     if (divide.expressions().stream().noneMatch(e -> e instanceof MultiExpression)) {
       return divide;
     }
@@ -80,7 +80,7 @@ public final class Divide implements MultiExpression {
     return divideBy(numerators, denominator);
   }
 
-  private static Expression divideBy(List<Expression> numerators, Expression denominator) {
+  private static ArithmeticExpression divideBy(List<ArithmeticExpression> numerators, ArithmeticExpression denominator) {
     for (int i = numerators.size() - 1; i >= 0; i--) {
       var numerator = numerators.get(i);
       var newDenominator = denominator;
@@ -100,17 +100,17 @@ public final class Divide implements MultiExpression {
         case LengthOf lengthOf -> divideBy(lengthOf, denominator);
         case ByteLengthOf byteLengthOf -> divideBy(byteLengthOf, denominator);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> divideBy(byteLengthOfBasicElement, denominator);
-        case BoolValue boolValue -> throw new UnsupportedOperationException("BoolValue not supported");
+        case EqualityExpression equalityExpression -> null;
       };
     }
     return denominator;
   }
 
-  private static Expression divideBy(Expression numerator, Expression denominator) {
+  private static ArithmeticExpression divideBy(ArithmeticExpression numerator, ArithmeticExpression denominator) {
     if (numerator instanceof Divide n) {
       return divide(Stream.concat(n.expressions().stream(), Stream.of(denominator)).toList());
-    } else if (numerator instanceof MultiExpression n && denominator instanceof MultiExpression d) {
-      return divideBy(n.expressions(), d);
+    } else if (numerator instanceof MultiExpression n && denominator instanceof MultiExpression) {
+      return divideBy((List<ArithmeticExpression>) n.expressions(), (ArithmeticExpression) denominator);
     } else if (numerator instanceof ByteLengthOfBasicElement) {
       return divide(numerator, denominator);
     } else if (numerator instanceof LengthOf) {
@@ -127,8 +127,8 @@ public final class Divide implements MultiExpression {
     throw new IllegalArgumentException("Cannot divide " + numerator + " by " + denominator);
   }
 
-  static Expression simplify(Divide d) {
-    var newExpressions = new ArrayList<Expression>();
+  static ArithmeticExpression simplify(Divide d) {
+    var newExpressions = new ArrayList<ArithmeticExpression>();
     for (int i = 0; i < d.expressions().size(); i++) {
       var expression = d.expressions().get(i);
       if (expression instanceof ArithmeticValue v) {

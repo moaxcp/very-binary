@@ -1,9 +1,11 @@
 package com.github.moaxcp.verybinary.uint8;
 
+import com.github.moaxcp.verybinary.Uint8ListType;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint8List.toUint8List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -16,9 +18,9 @@ public class AddUint8TypeTest {
         .uint8List(0)
         .build();
 
-    assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
+    assertThatThrownBy(() -> ((Uint8ListType) struct.getType(1)).add(struct, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Short) not supported for Uint8ListType. Use add(Pointer, short) instead.");
+        .hasMessage("add(Pointer, T) not supported for Uint8ListType. Use addUint8(Pointer, short) instead.");
   }
 
   @Test
@@ -30,7 +32,7 @@ public class AddUint8TypeTest {
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).add(struct, 0, Short.valueOf((short) 1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Short) not supported for Uint8ListType. Use add(Pointer, long, short) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Uint8ListType. Use addUint8(Pointer, long, short) instead.");
   }
 
   @Test
@@ -88,7 +90,7 @@ public class AddUint8TypeTest {
   @Test
   void addUint8Array_constant() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(toUint8List(new short[]{5, 5, 5, 5, 5})).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, (byte) 3))
@@ -173,7 +175,7 @@ public class AddUint8TypeTest {
   @Test
   void addUint8Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(toUint8List(new short[]{5, 5, 5, 5, 5})).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.addUint8(0, 3, (short) 3))

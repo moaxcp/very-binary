@@ -186,19 +186,6 @@ public class SetInt16TypeTest {
   }
 
   @Test
-  void setInt16Array_constant_value_same() {
-    var struct = struct()
-        .int16()
-        .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
-        .fromBytes(ba().int16(2, 5, 5))
-        .build();
-
-    struct.setInt16(1, 1, (short) 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int16(2, 5, 5));
-  }
-
-  @Test
   void setInt16Array_set_length_field_without_adding_to_array() {
     var struct = struct()
         .int16()

@@ -11,37 +11,37 @@ import java.util.StringJoiner;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-public final class Sum implements MultiExpression {
+public final class Sum implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
-  private final List<Expression> expressions;
+  private final List<ArithmeticExpression> expressions;
 
-  Sum(Expression... expressions) {
+  Sum(ArithmeticExpression... expressions) {
     if (expressions == null || expressions.length < 2) {
       throw new IllegalArgumentException("expressions must have at least two elements");
     }
     this.expressions = List.of(expressions);
   }
 
-  public Sum(List<Expression> expressions) {
+  public Sum(List<ArithmeticExpression> expressions) {
     if (expressions.size() < 2) {
       throw new IllegalArgumentException("Sum must have at least two expressions");
     }
     this.expressions = expressions;
   }
 
-  static Sum sum(Expression... expressions) {
+  static Sum sum(ArithmeticExpression... expressions) {
     return new Sum(expressions);
   }
 
-  static Sum sum(List<Expression> expressions) {
+  static Sum sum(List<ArithmeticExpression> expressions) {
     return new Sum(expressions);
   }
 
-  static Expression simplify(Sum sum) {
+  static ArithmeticExpression simplify(Sum sum) {
     return sum;
   }
 
-  public List<Expression> expressions() {
+  public List<ArithmeticExpression> expressions() {
     return expressions;
   }
 
@@ -61,7 +61,7 @@ public final class Sum implements MultiExpression {
   }
 
   @Override
-  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
     return expressions.stream().map(e -> (ArithmeticValue) e.evaluate(pointer)).reduce(ArithmeticValue::sum).orElse(ArithmeticValue.ZERO);
   }
 

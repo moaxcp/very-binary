@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint8List.toUint8List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -17,7 +18,7 @@ public class SetUint8TypeTest {
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8Type) struct.getType(0)).set(struct, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, Short) not supported for Uint8Type. Use set(Pointer, short) instead.");
+        .hasMessage("setUnchecked(Pointer, Short) not supported for Uint8Type. Use setUnchecked(Pointer, short) instead.");
   }
 
   @Test
@@ -72,8 +73,8 @@ public class SetUint8TypeTest {
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, (short) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8Type at position 0 is constant value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint8Type at position 0 is constant value");
   }
 
   @Test
@@ -82,10 +83,11 @@ public class SetUint8TypeTest {
         .uint8()
         .uint8List(0)
         .build();
+    struct.addUint8(1, 1);
 
     assertThatThrownBy(() -> ((com.github.moaxcp.verybinary.Uint8ListType) struct.getType(1)).set(struct, 0, Short.valueOf((short) 2)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("set(Pointer, long, Short) not supported for Uint8ListType. Use set(Pointer, long, short) instead.");
+        .hasMessage("set(Pointer, long, T) not supported for Uint8ListType. Use setUint8(Pointer, long, short) instead.");
   }
 
   @Test
@@ -162,38 +164,25 @@ public class SetUint8TypeTest {
   @Test
   void setUint8Array_constant_value_and_length() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(toUint8List(new short[]{5, 5, 5, 5, 5})).uint8()
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(0, 3, (short) 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8ListType at position 0 is constant index: 3 value: 2 constant: 5");
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint8ListType at position 0 is constant value");
   }
 
   @Test
   void setUint8Array_constant_value() {
     var struct = struct()
         .uint8()
-        .basic().constant(new short[]{5, 5}).uint8()
+        .basic().constant(toUint8List(new short[]{5, 5})).uint8()
         .fromBytes(ba().uint8(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setUint8(1, 1, 2))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Uint8ListType at position 1 is constant index: 1 value: 2 constant: 5");
-  }
-
-  @Test
-  void setUint8Array_constant_value_same() {
-    var struct = struct()
-        .uint8()
-        .basic().constant(new short[]{5, 5}).uint8()
-        .fromBytes(ba().uint8(2, 5, 5))
-        .build();
-
-    struct.setUint8(1, 1, (short) 5);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().uint8(2, 5, 5));
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Uint8ListType at position 1 is constant value");
   }
 
   @Test

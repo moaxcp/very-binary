@@ -2,14 +2,14 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.BinaryList;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public sealed abstract class PrimitiveListType<SELF extends PrimitiveListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends BasicListType<SELF, T, L> permits BoolListType, Float32ListType, Float64ListType, Int16ListType, Int32ListType, Int64ListType, Int8ListType, Uint16ListType, Uint32ListType, Uint8ListType {
 
-  protected PrimitiveListType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, Expression lengthExpression) {
+  protected PrimitiveListType(int position, @Nullable ComplexType<?> parent, BasicTypeInfo basicTypeInfo, @Nullable L constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, basicTypeInfo, constantValue, lengthExpression);
   }
 
@@ -44,5 +44,13 @@ public sealed abstract class PrimitiveListType<SELF extends PrimitiveListType<SE
 
   public void add(Pointer<?, ? extends Type<?>> pointer, T value) {
     throw new UnsupportedOperationException("add(Pointer, T) not supported for " + getClass().getSimpleName() + ". Use add" + basicTypeInfo.title() + "(Pointer, " + basicTypeInfo.primitive() + ") instead.");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    return true;
   }
 }

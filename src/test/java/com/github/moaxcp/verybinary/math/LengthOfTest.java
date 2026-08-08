@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary.math;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static com.github.moaxcp.verybinary.math.LengthOf.lengthOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,15 +19,15 @@ public class LengthOfTest {
   @Test
   void boolConstantTest() {
     var struct = struct()
-        .boolList(constant(10))
+        .boolList(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -41,23 +41,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void int8ConstantTest() {
     var struct = struct()
-        .int8List(constant(10))
+        .int8List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -71,23 +71,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void int16ConstantTest() {
     var struct = struct()
-        .int16List(constant(10))
+        .int16List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -101,23 +101,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void int32ConstantTest() {
     var struct = struct()
-        .int32List(constant(10))
+        .int32List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -131,23 +131,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void int64ConstantTest() {
     var struct = struct()
-        .int64List(constant(10))
+        .int64List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -161,23 +161,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void uint8ConstantTest() {
     var struct = struct()
-        .uint8List(constant(10))
+        .uint8List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -191,23 +191,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void uint16ConstantTest() {
     var struct = struct()
-        .uint16List(constant(10))
+        .uint16List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -221,23 +221,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void uint32ConstantTest() {
     var struct = struct()
-        .uint32List(constant(10))
+        .uint32List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -251,23 +251,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void uint64ConstantTest() {
     var struct = struct()
-        .uint64List(constant(10))
+        .uint64List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -281,23 +281,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void float32ConstantTest() {
     var struct = struct()
-        .float32List(constant(10))
+        .float32List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -311,23 +311,23 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 
   @Test
   void float64ConstantTest() {
     var struct = struct()
-        .float64List(constant(10))
+        .float64List(int8Value(10))
         .build();
 
     var expression = lengthOf(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(10);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(10);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -341,8 +341,8 @@ public class LengthOfTest {
     var expression = lengthOf(1);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 }

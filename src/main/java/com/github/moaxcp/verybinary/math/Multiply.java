@@ -13,15 +13,15 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-public final class Multiply implements MultiExpression {
+public final class Multiply implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
-  private final List<Expression> expressions;
+  private final List<ArithmeticExpression> expressions;
 
-  Multiply(Expression... expressions) {
+  Multiply(ArithmeticExpression... expressions) {
     this(List.of(expressions));
   }
 
-  Multiply(List<Expression> expressions) {
+  Multiply(List<? extends ArithmeticExpression> expressions) {
     if (expressions.size() < 2) {
       throw new IllegalArgumentException("Multiply must have at least two expressions");
     }
@@ -29,20 +29,21 @@ public final class Multiply implements MultiExpression {
     this.expressions = List.copyOf(expressions);
   }
 
-  public static Multiply multiply(Expression... expressions) {
+  public static Multiply multiply(ArithmeticExpression... expressions) {
     return new Multiply(expressions);
   }
 
-  public static Multiply multiply(List<Expression> expressions) {
+  public static Multiply multiply(List<ArithmeticExpression> expressions) {
     return new Multiply(expressions);
   }
 
-  public static Expression distribute(Multiply multiply) {
-    if (multiply.expressions().stream().noneMatch(e -> e instanceof MultiExpression)) {
+  public static ArithmeticExpression distribute(Multiply multiply) {
+    if (multiply.expressions().stream().noneMatch(e -> e instanceof ArithmeticExpression)) {
       return multiply;
     }
     var first = multiply.expressions().getFirst();
-    var newExpressions = new ArrayList<Expression>();
+    var partOfTerm = new ArrayList<ArithmeticExpression>();
+    var newExpressions = new ArrayList<ArithmeticExpression>();
     for (int i = 1; i < multiply.expressions().size(); i++) {
       Expression expr = multiply.expressions().get(i);
       switch (expr) {
@@ -56,13 +57,22 @@ public final class Multiply implements MultiExpression {
         case Divide d -> newExpressions.add(Divide.distribute(new Divide(d.expressions().stream()
             .map(term -> multiplyBy(first, term))
             .toList())));
-        case ArithmeticValue constant -> newExpressions.add(multiplyBy(first, constant));
-        case Variable variable -> newExpressions.add(multiplyBy(first, variable));
-        case LengthOf lengthOf -> newExpressions.add(multiplyBy(first, lengthOf));
-        case ByteLengthOf byteLengthOf -> newExpressions.add(multiplyBy(first, byteLengthOf));
-        case ByteLengthOfBasicElement byteLengthOfBasicElement -> newExpressions.add(multiplyBy(first, byteLengthOfBasicElement));
-        case BoolValue ignored -> throw new UnsupportedOperationException("BoolValue not supported");
+        case ArithmeticValue constant -> partOfTerm.add(constant);
+        case Variable variable -> partOfTerm.add(variable);
+        case LengthOf lengthOf -> partOfTerm.add(lengthOf);
+        case ByteLengthOf byteLengthOf -> partOfTerm.add(byteLengthOf);
+        case ByteLengthOfBasicElement byteLengthOfBasicElement -> partOfTerm.add(byteLengthOfBasicElement);
+        case EqualityExpression equalityExpression -> {
+        }
+        case StructValue structValue -> {
+        }
+        case StructVariable structVariable -> {
+        }
       }
+    }
+    if (!partOfTerm.isEmpty()) {
+      partOfTerm.add(0, first);
+      newExpressions.addAll(0, partOfTerm);
     }
     if (newExpressions.size() == 1) {
       return newExpressions.getFirst();
@@ -71,27 +81,27 @@ public final class Multiply implements MultiExpression {
     }
   }
 
-  static Expression multiplyBy(Expression first, Expression second) {
+  static ArithmeticExpression multiplyBy(ArithmeticExpression first, ArithmeticExpression second) {
     return switch(second) {
       case Sum sum -> new Sum(sum.expressions().stream().map(e -> multiplyBy(first, e)).toList());
       case Subtract subtract -> new Subtract(subtract.expressions().stream().map(e -> multiplyBy(first, e)).toList());
       case Multiply multiply -> distribute(new Multiply(Stream.concat(Stream.of(first), multiply.expressions().stream()).toList()));
       case Divide divide -> Divide.distribute(new Divide(divide.expressions().stream().map(e -> multiplyBy(first, e)).toList()));
-      case Constant constant -> new Multiply(List.of(first, constant));
+      case ArithmeticValue value -> new Multiply(first, value);
       case Variable variable -> new Multiply(List.of(first, variable));
       case LengthOf lengthOf -> new Multiply(List.of(first, lengthOf));
       case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
       case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));
-      case Value value -> null;
+      case EqualityExpression equalityExpression -> new Multiply(first, equalityExpression);
     };
   }
 
-  static Expression simplify(Multiply multiply) {
-    var constants = new ArrayList<Constant>();
-    var newExpressions = new ArrayList<Expression>();
+  static ArithmeticExpression simplify(Multiply multiply) {
+    var constants = new ArrayList<ArithmeticValue>();
+    var newExpressions = new ArrayList<ArithmeticExpression>();
     for (var expression : multiply.expressions()) {
-      if (expression instanceof Constant) {
-        constants.add((Constant) expression);
+      if (expression instanceof ArithmeticValue e) {
+        constants.add(e);
       } else if (expression instanceof Sum sum) {
         newExpressions.add(Sum.simplify(sum));
       } else if (expression instanceof Subtract sub) {
@@ -104,7 +114,7 @@ public final class Multiply implements MultiExpression {
         newExpressions.add(expression);
       }
     }
-    var constant = new Constant(constants.stream().map(Constant::value).reduce(1L, (a, b) -> a * b));
+    var constant = constants.stream().reduce(Int8Value.int8Value(1), ArithmeticValue::multiply);
     newExpressions.add(constant);
     if (newExpressions.size() == 1) {
       return newExpressions.getFirst();
@@ -113,7 +123,7 @@ public final class Multiply implements MultiExpression {
     }
   }
 
-  public List<Expression> expressions() {
+  public List<ArithmeticExpression> expressions() {
     return expressions;
   }
 
@@ -141,7 +151,7 @@ public final class Multiply implements MultiExpression {
   }
 
   @Override
-  public Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
+  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
     var result = (ArithmeticValue) expressions.get(0).evaluate(pointer);
     for (int i = 1; i < expressions.size(); i++) {
       result = result.multiply((ArithmeticValue) expressions.get(i).evaluate(pointer));

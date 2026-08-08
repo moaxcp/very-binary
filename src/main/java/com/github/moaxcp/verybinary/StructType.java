@@ -19,6 +19,14 @@ public final class StructType extends ValueType<StructType, Struct> implements C
     }
   }
 
+  StructType(int position, @Nullable ComplexType<?> parent, ByteArray constantValue, List<Type<?>> fields) {
+    super(position, parent, null);
+    for(int i = 0; i < fields.size(); i++) {
+      this.fields.add(((AbstractType<?>) fields.get(i)).setParent(this));
+    }
+    this.constantValue = new Struct(this, constantValue);
+  }
+
   @Override
   public StructType copy(int position, @Nullable ComplexType<?> parent) {
     return new StructType(position, parent, constantValue, new ArrayList<>(fields));
@@ -65,7 +73,7 @@ public final class StructType extends ValueType<StructType, Struct> implements C
   @Override
   public Struct get(Pointer<?, ? extends Type<?>> pointer) {
     var offset = getOffset(pointer);
-    return new Struct(offset, this, pointer.getByteArray());
+    return new Struct(pointer.getParentOffset(), offset, this, pointer.getByteArray());
   }
 
   @Override
@@ -88,7 +96,12 @@ public final class StructType extends ValueType<StructType, Struct> implements C
       setUnchecked(SET_VALUE, pointer, constantValue);
     } else {
       for (var field : fields) {
-        field.allocate(pointer);
+        if (field instanceof StructType st) {
+          var struct = new Struct(false, pointer.getOffset(), field.getOffset(pointer), st, pointer.getByteArray());
+          struct.removeByteArrayListener();
+        } else {
+          field.allocate(pointer);
+        }
       }
     }
   }

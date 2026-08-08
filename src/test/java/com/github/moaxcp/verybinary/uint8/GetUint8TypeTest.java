@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint8List.toUint8List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -160,7 +161,7 @@ public class GetUint8TypeTest {
   @Test
   void getUint8Array_constant() {
     var struct = struct()
-        .basic().constant(new short[]{5, 5, 5, 5, 5}).uint8()
+        .basic().constant(toUint8List(new short[]{5, 5, 5, 5, 5})).uint8()
         .build();
 
     assertThat(struct.getUint8(0, 3)).isEqualTo((byte) 5);

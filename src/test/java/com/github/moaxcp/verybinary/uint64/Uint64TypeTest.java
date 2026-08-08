@@ -8,7 +8,8 @@ import java.util.List;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT64;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.list.Uint64List.toUint64List;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint64TypeTest {
@@ -17,7 +18,7 @@ public class Uint64TypeTest {
   void copy() {
     var type = structType()
         .uint64()
-        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5)))).uint64()
         .align(2)
         .build();
     var copy = type.copy(15, null);
@@ -47,7 +48,7 @@ public class Uint64TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .uint64List(constant(5))
+        .uint64List(int8Value(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

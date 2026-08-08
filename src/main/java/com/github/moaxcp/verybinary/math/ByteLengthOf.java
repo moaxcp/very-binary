@@ -4,7 +4,7 @@ import com.github.moaxcp.verybinary.*;
 
 import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
-public final class ByteLengthOf implements Expression {
+public final class ByteLengthOf implements ArithmeticExpression {
 
   private final int position;
 
@@ -27,19 +27,19 @@ public final class ByteLengthOf implements Expression {
   }
 
   @Override
-  public ArithmeticValue constantValue(ComplexType<?> parent) {
+  public Int64Value constantValue(ComplexType<?> parent) {
     var type = (ListType<?, ?, ?>) parent.getType(position);
     return int64Value(type.getAllocationByteLength());
   }
 
   @Override
-  public ArithmeticValue defaultValue(ComplexType<?> parent) {
+  public Int64Value defaultValue(ComplexType<?> parent) {
     var type = (ListType<?, ?, ?>) parent.getType(position);
     return int64Value(type.getAllocationByteLength());
   }
 
   @Override
-  public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
+  public Int64Value evaluate(Pointer<?, ? extends Type<?>> pointer) {
     return int64Value(((ListType<?, ?, ?>)((ComplexPointer<?, ?>) pointer).getType(position)).getByteLength(pointer));
   }
 

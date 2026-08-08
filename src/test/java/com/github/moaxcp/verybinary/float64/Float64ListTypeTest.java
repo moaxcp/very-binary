@@ -8,16 +8,15 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.list.Float32List.toFloat32List;
 import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float64ListTypeTest {
   @Test
   void testGetSet() {
     Struct struct = struct(structType()
-        .float64List(constant(2))
+        .float64List(int8Value(2))
         .build())
         .build();
 
@@ -31,7 +30,7 @@ public class Float64ListTypeTest {
   @Test
   void testGetArray() {
     Struct struct = struct(structType()
-        .float64List(constant(2))
+        .float64List(int8Value(2))
         .build())
         .build();
 
@@ -43,7 +42,7 @@ public class Float64ListTypeTest {
   @Test
   void testGetList() {
     Struct struct = struct(structType()
-        .float64List(constant(2))
+        .float64List(int8Value(2))
         .build())
         .build();
 
@@ -69,7 +68,7 @@ public class Float64ListTypeTest {
   @Test
   void testFloat64List() {
     Struct struct = struct(structType()
-        .float64List(constant(2))
+        .float64List(int8Value(2))
         .build())
         .build();
 

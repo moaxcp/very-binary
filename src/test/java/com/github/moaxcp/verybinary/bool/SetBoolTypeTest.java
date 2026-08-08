@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.list.BoolList.toBoolList;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +28,7 @@ public class SetBoolTypeTest {
   @Test
   void set_index() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).set(struct, 0, TRUE))
@@ -164,19 +164,6 @@ public class SetBoolTypeTest {
   }
 
   @Test
-  void setBool_index_constant_value() {
-    var struct = struct()
-        .int8()
-        .basic().constant(toBoolList(new boolean[]{true, true, true, true, true})).bool()
-        .fromBytes(ba().int8(2).bool(true, true))
-        .build();
-
-    struct.setBool(1, 1, true);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int8(2).bool(true, true));
-  }
-
-  @Test
   void setBool_index_constant_value_bad_value() {
     var struct = struct()
         .int8()
@@ -214,9 +201,9 @@ public class SetBoolTypeTest {
   }
 
   @Test
-  void setBool_array_length_constant() {
+  void setBool_array_length_int8Value() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
     struct.setBool(0, true, false, true, false, true);
 
@@ -250,7 +237,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_length_constant() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
     struct.setBool(0, 2, true, true);
 
@@ -271,7 +258,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_with_index_negative() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, -1, true, false))
@@ -282,7 +269,7 @@ public class SetBoolTypeTest {
   @Test
   void setBool_index_array_with_index_greater_than_length() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> struct.setBool(0, 5, true, false))

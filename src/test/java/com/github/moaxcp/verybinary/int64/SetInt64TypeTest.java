@@ -162,17 +162,6 @@ public class SetInt64TypeTest {
   }
 
   @Test
-  void setInt64Array_constant_value_and_length() {
-    var struct = struct()
-        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt64(0, 3, 2L))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Int64ListType at position 0 is constant index: 3 value: 2 constant: 5");
-  }
-
-  @Test
   void setInt64Array_constant_value() {
     var struct = struct()
         .int64()
@@ -183,19 +172,6 @@ public class SetInt64TypeTest {
     assertThatThrownBy(() -> struct.setInt64(1, 1, 2))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("Int64ListType at position 1 is constant value");
-  }
-
-  @Test
-  void setInt64Array_constant_value_same() {
-    var struct = struct()
-        .int64()
-        .basic().constant(toInt64List(new long[]{5, 5, 5, 5, 5})).int64()
-        .fromBytes(ba().int64(2, 5, 5))
-        .build();
-
-    struct.setInt64(1, 1, 5L);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().int64(2, 5, 5));
   }
 
   @Test

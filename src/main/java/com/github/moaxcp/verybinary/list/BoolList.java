@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolean> implements PrimitiveIterable<Boolean, BooleanConsumer> {
 
@@ -32,7 +32,7 @@ public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolea
 
   public static StructType getBoolListStructType(long length) {
     return structType()
-        .boolList(constant(length))
+        .boolList(int64Value(length))
         .build();
   }
 
@@ -86,7 +86,20 @@ public final class BoolList extends PrimitiveList<BoolList, BoolListType, Boolea
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getLength(pointer));
     return s.getBoolList(0);
   }
-  
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getBool(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getBool(i));
+    }
+    return builder.toString();
+  }
+
   public boolean equals(Object o) {
     if (this == o) {
       return true;

@@ -17,9 +17,9 @@ public class VariableTest {
     var expression = variable(0);
 
     assertThat(expression.isConstant(struct.getType())).isFalse();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(0);
-    assertThat(expression.evaluate(struct)).isEqualTo(10);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(0);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(10);
   }
 
   @Test
@@ -31,8 +31,8 @@ public class VariableTest {
     var expression = variable(0);
 
     assertThat(expression.isConstant(struct.getType())).isTrue();
-    assertThat(expression.constantValue(struct.getType())).isEqualTo(25);
-    assertThat(expression.defaultValue(struct.getType())).isEqualTo(25);
-    assertThat(expression.evaluate(struct)).isEqualTo(25);
+    assertThat(expression.constantValue(struct.getType()).toInt()).isEqualTo(25);
+    assertThat(expression.defaultValue(struct.getType()).toInt()).isEqualTo(25);
+    assertThat(expression.evaluate(struct).toInt()).isEqualTo(25);
   }
 }

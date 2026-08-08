@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Short> implements PrimitiveIterable<Short, Uint8Consumer> {
 
@@ -32,7 +32,7 @@ public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Sho
 
   public static StructType getUint8ListStructType(long length) {
     return structType()
-        .uint8List(constant(length))
+        .uint8List(int64Value(length))
         .build();
   }
 
@@ -84,6 +84,19 @@ public final class Uint8List extends PrimitiveList<Uint8List, Uint8ListType, Sho
     var s = struct(getUint8ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getUint8List(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getUint8(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getUint8(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

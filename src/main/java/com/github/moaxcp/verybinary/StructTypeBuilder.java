@@ -1,16 +1,17 @@
 package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.list.StructList;
-import com.github.moaxcp.verybinary.math.Constant;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
+
 public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
 
-  Expression lengthExpression;
+  ArithmeticExpression lengthExpression;
   final List<ByteLengthListener> byteLengthListeners = new ArrayList<>();
   final List<ValueChangeListener> valueChangeListeners = new ArrayList<>();
   @Nullable Object constant;
@@ -32,7 +33,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return fields.get(position);
   }
 
-  public SELF lengthExpression(Expression lengthExpression) {
+  public SELF lengthExpression(ArithmeticExpression lengthExpression) {
     this.lengthExpression = lengthExpression;
     return (SELF) this;
   }
@@ -95,7 +96,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).bool();
   }
 
-  public SELF boolList(Expression expression) {
+  public SELF boolList(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).bool();
   }
 
@@ -104,14 +105,14 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public SELF int8List() {
-    return basic().lengthExpression(Constant.constant(0)).int8();
+    return basic().lengthExpression(int64Value(0)).int8();
   }
 
   public SELF int8List(int lengthPosition) {
     return basic().lengthField(lengthPosition).int8();
   }
 
-  public SELF int8List(Expression expression) {
+  public SELF int8List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).int8();
   }
 
@@ -122,7 +123,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).uint8();
   }
 
-  public SELF uint8List(Expression expression) {
+  public SELF uint8List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).uint8();
   }
 
@@ -134,7 +135,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).int16();
   }
 
-  public SELF int16List(Expression expression) {
+  public SELF int16List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).int16();
   }
 
@@ -146,7 +147,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).uint16();
   }
 
-  public SELF uint16List(Expression expression) {
+  public SELF uint16List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).uint16();
   }
 
@@ -158,7 +159,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).int32();
   }
 
-  public SELF int32List(Expression expression) {
+  public SELF int32List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).int32();
   }
   public SELF uint32() {
@@ -169,7 +170,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).uint32();
   }
 
-  public SELF uint32List(Expression expression) {
+  public SELF uint32List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).uint32();
   }
 
@@ -181,7 +182,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).int64();
   }
 
-  public SELF int64List(Expression expression) {
+  public SELF int64List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).int64();
   }
 
@@ -192,7 +193,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).uint64();
   }
 
-  public SELF uint64List(Expression expression) {
+  public SELF uint64List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).uint64();
   }
 
@@ -204,7 +205,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).float32();
   }
 
-  public SELF float32List(Expression expression) {
+  public SELF float32List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).float32();
   }
 
@@ -216,7 +217,7 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return basic().lengthField(lengthPosition).float64();
   }
 
-  public SELF float64List(Expression expression) {
+  public SELF float64List(ArithmeticExpression expression) {
     return basic().lengthExpression(expression).float64();
   }
 
@@ -261,11 +262,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
     return builder.end();
   }
 
-  public SELF structList(Expression lengthExpression) {
+  public SELF structList(ArithmeticExpression lengthExpression) {
     return new ChildStructTypeBuilder<>((SELF) this, fields.size()).lengthExpression(lengthExpression).end();
   }
 
-  public SELF structList(Expression lengthExpression, StructType type) {
+  public SELF structList(ArithmeticExpression lengthExpression, StructType type) {
     var builder = new ChildStructTypeBuilder<>((SELF) this, fields.size())
         .lengthExpression(lengthExpression)
         .constant(type.getConstantValue());
@@ -301,6 +302,11 @@ public abstract class StructTypeBuilder<SELF extends StructTypeBuilder<SELF>> {
   }
 
   public StructType toStructType() {
+    if (constant instanceof ByteArray) {
+      return new StructType(-1, null, (ByteArray) constant, fields)
+          .addByteLengthListeners(byteLengthListeners)
+          .addValueChangeListeners(valueChangeListeners);
+    }
     return new StructType(-1, null, (Struct) constant, fields)
         .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners);

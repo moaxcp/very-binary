@@ -3,11 +3,11 @@ package com.github.moaxcp.verybinary.float32;
 import com.github.moaxcp.verybinary.Float32Type;
 import org.junit.jupiter.api.Test;
 
+import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT32;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
-import static com.github.moaxcp.verybinary.BasicTypeInfo.FLOAT32;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Float32TypeTest {
@@ -53,7 +53,7 @@ public class Float32TypeTest {
   @Test
   void getAllocationLength_array_with_constant_Byte_length() {
     var type = structType()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
     assertThat(type.getType(0).getAllocationByteLength()).isEqualTo(20);
     assertThat(type.getAllocationByteLength()).isEqualTo(20);
@@ -82,7 +82,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_constant_length() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0)).isEqualTo(FLOAT32.size() * 5);
@@ -103,7 +103,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_with_index() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2)).isEqualTo(4);
@@ -112,7 +112,7 @@ public class Float32TypeTest {
   @Test
   void getByteLength_array_with_index_length() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThat(struct.getByteLength(0, 2, 2)).isEqualTo(8);
@@ -131,7 +131,7 @@ public class Float32TypeTest {
   @Test
   void isFixedLengthArray_constant_Byte_length() {
     var struct = struct()
-        .float32List(constant(5))
+        .float32List(int8Value(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

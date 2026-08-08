@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, Long> implements PrimitiveIterable<Long, Uint32Consumer> {
 
@@ -32,7 +32,7 @@ public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, 
 
   public static StructType getUint32ListStructType(long length) {
     return structType()
-        .uint32List(constant(length))
+        .uint32List(int64Value(length))
         .build();
   }
 
@@ -84,6 +84,19 @@ public final class Uint32List extends PrimitiveList<Uint32List, Uint32ListType, 
     var s = struct(getUint32ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getUint32List(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getUint32(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getUint32(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

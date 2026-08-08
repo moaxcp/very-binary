@@ -3,25 +3,27 @@ package com.github.moaxcp.verybinary;
 import java.math.BigInteger;
 
 public enum BasicTypeInfo {
-  BOOL(1),
-  INT8(1),
-  UINT8(1),
-  INT16(2),
-  UINT16(2),
-  INT32(4),
-  UINT32(4),
-  INT64(8),
-  UINT64(8),
-  FLOAT32(4),
-  FLOAT64(8);
+  BOOL((byte) 1),
+  INT8((byte) 1),
+  UINT8((byte) 1),
+  INT16((byte) 2),
+  UINT16((byte) 2),
+  INT32((byte) 4),
+  UINT32((byte) 4),
+  INT64((byte) 8),
+  UINT64((byte) 8),
+  FLOAT32((byte) 4),
+  FLOAT64((byte) 8);
+  public static final long UINT32_MAX = 4_294_967_295L;
+  public static final BigInteger UINT64_MAX = new BigInteger("18446744073709551615");
 
-  private final int size;
+  private final byte size;
 
-  BasicTypeInfo(int size) {
+  BasicTypeInfo(byte size) {
     this.size = size;
   }
 
-  public int size() {
+  public byte size() {
     return size;
   }
 

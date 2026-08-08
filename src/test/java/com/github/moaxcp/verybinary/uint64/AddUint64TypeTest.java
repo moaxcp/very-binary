@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint64List.toUint64List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -66,7 +67,7 @@ public class AddUint64TypeTest {
   @Test
   void addUint64Array_constant() {
     var struct = struct()
-        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5)))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, BigInteger.valueOf(3)))
@@ -151,7 +152,7 @@ public class AddUint64TypeTest {
   @Test
   void addUint64Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(List.of(BigInteger.valueOf(5))).uint64()
+        .basic().constant(toUint64List(List.of(BigInteger.valueOf(5)))).uint64()
         .build();
 
     assertThatThrownBy(() -> struct.addUint64(0, 3, BigInteger.valueOf(3)))

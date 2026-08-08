@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.Uint32List;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason
 
 public final class Uint32ListType extends PrimitiveListType<Uint32ListType, Long, Uint32List> {
 
-  public Uint32ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint32List constantValue, Expression lengthExpression) {
+  public Uint32ListType(int position, @Nullable ComplexType<?> parent, @Nullable Uint32List constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, UINT32, constantValue, lengthExpression);
   }
 

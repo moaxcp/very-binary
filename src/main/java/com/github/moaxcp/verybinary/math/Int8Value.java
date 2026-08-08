@@ -29,8 +29,49 @@ public final class Int8Value extends ArithmeticValue {
   }
 
   @Override
+  public boolean toBool() {
+    return value != 0;
+  }
+
+  @Override
+  public byte toByte() {
+    return value;
+  }
+
+  @Override
+  public short toShort() {
+    return value;
+  }
+
+  @Override
+  public int toInt() {
+    return value;
+  }
+
+  @Override
+  public long toLong() {
+    return value;
+  }
+
+  @Override
+  public BigInteger toBigInteger() {
+    return BigInteger.valueOf(value);
+  }
+
+  @Override
+  public float toFloat() {
+    return value;
+  }
+
+  @Override
+  public double toDouble() {
+    return value;
+  }
+
+  @Override
   public ArithmeticValue sum(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> int32Value(value + v.toInt());
       case Float32Value v -> float32Value(value + v.value);
       case Float64Value v -> float64Value(value + v.value);
       case Int8Value v -> int32Value(value + v.value);
@@ -47,6 +88,7 @@ public final class Int8Value extends ArithmeticValue {
   @Override
   public ArithmeticValue subtract(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> int32Value(value - v.toInt());
       case Float32Value v -> float32Value(value - v.value);
       case Float64Value v -> float64Value(value - v.value);
       case Int8Value v -> int32Value(value - v.value);
@@ -63,6 +105,7 @@ public final class Int8Value extends ArithmeticValue {
   @Override
   public ArithmeticValue multiply(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> int32Value(value * v.toInt());
       case Float32Value v -> float32Value(value * v.value);
       case Float64Value v -> float64Value(value * v.value);
       case Int8Value v -> int32Value(value * v.value);
@@ -79,6 +122,7 @@ public final class Int8Value extends ArithmeticValue {
   @Override
   public ArithmeticValue divide(ArithmeticValue other) {
     return switch (other) {
+      case BoolValue v -> int32Value(value / v.toInt());
       case Float32Value v -> float32Value(value / v.value);
       case Float64Value v -> float64Value(value / v.value);
       case Int8Value v -> int32Value(value / v.value);
@@ -90,5 +134,23 @@ public final class Int8Value extends ArithmeticValue {
       case Uint32Value v -> uint32Value(value / v.value);
       case Uint64Value v -> uint64Value(BigInteger.valueOf(value).divide(v.value));
     };
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(value);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Int8Value other = (Int8Value) o;
+    return value == other.value;
+  }
+
+  @Override
+  public int hashCode() {
+    return Byte.hashCode(value);
   }
 }

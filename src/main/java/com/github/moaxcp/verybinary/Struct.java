@@ -1518,13 +1518,37 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
       } else if (type instanceof Float64Type) {
         builder.append(getFloat64(i));
       } else if (type instanceof StructType) {
-        builder.append("Struct=").append(getStruct(i).toString());
+        builder.append("struct=").append(getStruct(i).toString());
       } else if (type instanceof PadType padType) {
         if (padType.isAlign()) {
           builder.append("align=").append(padType.getByteLength(this));
         } else {
           builder.append("pad=").append(padType.getByteLength(this));
         }
+      } else if (type instanceof BoolListType) {
+        builder.append("bool=[").append(getBoolList(i)).append("]");
+      } else if (type instanceof Int8ListType) {
+        builder.append("int8=[").append(getInt8List(i)).append("]");
+      } else if (type instanceof Int16ListType) {
+        builder.append("int16=[").append(getInt16List(i)).append("]");
+      } else if (type instanceof Int32ListType) {
+        builder.append("int32=[").append(getInt32List(i)).append("]");
+      } else if (type instanceof Int64ListType) {
+        builder.append("int64=[").append(getInt64List(i)).append("]");
+      } else if (type instanceof Uint8ListType) {
+        builder.append("uint8=[").append(getUint8List(i)).append("]");
+      } else if (type instanceof Uint16ListType) {
+        builder.append("uint16=[").append(getUint16List(i)).append("]");
+      } else if (type instanceof Uint32ListType) {
+        builder.append("uint32=[").append(getUint32List(i)).append("]");
+      } else if (type instanceof Uint64ListType) {
+        builder.append("uint64=[").append(getUint64List(i)).append("]");
+      } else if (type instanceof Float32ListType) {
+        builder.append("float32=[").append(getFloat32List(i)).append("]");
+      } else if (type instanceof Float64ListType) {
+        builder.append("float64=[").append(getFloat64List(i)).append("]");
+      } else if (type instanceof StructListType) {
+        builder.append("struct=[").append(getStructList(i)).append("]");
       }
     }
     builder.append("}");

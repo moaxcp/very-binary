@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public final class Uint16List extends PrimitiveList<Uint16List, Uint16ListType, Integer> implements PrimitiveIterable<Integer, Uint16Consumer> {
 
@@ -32,7 +32,7 @@ public final class Uint16List extends PrimitiveList<Uint16List, Uint16ListType, 
 
   public static StructType getUint16ListStructType(long length) {
     return structType()
-        .uint16List(constant(length))
+        .uint16List(int64Value(length))
         .build();
   }
 
@@ -84,6 +84,19 @@ public final class Uint16List extends PrimitiveList<Uint16List, Uint16ListType, 
     var s = struct(getUint16ListStructType(size64())).build();
     s.getByteArray().setBytes(pointer.getByteArray(), type.getOffset(pointer), 0, type.getByteLength(pointer));
     return s.getUint16List(0);
+  }
+
+  @Override
+  public String toString() {
+    if (size64() == 0) {
+      return "";
+    }
+    var first = getUint16(0);
+    var builder = new StringBuilder().append(first);
+    for (long i = 1; i < size64(); i++) {
+      builder.append(", ").append(getUint16(i));
+    }
+    return builder.toString();
   }
 
   public boolean equals(Object o) {

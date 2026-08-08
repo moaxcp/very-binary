@@ -2,9 +2,9 @@ package com.github.moaxcp.verybinary.uint16;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
 import static com.github.moaxcp.verybinary.BasicTypeInfo.UINT16;
+import static com.github.moaxcp.verybinary.Builders.struct;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Uint16TypeTest {
@@ -32,8 +32,8 @@ public class Uint16TypeTest {
   @Test
   void isFixedByteLengthArray() {
     var struct = struct()
-        .basic().lengthExpression(constant(5)).uint16()
-        .uint16List(constant(5))
+        .basic().lengthExpression(int8Value(5)).uint16()
+        .uint16List(int8Value(5))
         .build();
 
     assertThat(struct.getType(0).isFixedByteLength()).isTrue();

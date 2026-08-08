@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.list.Float64List.toFloat64List;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -82,7 +82,7 @@ public class SetFloat64TypeTest {
   @Test
   void setArrayWrapper() {
     var struct = struct()
-        .float64List(constant(1))
+        .float64List(int8Value(1))
         .build();
 
     assertThatThrownBy(() -> ((Float64ListType) struct.getType(0)).set(struct, 0, Double.valueOf(2.0d)))
@@ -181,19 +181,6 @@ public class SetFloat64TypeTest {
     assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("Float64ListType at position 1 is constant value");
-  }
-
-  @Test
-  void setFloat64Array_constant_value_same() {
-    var struct = struct()
-        .float64()
-        .basic().constant(toFloat64List(new double[]{3, 3, 3})).float64()
-        .fromBytes(ba().float64(2, 3, 3))
-        .build();
-
-    struct.setFloat64(1, 1, 3.0d);
-
-    assertThat(struct.getByteArray()).isEqualTo(ba().float64(2, 3, 3));
   }
 
   @Test

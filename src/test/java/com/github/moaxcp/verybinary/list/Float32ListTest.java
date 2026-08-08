@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.Builders.structType;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Float32ListTest {
   @Test
   void testGetFloat32() {
-    Struct struct = struct(structType().float32List(constant(2)).build())
+    Struct struct = struct(structType().float32List(int8Value(2)).build())
         .build()
         .setFloat32(0, 1.1f, 2.2f);
 
@@ -22,20 +22,20 @@ class Float32ListTest {
 
   @Test
   void testSetAndGet() {
-    Struct struct = struct(structType().float32List(constant(2)).build())
+    Struct struct = struct(structType().float32List(int8Value(2)).build())
         .build();
 
     Float32List list = struct.getFloat32Array(0);
     list.set(0, 3.3f);
     list.set(1, 4.4f);
 
-    assertThat(list.get(0)).isEqualTo(3.3f);
-    assertThat(list.get(1)).isEqualTo(4.4f);
+    assertThat(list.getFloat32(0)).isEqualTo(3.3f);
+    assertThat(list.getFloat32(1)).isEqualTo(4.4f);
   }
 
   @Test
   void testIteration() {
-    Struct struct = struct(structType().float32List(constant(3)).build())
+    Struct struct = struct(structType().float32List(int8Value(3)).build())
         .build()
         .setFloat32(0, 1.0f, 2.0f, 3.0f);
 

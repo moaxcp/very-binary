@@ -2,7 +2,7 @@ package com.github.moaxcp.verybinary;
 
 import com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason;
 import com.github.moaxcp.verybinary.list.BinaryList;
-import com.github.moaxcp.verybinary.math.Expression;
+import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -10,15 +10,15 @@ import java.util.List;
 
 import static com.github.moaxcp.verybinary.LengthChangeReason.*;
 import static com.github.moaxcp.verybinary.ValueChangeListener.ValueChangeReason.SET_VALUE;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int64Value.int64Value;
 
 public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L extends BinaryList<L, SELF, T>> extends ValueType<SELF, L> permits BasicListType, StructListType {
 
-  protected final Expression lengthExpression;
+  protected final ArithmeticExpression lengthExpression;
 
   protected final List<LengthListener> lengthListeners = new ArrayList<>();
 
-  protected ListType(int position, @Nullable ComplexType<?> parent, @Nullable L constantValue, @Nullable Expression lengthExpression) {
+  protected ListType(int position, @Nullable ComplexType<?> parent, @Nullable L constantValue, @Nullable ArithmeticExpression lengthExpression) {
     super(position, parent, constantValue);
     if (lengthExpression == null && constantValue == null) {
       throw new IllegalArgumentException("lengthExpression and constantValue cannot both be null");
@@ -28,7 +28,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
     }
     if (constantValue != null) {
       this.constantValue = constantValue;
-      this.lengthExpression = constant(constantValue.size64());
+      this.lengthExpression = int64Value(constantValue.size64());
     } else {
       this.lengthExpression = lengthExpression;
     }
@@ -52,14 +52,14 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   }
 
   public long getLength(Pointer<?, ? extends Type<?>> pointer) {
-    return lengthExpression.evaluate(pointer);
+    return lengthExpression.evaluate(pointer).toLong();
   }
 
   public long getAllocationLength() {
     if (lengthExpression.isConstant(parent)) {
-      return lengthExpression.constantValue(parent);
+      return lengthExpression.constantValue(parent).toLong();
     } else {
-      return lengthExpression.defaultValue(parent);
+      return lengthExpression.defaultValue(parent).toLong();
     }
   }
 
@@ -297,15 +297,16 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
 
     ListType<?, ?, ?> listType = (ListType<?, ?, ?>) o;
-    return lengthExpression.equals(listType.lengthExpression) && lengthListeners.equals(listType.lengthListeners);
+    return lengthExpression.equals(listType.lengthExpression);
   }
 
   @Override
   public int hashCode() {
-    int result = lengthExpression.hashCode();
-    result = 31 * result + lengthListeners.hashCode();
+    int result = super.hashCode();
+    result = 31 * result + lengthExpression.hashCode();
     return result;
   }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint16List.toUint16List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -161,7 +162,7 @@ public class GetUint16TypeTest {
   @Test
   void getUint16Array_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(toUint16List(new int[]{5, 5, 5, 5, 5})).uint16()
         .build();
 
     assertThat(struct.getUint16(0, 3)).isEqualTo(5);

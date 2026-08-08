@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
+import static com.github.moaxcp.verybinary.list.Uint16List.toUint16List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -18,7 +19,7 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, Integer) not supported for Uint16ListType. Use add(Pointer, int) instead.");
+        .hasMessage("add(Pointer, T) not supported for Uint16ListType. Use addUint16(Pointer, int) instead.");
   }
 
   @Test
@@ -30,7 +31,7 @@ public class AddUint16TypeTest {
 
     assertThatThrownBy(() -> ((Uint16ListType) struct.getType(1)).add(struct, 0, Integer.valueOf(1)))
         .isInstanceOf(UnsupportedOperationException.class)
-        .hasMessage("add(Pointer, long, Integer) not supported for Uint16ListType. Use add(Pointer, long, int) instead.");
+        .hasMessage("add(Pointer, long, T) not supported for Uint16ListType. Use addUint16(Pointer, long, int) instead.");
   }
 
   @Test
@@ -88,7 +89,7 @@ public class AddUint16TypeTest {
   @Test
   void addUint16Array_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(toUint16List(new int[]{5, 5, 5, 5, 5})).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 3))
@@ -171,7 +172,7 @@ public class AddUint16TypeTest {
   @Test
   void addUint16Array_with_index_constant() {
     var struct = struct()
-        .basic().constant(new int[]{5, 5, 5, 5, 5}).uint16()
+        .basic().constant(toUint16List(new int[]{5, 5, 5, 5, 5})).uint16()
         .build();
 
     assertThatThrownBy(() -> struct.addUint16(0, 0, 3))

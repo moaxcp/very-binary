@@ -1,7 +1,5 @@
 package com.github.moaxcp.verybinary;
 
-import com.github.moaxcp.verybinary.list.StructList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,13 +49,18 @@ public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends
   }
 
   public StructListType toStructListType() {
-    return new StructListType(position, null, (StructList) constant, lengthExpression, toStructType())
+    return new StructListType(position, null, null, lengthExpression, toStructType())
         .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners)
         .addLengthListeners(lengthListeners);
   }
 
   public StructType toStructType() {
+    if (constant instanceof ByteArray) {
+      return new StructType(position, null, (ByteArray) constant, fields)
+          .addByteLengthListeners(byteLengthListeners)
+          .addValueChangeListeners(valueChangeListeners);
+    }
     return new StructType(position, null, (Struct) constant, fields)
         .addByteLengthListeners(byteLengthListeners)
         .addValueChangeListeners(valueChangeListeners);

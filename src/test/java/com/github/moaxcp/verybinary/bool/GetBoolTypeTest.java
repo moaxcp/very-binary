@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -26,7 +26,7 @@ public class GetBoolTypeTest {
   @Test
   void get_index() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .build();
 
     assertThatThrownBy(() -> ((BoolListType) struct.getType(0)).get(struct, 0))
@@ -171,7 +171,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolArray() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -181,7 +181,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolArray_sub() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -191,7 +191,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolArray_sub_index_negative() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -203,7 +203,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolArray_sub_index_over() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -215,7 +215,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolList() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -225,7 +225,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolList_sub() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -235,7 +235,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolList_sub_index_negative() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 
@@ -247,7 +247,7 @@ public class GetBoolTypeTest {
   @Test
   void getBoolList_sub_index_over() {
     var struct = struct()
-        .boolList(constant(5))
+        .boolList(int8Value(5))
         .fromBytes(ba().bool(true, false, true, false, true))
         .build();
 

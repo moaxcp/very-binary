@@ -10,10 +10,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.math.BigInteger;
 import java.util.stream.Stream;
 
+import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
 import static com.github.moaxcp.verybinary.Builders.struct;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
-import static com.github.moaxcp.verybinary.math.Constant.constant;
-import static com.github.moaxcp.verybinary.BasicTypeInfo.*;
+import static com.github.moaxcp.verybinary.list.Int8List.toInt8List;
+import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -44,17 +45,17 @@ public class PadTypeTest {
         Arguments.of(struct().float32(), FLOAT32.size()),
         Arguments.of(struct().float64(), FLOAT64.size()),
         Arguments.of(struct().struct().int8().end(), INT8.size()),
-        Arguments.of(struct().int8List(constant(5)), INT8.size() * 5),
-        Arguments.of(struct().int16List(constant(5)), INT16.size() * 5),
-        Arguments.of(struct().int32List(constant(5)), INT32.size() * 5),
-        Arguments.of(struct().int64List(constant(5)), INT64.size() * 5),
-        Arguments.of(struct().uint8List(constant(5)), UINT8.size() * 5),
-        Arguments.of(struct().uint16List(constant(5)), UINT16.size() * 5),
-        Arguments.of(struct().uint32List(constant(5)), UINT32.size() * 5),
-        Arguments.of(struct().uint64List(constant(5)), UINT64.size() * 5),
-        Arguments.of(struct().float32List(constant(5)), FLOAT32.size() * 5),
-        Arguments.of(struct().float64List(constant(5)), FLOAT64.size() * 5),
-        Arguments.of(struct().struct().int8List(constant(5)).end(), INT8.size() * 5)
+        Arguments.of(struct().int8List(int8Value(5)), INT8.size() * 5),
+        Arguments.of(struct().int16List(int8Value(5)), INT16.size() * 5),
+        Arguments.of(struct().int32List(int8Value(5)), INT32.size() * 5),
+        Arguments.of(struct().int64List(int8Value(5)), INT64.size() * 5),
+        Arguments.of(struct().uint8List(int8Value(5)), UINT8.size() * 5),
+        Arguments.of(struct().uint16List(int8Value(5)), UINT16.size() * 5),
+        Arguments.of(struct().uint32List(int8Value(5)), UINT32.size() * 5),
+        Arguments.of(struct().uint64List(int8Value(5)), UINT64.size() * 5),
+        Arguments.of(struct().float32List(int8Value(5)), FLOAT32.size() * 5),
+        Arguments.of(struct().float64List(int8Value(5)), FLOAT64.size() * 5),
+        Arguments.of(struct().struct().int8List(int8Value(5)).end(), INT8.size() * 5)
     );
   }
 
@@ -83,7 +84,7 @@ public class PadTypeTest {
             .basic().constant((byte) 64).int8()
             .struct()
               .basic().constant((byte) 6).int8()
-              .basic().constant(new byte[]{8, 8, 8, 8, 8, 8}).int8()
+              .basic().constant(toInt8List(new byte[]{8, 8, 8, 8, 8, 8})).int8()
               .end()
             .align(5)
             .build(), 1 + 1 + 6 + 3)
@@ -132,7 +133,7 @@ public class PadTypeTest {
   @Test
   void isFixedByteLengthAlignArrayConstant() {
     var struct = struct()
-        .int8List(constant(8))
+        .int8List(int8Value(8))
         .align(4)
         .build();
 

@@ -48,6 +48,11 @@ public final class Struct implements ComplexPointer<Struct, StructType> {
     this.bytes = bytes;
     if (!this.allocated) {
       structType.allocate(this);
+    } else {
+      long requiredLength = offset + structType.getByteLength(this);
+      if (bytes.getAllocated() < requiredLength) {
+        throw new IllegalArgumentException("ByteArray allocated length " + bytes.getAllocated() + " is less than required length " + requiredLength + " at offset " + offset);
+      }
     }
     listener = shift -> {
       var o = getOffset();

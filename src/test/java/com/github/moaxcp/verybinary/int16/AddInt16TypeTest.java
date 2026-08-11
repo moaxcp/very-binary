@@ -75,18 +75,6 @@ public class AddInt16TypeTest {
   }
 
   @Test
-  void addInt16_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int16()
-        .int16List(0)
-        .build();
-    assertThatThrownBy(() -> struct.addInt16(1, (short) 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 2");
-  }
-
-  @Test
   void addInt16Array_constant() {
     var struct = struct()
         .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
@@ -145,19 +133,6 @@ public class AddInt16TypeTest {
     assertThatThrownBy(() -> struct.addInt16(1, 3, (short) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Int16ListType at position 1 index: 3 new length: 3");
-  }
-
-  @Test
-  void addInt16_with_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int16()
-        .int16List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt16(1, 0, (short) 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 2");
   }
 
   @Test

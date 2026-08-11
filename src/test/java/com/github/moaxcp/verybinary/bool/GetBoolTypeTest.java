@@ -78,18 +78,6 @@ public class GetBoolTypeTest {
   }
 
   @Test
-  void getBoolNotAllocated() {
-    var struct = struct()
-        .allocated()
-        .bool()
-        .build();
-
-    assertThatThrownBy(() -> struct.getBool(0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void getBool_constant() {
     var struct = struct()
         .basic().constant(true).bool()
@@ -144,19 +132,6 @@ public class GetBoolTypeTest {
     assertThatThrownBy(() -> struct.getBool(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("BoolListType at position 1 index: 2 length: 2");
-  }
-
-  @Test
-  void getBool_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .boolList(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.getBool(1, 0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

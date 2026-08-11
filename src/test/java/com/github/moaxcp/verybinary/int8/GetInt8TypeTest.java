@@ -66,18 +66,6 @@ public class GetInt8TypeTest {
   }
 
   @Test
-  void getInt8NotAllocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .build();
-
-    assertThatThrownBy(() -> struct.getInt8(0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void getInt8_constant() {
     var struct = struct()
         .basic().constant((byte) 5).int8()
@@ -144,19 +132,6 @@ public class GetInt8TypeTest {
     assertThatThrownBy(() -> struct.getInt8(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Int8ListType at position 1 index: 2 length: 2");
-  }
-
-  @Test
-  void getInt8Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .int8List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.getInt8(1, 0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

@@ -66,18 +66,6 @@ public class GetInt64TypeTest {
   }
 
   @Test
-  void getInt64NotAllocated() {
-    var struct = struct()
-        .allocated()
-        .int64()
-        .build();
-
-    assertThatThrownBy(() -> struct.getInt64(0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void getInt64_constant() {
     var struct = struct()
         .basic().constant(5L).int64()
@@ -155,19 +143,6 @@ public class GetInt64TypeTest {
     assertThatThrownBy(() -> struct.getInt64(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Int64ListType at position 1 index: 2 length: 2");
-  }
-
-  @Test
-  void getInt64Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int64()
-        .int64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.getInt64(1, 0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test

@@ -75,18 +75,6 @@ public class AddInt32TypeTest {
   }
 
   @Test
-  void addInt32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int32()
-        .int32List(0)
-        .build();
-    assertThatThrownBy(() -> struct.addInt32(1, 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void addInt32Array_constant() {
     var struct = struct()
         .basic().constant(toInt32List(new int[]{5, 5, 5, 5, 5})).int32()
@@ -145,19 +133,6 @@ public class AddInt32TypeTest {
     assertThatThrownBy(() -> struct.addInt32(1, 3, 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Int32ListType at position 1 index: 3 new length: 3");
-  }
-
-  @Test
-  void addInt32_with_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int32()
-        .int32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt32(1, 0, 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test

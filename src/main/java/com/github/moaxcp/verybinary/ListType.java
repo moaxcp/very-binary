@@ -266,7 +266,7 @@ public sealed abstract class ListType<SELF extends ListType<SELF, T, L>, T, L ex
     allocate(reason, pointer, index, 1);
   }
 
-  protected final void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
     if (this.isConstant()) {
       throw new IllegalStateException("Cannot allocate element when type has constantValue");
     }

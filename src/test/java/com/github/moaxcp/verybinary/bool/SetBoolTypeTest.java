@@ -70,18 +70,6 @@ public class SetBoolTypeTest {
   }
 
   @Test
-  void setBool_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .bool()
-        .build();
-
-    assertThatThrownBy(() -> struct.setBool(0, true))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void setBool_constant() {
     var struct = struct()
         .basic().constant(true).bool()
@@ -138,19 +126,6 @@ public class SetBoolTypeTest {
     assertThat(struct.getInt8(0)).isEqualTo((byte) 1);
     assertThat(struct.getBool(1, 0)).isTrue();
     assertThat(struct.getByteArray()).isEqualTo(ba().int8(1).bool(true, false));
-  }
-
-  @Test
-  void setBool_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .boolList(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setBool(1, 0, true))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

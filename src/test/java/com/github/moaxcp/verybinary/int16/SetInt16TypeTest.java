@@ -56,18 +56,6 @@ public class SetInt16TypeTest {
   }
 
   @Test
-  void setInt16_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int16()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt16(0, (short) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void setInt16_constant() {
     var struct = struct()
         .basic().constant((short) 5).int16()
@@ -139,19 +127,6 @@ public class SetInt16TypeTest {
   }
 
   @Test
-  void setInt16Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int16()
-        .int16List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt16(1, 0, (short) 2))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 2");
-  }
-
-  @Test
   void setInt16Array_index_0_not_array() {
     var struct = struct()
         .int16()
@@ -177,7 +152,6 @@ public class SetInt16TypeTest {
     var struct = struct()
         .int16()
         .basic().constant(toInt16List(new short[]{5, 5, 5, 5, 5})).int16()
-        .fromBytes(ba().int16(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setInt16(1, 1, 2))

@@ -57,18 +57,6 @@ public class SetUint32TypeTest {
   }
 
   @Test
-  void setUint32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint32()
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint32(0, 2L))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void setUint32_constant() {
     var struct = struct()
         .basic().constant(5L).uint32()
@@ -141,19 +129,6 @@ public class SetUint32TypeTest {
   }
 
   @Test
-  void setUint32Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint32()
-        .uint32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint32(1, 0, 2L))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void setUint32Array_index_0_not_array() {
     var struct = struct()
         .uint32()
@@ -179,7 +154,6 @@ public class SetUint32TypeTest {
     var struct = struct()
         .uint32()
         .basic().constant(toUint32List(new long[]{5, 5, 5, 5, 5})).uint32()
-        .fromBytes(ba().uint32(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.setUint32(1, 1, 2))

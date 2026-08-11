@@ -49,19 +49,6 @@ public class RemoveUint32TypeTest {
   }
 
   @Test
-  void removeUint32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint32()
-        .uint32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void removeUint32_not_array() {
     var struct = struct()
         .uint32()

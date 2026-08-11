@@ -48,19 +48,6 @@ public class RemoveFloat32TypeTest {
   }
 
   @Test
-  void removeFloat32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .float32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void removeFloat32_not_array() {
     var struct = struct()
         .float32()

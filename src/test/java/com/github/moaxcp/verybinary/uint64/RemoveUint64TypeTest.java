@@ -50,19 +50,6 @@ public class RemoveUint64TypeTest {
   }
 
   @Test
-  void removeUint64_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint64()
-        .uint64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void removeUint64_not_array() {
     var struct = struct()
         .uint64()

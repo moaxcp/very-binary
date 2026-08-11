@@ -75,18 +75,6 @@ public class AddInt8TypeTest {
   }
 
   @Test
-  void addInt8_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .int8List(0)
-        .build();
-    assertThatThrownBy(() -> struct.addInt8(1, (byte) 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void addInt8Array_constant() {
     var struct = struct()
         .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
@@ -145,19 +133,6 @@ public class AddInt8TypeTest {
     assertThatThrownBy(() -> struct.addInt8(1, 3, (byte) 3))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Int8ListType at position 1 index: 3 new length: 3");
-  }
-
-  @Test
-  void addInt8_with_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .int8List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addInt8(1, 0, (byte) 3))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

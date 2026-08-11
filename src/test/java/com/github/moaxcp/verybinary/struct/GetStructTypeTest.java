@@ -36,7 +36,6 @@ public class GetStructTypeTest {
           .int8()
           .int8List(0)
           .end()
-        .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.getStruct(-1))
@@ -52,7 +51,6 @@ public class GetStructTypeTest {
         .int8()
         .int8List(0)
         .end()
-        .fromBytes(ba().int8(100, 2, 3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.getStruct(2))
@@ -74,24 +72,6 @@ public class GetStructTypeTest {
 
     assertThat(struct.getStruct(1))
         .isEqualTo(struct(inner).build());
-  }
-
-  @Test
-  void get_not_allocated() {
-    var inner = structType()
-        .int8()
-        .int8List(0)
-        .build();
-
-    var struct = struct()
-        .allocated()
-        .int8()
-        .struct(inner)
-        .build();
-
-    assertThatThrownBy(() -> struct.getStruct(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 1, length: 0");
   }
 
   @Test

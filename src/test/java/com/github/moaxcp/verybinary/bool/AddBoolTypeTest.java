@@ -114,19 +114,6 @@ public class AddBoolTypeTest {
   }
 
   @Test
-  void addBool_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .boolList(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addBool(1, true))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void addBool_constant_value() {
     var struct = struct()
         .int8()
@@ -209,19 +196,6 @@ public class AddBoolTypeTest {
     assertThatThrownBy(() -> struct.addBool(1, 3, true))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("BoolListType at position 1 index: 3 new length: 3");
-  }
-
-  @Test
-  void addBool_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .boolList(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addBool(1, 0, true))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

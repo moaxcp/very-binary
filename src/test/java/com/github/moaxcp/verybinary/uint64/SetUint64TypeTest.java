@@ -46,18 +46,6 @@ public class SetUint64TypeTest {
   }
 
   @Test
-  void set_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint64()
-        .build();
-
-    assertThatThrownBy(() -> struct.set(0, BigInteger.valueOf(2)))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void set_constant() {
     var struct = struct()
         .basic().constant(BigInteger.valueOf(5)).uint64()
@@ -117,19 +105,6 @@ public class SetUint64TypeTest {
   }
 
   @Test
-  void setArray_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint64()
-        .uint64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.set(1, 0, BigInteger.valueOf(5)))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void setArray_index_0_not_array() {
     var struct = struct()
         .uint64()
@@ -155,7 +130,6 @@ public class SetUint64TypeTest {
     var struct = struct()
         .uint64()
         .basic().constant(toUint64List(List.of(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(5)))).uint64()
-        .fromBytes(ba().uint64(2, 5, 5))
         .build();
 
     assertThatThrownBy(() -> struct.set(1, 1, BigInteger.valueOf(2)))

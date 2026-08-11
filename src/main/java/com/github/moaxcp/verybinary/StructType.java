@@ -54,7 +54,13 @@ public final class StructType extends ValueType<StructType, Struct> implements C
     long byteLength = 0;
     for (int i = 0; i < fields.size(); i++) {
       var field = fields.get(i);
-      byteLength += field.getByteLength(pointer);
+      if (field instanceof StructType st) {
+        var s = new Struct(getOffset(pointer), st.getOffset(pointer), st, pointer.getByteArray());
+        s.removeByteArrayListener();
+        byteLength += st.getByteLength(s);
+      } else {
+        byteLength += field.getByteLength(pointer);
+      }
     }
     return byteLength;
   }
@@ -93,7 +99,8 @@ public final class StructType extends ValueType<StructType, Struct> implements C
   @Override
   public void allocate(Pointer<?, ? extends Type<?>> pointer) {
     if (isConstant()) {
-      setUnchecked(SET_VALUE, pointer, constantValue);
+      pointer.getByteArray().shiftBytesFor(getOffset(pointer), constantValue.getByteLength());
+      pointer.getByteArray().replace(getOffset(pointer), constantValue.getByteLength(), constantValue.getByteArray(), constantValue.getOffset(), constantValue.getByteLength());
     } else {
       for (var field : fields) {
         if (field instanceof StructType st) {

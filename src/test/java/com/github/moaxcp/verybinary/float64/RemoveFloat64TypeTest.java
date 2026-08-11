@@ -48,19 +48,6 @@ public class RemoveFloat64TypeTest {
   }
 
   @Test
-  void removeFloat64_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float64()
-        .float64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void removeFloat64_not_array() {
     var struct = struct()
         .float64()

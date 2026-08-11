@@ -49,19 +49,6 @@ public class RemoveBoolTypeTest {
   }
 
   @Test
-  void remove_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .boolList(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void remove_not_array() {
     var struct = struct()
         .bool()

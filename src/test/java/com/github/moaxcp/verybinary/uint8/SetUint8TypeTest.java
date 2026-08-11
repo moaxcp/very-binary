@@ -55,18 +55,6 @@ public class SetUint8TypeTest {
   }
 
   @Test
-  void setUint8_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint8()
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint8(0, (byte) 2))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void setUint8_constant() {
     var struct = struct()
         .basic().constant((short) 5).uint8()
@@ -136,19 +124,6 @@ public class SetUint8TypeTest {
     assertThat(struct.getUint8(0)).isEqualTo((byte) 1);
     assertThat(struct.getUint8(1, 0)).isEqualTo((byte) 2);
     assertThat(struct.getByteArray()).isEqualTo(ba().uint8(1, 2, 3));
-  }
-
-  @Test
-  void setUint8Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint8()
-        .uint8List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setUint8(1, 0, (byte) 2))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
   }
 
   @Test

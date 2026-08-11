@@ -12,6 +12,7 @@ import static com.github.moaxcp.verybinary.Builders.*;
 import static com.github.moaxcp.verybinary.ByteArray.ba;
 import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StructTypeTest {
 
@@ -328,6 +329,18 @@ public class StructTypeTest {
   }
 
   @Test
+  void struct_not_allocated() {
+    assertThatThrownBy(() -> struct()
+        .int8()
+        .int16()
+        .int32()
+        .fromBytes(ba().int8(0))
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("ByteArray allocated length 1 is less than required length 7 at offset 0");
+  }
+
+  @Test
   void toString_empty() {
     var struct = struct().build();
     assertThat(struct.toString()).isEqualTo("{}");
@@ -336,7 +349,7 @@ public class StructTypeTest {
   @Test
   void toString_notEmpty() {
     var inner = structType().int8().build();
-    var innerArray = structListType().int8().lengthExpression(int8Value(2)).build();
+    var innerList = structListType().int8().lengthExpression(int8Value(2)).build();
     var struct = struct()
         .int8()
         .int8List(int8Value(2))
@@ -359,7 +372,7 @@ public class StructTypeTest {
         .float64()
         .float64List(int8Value(2))
         .struct(inner)
-        .structList(innerArray)
+        .structList(innerList)
         .build()
         .setInt8(0, -127)
         .setInt8(1, new int[] {-127, 128})

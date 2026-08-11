@@ -83,7 +83,7 @@ public final class Variable implements ArithmeticExpression {
 
   @Override
   public String toString() {
-    return "ValueOf(" +
+    return "Variable(" +
         position +
         ')';
   }

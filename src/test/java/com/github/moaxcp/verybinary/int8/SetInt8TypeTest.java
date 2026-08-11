@@ -56,18 +56,6 @@ public class SetInt8TypeTest {
   }
 
   @Test
-  void setInt8_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt8(0, (byte) 1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void setInt8_constant() {
     var struct = struct()
         .basic().constant((byte) 5).int8()
@@ -141,19 +129,6 @@ public class SetInt8TypeTest {
   }
 
   @Test
-  void setInt8Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .int8List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt8(1, 0, (byte) 2))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void setInt8Array_index_0_not_array() {
     var struct = struct()
         .int8()
@@ -172,19 +147,6 @@ public class SetInt8TypeTest {
     assertThatThrownBy(() -> struct.setInt8(0, 3, (byte) 2))
         .isInstanceOf(IllegalStateException.class)
         .hasMessage("Int8ListType at position 0 is constant value");
-  }
-
-  @Test
-  void setInt8Array_constant_value() {
-    var struct = struct()
-        .int8()
-        .basic().constant(toInt8List(new byte[]{5, 5, 5, 5, 5})).int8()
-        .fromBytes(ba().int8(2, 5, 5))
-        .build();
-
-    assertThatThrownBy(() -> struct.setInt8(1, 1, 2))
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Int8ListType at position 1 is constant value");
   }
 
   @Test

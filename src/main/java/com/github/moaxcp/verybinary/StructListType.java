@@ -146,4 +146,32 @@ public final class StructListType extends ListType<StructListType, Struct, Struc
       setUnchecked(reason, pointer, index + i, values.get(i));
     }
   }
+
+  @Override
+  public void allocate(Pointer<?, ? extends Type<?>> pointer) {
+    if (this.isConstant()) {
+      setUnchecked(SET_VALUE, pointer, constantValue);
+    } else {
+      var length = getLength(pointer);
+      for (var i = 0; i < length; i++) {
+        allocate(pointer, i);
+      }
+    }
+  }
+
+  protected void allocate(LengthChangeReason reason, Pointer<?, ? extends Type<?>> pointer, long index, long length) {
+    if (this.isConstant()) {
+      throw new IllegalStateException("Cannot allocate element when type has constantValue");
+    }
+    //todo check length is divisible by element size allocation length
+    callWithLengthChange(reason, pointer, length, () -> {
+      callWithByteLengthChange(reason, pointer, () -> {
+        for (var i = 0; i < length; i++) {
+        checkIndexAllocate(pointer, i);
+        var struct = new Struct(false, pointer.getOffset(), getOffset(pointer, index + i), structType.copy(0, null), pointer.getByteArray());
+        struct.removeByteArrayListener();
+        }
+      });
+    });
+  }
 }

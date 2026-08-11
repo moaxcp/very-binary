@@ -56,18 +56,6 @@ public class GetFloat32TypeTest {
   }
 
   @Test
-  void getFloat32NotAllocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .build();
-
-    assertThatThrownBy(() -> struct.getFloat32(0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void getFloat32_constant() {
     var struct = struct()
         .basic().constant(3.0f).float32()
@@ -122,19 +110,6 @@ public class GetFloat32TypeTest {
     assertThatThrownBy(() -> struct.getFloat32(1, 2))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Float32ListType at position 1 index: 2 length: 2");
-  }
-
-  @Test
-  void getFloat32_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .float32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.getFloat32(1, 0))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test

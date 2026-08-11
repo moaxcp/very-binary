@@ -53,7 +53,6 @@ public class AddFloat32TypeTest {
     var struct = struct()
         .float32()
         .float32List(0)
-        .fromBytes(ba())
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(-1, 3.0f))
@@ -66,24 +65,11 @@ public class AddFloat32TypeTest {
     var struct = struct()
         .float32()
         .float32List(0)
-        .fromBytes(ba())
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(3, 3.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
         .hasMessage("Index 3 out of bounds for length 2");
-  }
-
-  @Test
-  void addFloat32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .float32List(0)
-        .build();
-    assertThatThrownBy(() -> struct.addFloat32(1, 3.0f))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
   }
 
   @Test
@@ -101,7 +87,6 @@ public class AddFloat32TypeTest {
   void addFloat32_not_array() {
     var struct = struct()
         .float32()
-        .fromBytes(ba())
         .build();
     assertThatThrownBy(() -> struct.addFloat32(0, 3.0f))
         .isInstanceOf(ClassCastException.class);
@@ -148,23 +133,9 @@ public class AddFloat32TypeTest {
   }
 
   @Test
-  void addFloat32_with_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .float32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addFloat32(1, 0, 3.0f))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void addFloat32_with_index_0_not_array() {
     var struct = struct()
         .float32()
-        .fromBytes(ba())
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 0, 3.0f))
@@ -175,7 +146,6 @@ public class AddFloat32TypeTest {
   void addFloat32_with_index_1_not_array() {
     var struct = struct()
         .float32()
-        .fromBytes(ba())
         .build();
 
     assertThatThrownBy(() -> struct.addFloat32(0, 1, 3.0f))

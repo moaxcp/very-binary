@@ -48,19 +48,6 @@ public class RemoveUint16TypeTest {
   }
 
   @Test
-  void removeUint16_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint16()
-        .uint16List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 2");
-  }
-
-  @Test
   void removeUint16_not_array() {
     var struct = struct()
         .uint16()

@@ -48,19 +48,6 @@ public class RemoveInt8TypeTest {
   }
 
   @Test
-  void removeInt8_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .int8()
-        .int8List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.remove(1))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 1");
-  }
-
-  @Test
   void removeInt8_not_array() {
     var struct = struct()
         .int8()

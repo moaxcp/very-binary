@@ -46,18 +46,6 @@ public class SetFloat32TypeTest {
   }
 
   @Test
-  void setFloat32_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat32(0, 2.0f))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void setFloat32_constant() {
     var struct = struct()
         .basic().constant(3.0f).float32()
@@ -90,12 +78,11 @@ public class SetFloat32TypeTest {
         .float32()
         .float32List(0)
         .float32()
-        .fromBytes(ba().float32(1, 4))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, -1, 2.0f))
         .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("Float32ListType at position 1 index: -1 length: 1");
+        .hasMessage("Float32ListType at position 1 index: -1 length: 0");
   }
 
   @Test
@@ -113,19 +100,6 @@ public class SetFloat32TypeTest {
   }
 
   @Test
-  void setFloat32Array_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float32()
-        .float32List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat32(1, 0, 2.0f))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 4");
-  }
-
-  @Test
   void setFloat32_index_0_not_array() {
     var struct = struct()
         .float32()
@@ -140,7 +114,6 @@ public class SetFloat32TypeTest {
     var struct = struct()
         .int8()
         .basic().constant(toFloat32List(new float[]{3, 3, 3})).float32()
-        .fromBytes(ba().int8(2).float32(3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat32(1, 1, 2))

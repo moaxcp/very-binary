@@ -57,18 +57,6 @@ public class SetFloat64TypeTest {
   }
 
   @Test
-  void setFloat64_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float64()
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat64(0, 2.0d))
-        .isInstanceOf(ArrayIndexOutOfBoundsException.class)
-        .hasMessage("Index 0 out of bounds for length 0");
-  }
-
-  @Test
   void setFloat64_constant() {
     var struct = struct()
         .basic().constant(3.0d).float64()
@@ -137,19 +125,6 @@ public class SetFloat64TypeTest {
   }
 
   @Test
-  void setFloat64Array_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .float64()
-        .float64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.setFloat64(1, 0, 2.0d))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void setFloat64Array_index_0_not_array() {
     var struct = struct()
         .float64()
@@ -175,7 +150,6 @@ public class SetFloat64TypeTest {
     var struct = struct()
         .float64()
         .basic().constant(toFloat64List(3, 3, 3)).float64()
-        .fromBytes(ba().float64(2, 3, 3))
         .build();
 
     assertThatThrownBy(() -> struct.setFloat64(1, 1, 2.0d))

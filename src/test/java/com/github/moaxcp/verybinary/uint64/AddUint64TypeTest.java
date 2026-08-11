@@ -53,18 +53,6 @@ public class AddUint64TypeTest {
   }
 
   @Test
-  void addUint64_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint64()
-        .uint64List(0)
-        .build();
-    assertThatThrownBy(() -> struct.addUint64(1, BigInteger.valueOf(3)))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
-  }
-
-  @Test
   void addUint64Array_constant() {
     var struct = struct()
         .basic().constant(toUint64List(List.of(BigInteger.valueOf(5)))).uint64()
@@ -123,19 +111,6 @@ public class AddUint64TypeTest {
     assertThatThrownBy(() -> struct.addUint64(1, 3, BigInteger.valueOf(3)))
         .isInstanceOf(ArrayIndexOutOfBoundsException.class)
         .hasMessage("Uint64ListType at position 1 index: 3 new length: 3");
-  }
-
-  @Test
-  void addUint64_with_index_not_allocated() {
-    var struct = struct()
-        .allocated()
-        .uint64()
-        .uint64List(0)
-        .build();
-
-    assertThatThrownBy(() -> struct.addUint64(1, 0, BigInteger.valueOf(3)))
-        .isInstanceOf(IndexOutOfBoundsException.class)
-        .hasMessage("allocated: 0, index: 0, length: 8");
   }
 
   @Test

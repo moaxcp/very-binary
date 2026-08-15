@@ -131,6 +131,36 @@ public final class Uint32Value extends ArithmeticValue {
   }
 
   @Override
+  public BoolValue same(ArithmeticValue other) {
+    return value == other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
+  public BoolValue notSame(ArithmeticValue other) {
+    return value != other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
+  public BoolValue greaterThan(ArithmeticValue other) {
+    return value > other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
+  public BoolValue greaterThanOrEqual(ArithmeticValue other) {
+    return value >= other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
+  public BoolValue lessThan(ArithmeticValue other) {
+    return value < other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
+  public BoolValue lessThanOrEqual(ArithmeticValue other) {
+    return value <= other.toLong() ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
   public String toString() {
     return String.valueOf(value);
   }

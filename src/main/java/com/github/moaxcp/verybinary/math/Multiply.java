@@ -62,7 +62,7 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
         case LengthOf lengthOf -> partOfTerm.add(lengthOf);
         case ByteLengthOf byteLengthOf -> partOfTerm.add(byteLengthOf);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> partOfTerm.add(byteLengthOfBasicElement);
-        case EqualityExpression equalityExpression -> {
+        case SameExpression sameExpression -> {
         }
         case StructValue structValue -> {
         }
@@ -92,7 +92,7 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
       case LengthOf lengthOf -> new Multiply(List.of(first, lengthOf));
       case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
       case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));
-      case EqualityExpression equalityExpression -> new Multiply(first, equalityExpression);
+      case SameExpression sameExpression -> new Multiply(first, sameExpression);
     };
   }
 

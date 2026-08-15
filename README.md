@@ -144,20 +144,7 @@ Add support for default values. Constant values might actually be useless.
 * Add verification for being allocated
     * When a struct is created and allocated is true the byte array should be checked against the array for valid values.
     * Each type should be able to do this.
-* getters on all types returning an array or List should return an empty value if the length is 0.
-* allocation length needs to also check byteLengthExpression for a length value.
-* move constant value down to each type to prevent wrapping.
-* arrays should have constant values that are an array instead of a single value.
-* add verification for struct constant matching type.
-* There no implementation for large ByteArrays. Even with an implementation much of the design for arrays will not.
-  * arrays would need a collection type that can be larger than a java array.
-* Add tests for 0 length getters. They should return an empty array or List.
-* fix isConstant/isConstantValue/isFixedLength with array/list types.
-  * Constants are now a list or array instead of a single repeated value. This means a length expression is not required because the constant value defines the length.
-  * if and indexed type is constant then it shouldn't even have a length expression.
-  * fixed length should check if there is a constant
 * Struct and StructList types should not have constants instead each member should be constant. isConstant should check each field
-* isFixedLength does not need a pointer. It needs the parent type which is used in pad and length expression.
 * Paths to navigate to sub fields. Could be like xpath or json paths.
-* There are two concepts for length. Array length and byte length. Maybe the listeners can be handled the same way. And if the value doesn't fit into a byte length (long list with length of 6) an exception should be thrown.
+  * pointers should have parent pointers instead of offset
 * Lists should implement java List.

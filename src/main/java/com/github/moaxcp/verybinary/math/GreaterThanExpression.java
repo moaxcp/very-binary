@@ -6,11 +6,13 @@ import com.github.moaxcp.verybinary.Type;
 
 import java.util.List;
 
-public final class EqualityExpression implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
+import static com.github.moaxcp.verybinary.math.BooleanGatherer.greaterThan;
+
+public final class GreaterThanExpression implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
   private final List<ArithmeticExpression> expressions;
 
-  public EqualityExpression(List<ArithmeticExpression> expressions) {
+  public GreaterThanExpression(List<ArithmeticExpression> expressions) {
     this.expressions = List.copyOf(expressions);
   }
 
@@ -26,16 +28,16 @@ public final class EqualityExpression implements ArithmeticExpression, MultiExpr
 
   @Override
   public ArithmeticValue constantValue(ComplexType<?> parent) {
-    return null;
+    return expressions.stream().map(e -> e.constantValue(parent)).gather(greaterThan()).findAny().orElse(BoolValue.FALSE);
   }
 
   @Override
   public ArithmeticValue defaultValue(ComplexType<?> parent) {
-    return null;
+    return expressions.stream().map(e -> e.defaultValue(parent)).gather(greaterThan()).findAny().orElse(BoolValue.FALSE);
   }
 
   @Override
   public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
-    return null;
+    return expressions.stream().map(e -> e.evaluate(pointer)).gather(greaterThan()).findAny().orElse(BoolValue.FALSE);
   }
 }

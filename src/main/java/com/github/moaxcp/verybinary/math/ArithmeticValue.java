@@ -24,11 +24,23 @@ public abstract sealed class ArithmeticValue extends Value<ArithmeticValue> impl
 
   public abstract double toDouble();
 
-  public abstract ArithmeticValue sum(ArithmeticValue value);
+  public abstract ArithmeticValue sum(ArithmeticValue other);
 
-  public abstract ArithmeticValue multiply(ArithmeticValue value);
+  public abstract ArithmeticValue multiply(ArithmeticValue other);
 
-  public abstract ArithmeticValue subtract(ArithmeticValue value);
+  public abstract ArithmeticValue subtract(ArithmeticValue other);
 
-  public abstract ArithmeticValue divide(ArithmeticValue value);
+  public abstract ArithmeticValue divide(ArithmeticValue other);
+
+  public abstract BoolValue same(ArithmeticValue other);
+
+  public abstract BoolValue notSame(ArithmeticValue other);
+
+  public abstract BoolValue greaterThan(ArithmeticValue other);
+
+  public abstract BoolValue greaterThanOrEqual(ArithmeticValue other);
+
+  public abstract BoolValue lessThan(ArithmeticValue other);
+
+  public abstract BoolValue lessThanOrEqual(ArithmeticValue other);
 }

@@ -44,7 +44,7 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       case Divide div -> false;
       case Sum sum -> false;
       case Subtract sub -> false;
-      case EqualityExpression equalityExpression -> false;
+      case SameExpression sameExpression -> false;
       case StructVariable structVariable -> false;
     };
   }

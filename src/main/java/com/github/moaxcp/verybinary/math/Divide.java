@@ -100,7 +100,13 @@ public final class Divide implements ArithmeticExpression, MultiExpression<Arith
         case LengthOf lengthOf -> divideBy(lengthOf, denominator);
         case ByteLengthOf byteLengthOf -> divideBy(byteLengthOf, denominator);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> divideBy(byteLengthOfBasicElement, denominator);
-        case SameExpression sameExpression -> null;
+        case SameExpression sameExpression -> divideBy(sameExpression, denominator);
+        case GreaterThanExpression greaterThanExpression -> divideBy(greaterThanExpression, denominator);
+        case GreaterThanOrEqualExpression greaterThanOrEqualExpression -> divideBy(greaterThanOrEqualExpression, denominator);
+        case LessThanExpression lessThanExpression -> divideBy(lessThanExpression, denominator);
+        case LessThanOrEqualExpression lessThanOrEqualExpression -> divideBy(lessThanOrEqualExpression, denominator);
+        case NotSameExpression notSameExpression -> divideBy(notSameExpression, denominator);
+        case ValueOfBit valueOfBit -> divideBy(valueOfBit, denominator);
       };
     }
     return denominator;

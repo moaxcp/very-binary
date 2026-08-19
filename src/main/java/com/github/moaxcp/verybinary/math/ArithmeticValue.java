@@ -43,4 +43,6 @@ public abstract sealed class ArithmeticValue extends Value<ArithmeticValue> impl
   public abstract BoolValue lessThan(ArithmeticValue other);
 
   public abstract BoolValue lessThanOrEqual(ArithmeticValue other);
+
+  public abstract ArithmeticValue valueOfBit(long bit);
 }

@@ -157,6 +157,14 @@ public final class Int64Value extends ArithmeticValue {
   }
 
   @Override
+  public ArithmeticValue valueOfBit(long bit) {
+    if (bit < 0 || bit > 63) {
+      throw new IllegalArgumentException("Bit index must be between 0 and 63");
+    }
+    return ((value >> bit) & 1L) >= 1 ? BoolValue.TRUE : BoolValue.FALSE;
+  }
+
+  @Override
   public String toString() {
     return String.valueOf(value);
   }

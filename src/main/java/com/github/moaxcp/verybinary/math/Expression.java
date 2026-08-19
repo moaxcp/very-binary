@@ -29,6 +29,8 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       }
       case StructVariable structVariable -> {
       }
+      case ValueOfBit valueOfBit -> {
+      }
     }
     return variables;
   }
@@ -46,6 +48,12 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       case Subtract sub -> false;
       case SameExpression sameExpression -> false;
       case StructVariable structVariable -> false;
+      case GreaterThanExpression greaterThanExpression -> false;
+      case GreaterThanOrEqualExpression greaterThanOrEqualExpression -> false;
+      case LessThanExpression lessThanExpression -> false;
+      case LessThanOrEqualExpression lessThanOrEqualExpression -> false;
+      case NotSameExpression notSameExpression -> false;
+      case ValueOfBit valueOfBit -> false;
     };
   }
 

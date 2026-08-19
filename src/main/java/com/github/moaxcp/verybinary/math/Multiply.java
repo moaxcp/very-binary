@@ -64,6 +64,18 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> partOfTerm.add(byteLengthOfBasicElement);
         case SameExpression sameExpression -> {
         }
+        case GreaterThanExpression greaterThanExpression -> {
+        }
+        case GreaterThanOrEqualExpression greaterThanOrEqualExpression -> {
+        }
+        case LessThanExpression lessThanExpression -> {
+        }
+        case LessThanOrEqualExpression lessThanOrEqualExpression -> {
+        }
+        case NotSameExpression notSameExpression -> {
+        }
+        case ValueOfBit valueOfBit -> {
+        }
         case StructValue structValue -> {
         }
         case StructVariable structVariable -> {
@@ -93,6 +105,12 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
       case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
       case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));
       case SameExpression sameExpression -> new Multiply(first, sameExpression);
+      case GreaterThanExpression greaterThanExpression -> multiply(first, greaterThanExpression);
+      case GreaterThanOrEqualExpression greaterThanOrEqualExpression -> multiply(first, greaterThanOrEqualExpression);
+      case LessThanExpression lessThanExpression -> multiply(first, lessThanExpression);
+      case LessThanOrEqualExpression lessThanOrEqualExpression -> multiply(first, lessThanOrEqualExpression);
+      case NotSameExpression notSameExpression -> multiply(first, notSameExpression);
+      case ValueOfBit valueOfBit -> multiply(first, valueOfBit);
     };
   }
 

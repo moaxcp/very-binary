@@ -96,7 +96,7 @@ public final class Divide implements ArithmeticExpression, MultiExpression<Arith
             .toList());
         case Divide divide -> distribute(divide(Stream.concat(divide.expressions().stream(), Stream.of(newDenominator)).toList()));
         case ArithmeticValue value -> divideBy(value, denominator);
-        case Variable variable -> divideBy(variable, denominator);
+        case ValueOf valueOf -> divideBy(valueOf, denominator);
         case LengthOf lengthOf -> divideBy(lengthOf, denominator);
         case ByteLengthOf byteLengthOf -> divideBy(byteLengthOf, denominator);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> divideBy(byteLengthOfBasicElement, denominator);
@@ -121,7 +121,7 @@ public final class Divide implements ArithmeticExpression, MultiExpression<Arith
       return divide(numerator, denominator);
     } else if (numerator instanceof LengthOf) {
       return divide(numerator, denominator);
-    } else if (numerator instanceof Variable) {
+    } else if (numerator instanceof ValueOf) {
       return divide(numerator, denominator);
     } else if (numerator instanceof Value) {
       if (denominator instanceof Value) {

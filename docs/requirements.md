@@ -62,7 +62,7 @@ Each data type in ByteArray requires a set of public methods for example:
 * ByteArray removeBool(long index) - removes bool (1 byte) from bytes at index
 * ByteArray removeBool(long index, long length) - removes bool array of length from bytes at index
 
-A ByteArray can be preallocated to avoid a lot of byte shifts. As bytes are added the allocated variable is incremented.
+A ByteArray can be preallocated to avoid a lot of byte shifts. As bytes are added the allocated valueOf is incremented.
 
 ByteArray has listeners that can be added. Listeners are notified when bytes shift in the array. Bytes shift when add/remove
 methods are called.

@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary;
 import com.github.moaxcp.verybinary.list.BoolList;
 import com.github.moaxcp.verybinary.math.ArithmeticExpression;
 
-import static com.github.moaxcp.verybinary.math.Variable.variable;
+import static com.github.moaxcp.verybinary.math.ValueOf.variable;
 
 public class StructTypeBasicSubBuilder<PARENT extends StructTypeBuilder<PARENT>> {
   private final PARENT structTypeBuilder;

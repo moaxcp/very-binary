@@ -14,16 +14,16 @@ import static com.github.moaxcp.verybinary.math.Uint32Value.uint32Value;
 import static com.github.moaxcp.verybinary.math.Uint64Value.uint64Value;
 import static com.github.moaxcp.verybinary.math.Uint8Value.uint8Value;
 
-public final class Variable implements ArithmeticExpression {
+public final class ValueOf implements ArithmeticExpression {
 
   private final int position;
 
-  Variable(int position) {
+  ValueOf(int position) {
     this.position = position;
   }
 
-  public static Variable variable(int position) {
-    return new Variable(position);
+  public static ValueOf variable(int position) {
+    return new ValueOf(position);
   }
 
   public int position() {
@@ -92,8 +92,8 @@ public final class Variable implements ArithmeticExpression {
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
 
-    Variable variable = (Variable) o;
-    return position == variable.position;
+    ValueOf valueOf = (ValueOf) o;
+    return position == valueOf.position;
   }
 
   @Override

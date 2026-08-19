@@ -3,10 +3,10 @@ package com.github.moaxcp.verybinary.math;
 import org.junit.jupiter.api.Test;
 
 import static com.github.moaxcp.verybinary.Builders.struct;
-import static com.github.moaxcp.verybinary.math.Variable.variable;
+import static com.github.moaxcp.verybinary.math.ValueOf.variable;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VariableTest {
+public class ValueOfTest {
   @Test
   public void testVariableInt8() {
     var struct = struct()

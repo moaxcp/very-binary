@@ -3,7 +3,7 @@ package com.github.moaxcp.verybinary;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.moaxcp.verybinary.math.Variable.variable;
+import static com.github.moaxcp.verybinary.math.ValueOf.variable;
 
 public class ChildStructTypeBuilder<PARENT extends StructTypeBuilder<?>> extends StructTypeBuilder<ChildStructTypeBuilder<PARENT>> {
   private final PARENT parent;

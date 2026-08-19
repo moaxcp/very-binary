@@ -58,7 +58,7 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
             .map(term -> multiplyBy(first, term))
             .toList())));
         case ArithmeticValue constant -> partOfTerm.add(constant);
-        case Variable variable -> partOfTerm.add(variable);
+        case ValueOf valueOf -> partOfTerm.add(valueOf);
         case LengthOf lengthOf -> partOfTerm.add(lengthOf);
         case ByteLengthOf byteLengthOf -> partOfTerm.add(byteLengthOf);
         case ByteLengthOfBasicElement byteLengthOfBasicElement -> partOfTerm.add(byteLengthOfBasicElement);
@@ -100,7 +100,7 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
       case Multiply multiply -> distribute(new Multiply(Stream.concat(Stream.of(first), multiply.expressions().stream()).toList()));
       case Divide divide -> Divide.distribute(new Divide(divide.expressions().stream().map(e -> multiplyBy(first, e)).toList()));
       case ArithmeticValue value -> new Multiply(first, value);
-      case Variable variable -> new Multiply(List.of(first, variable));
+      case ValueOf valueOf -> new Multiply(List.of(first, valueOf));
       case LengthOf lengthOf -> new Multiply(List.of(first, lengthOf));
       case ByteLengthOf byteLengthOf -> new Multiply(List.of(first, byteLengthOf));
       case ByteLengthOfBasicElement byteLengthOfBasicElement -> new Multiply(List.of(first, byteLengthOfBasicElement));

@@ -9,14 +9,14 @@ import java.util.List;
 
 public sealed interface Expression<T extends Value<T>> permits ArithmeticExpression, MultiExpression, StructVariable, Value {
 
-  default List<Variable> findVariables(int position) {
-    var variables = new ArrayList<Variable>();
+  default List<ValueOf> findVariables(int position) {
+    var variables = new ArrayList<ValueOf>();
     switch (this) {
       case LengthOf ignored -> {}
       case ByteLengthOf ignored -> {}
       case ByteLengthOfBasicElement ignored -> {}
       case Value ignored -> {}
-      case Variable v -> {
+      case ValueOf v -> {
         if (v.position() == position) {
           variables.add(v);
         }
@@ -41,7 +41,7 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       case ByteLengthOf ignored -> first.equals(second);
       case ByteLengthOfBasicElement ignored -> first.equals(second);
       case Value ignored -> true;
-      case Variable ignored -> first.equals(second);
+      case ValueOf ignored -> first.equals(second);
       case Multiply mul -> false;
       case Divide div -> false;
       case Sum sum -> false;

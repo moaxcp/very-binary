@@ -8,7 +8,7 @@ import static com.github.moaxcp.verybinary.math.Int8Value.int8Value;
 import static com.github.moaxcp.verybinary.math.Multiply.multiply;
 import static com.github.moaxcp.verybinary.math.Subtract.subtract;
 import static com.github.moaxcp.verybinary.math.Sum.sum;
-import static com.github.moaxcp.verybinary.math.Variable.variable;
+import static com.github.moaxcp.verybinary.math.ValueOf.variable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpressionTest {

@@ -107,6 +107,7 @@ public final class Divide implements ArithmeticExpression, MultiExpression<Arith
         case LessThanOrEqualExpression lessThanOrEqualExpression -> divideBy(lessThanOrEqualExpression, denominator);
         case NotSameExpression notSameExpression -> divideBy(notSameExpression, denominator);
         case ValueOfBit valueOfBit -> divideBy(valueOfBit, denominator);
+        case Variable variable -> divideBy(variable, denominator);
       };
     }
     return denominator;

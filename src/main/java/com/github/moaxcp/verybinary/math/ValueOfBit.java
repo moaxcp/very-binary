@@ -81,4 +81,27 @@ public final class ValueOfBit implements ArithmeticExpression {
 
     return value.valueOfBit(bit);
   }
+
+  @Override
+  public String toString() {
+    return "ValueOfBit(" +
+        position +
+        ", " + bit +
+        ')';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ValueOfBit that = (ValueOfBit) o;
+    return position == that.position && bit == that.bit;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = position;
+    result = 31 * result + Long.hashCode(bit);
+    return result;
+  }
 }

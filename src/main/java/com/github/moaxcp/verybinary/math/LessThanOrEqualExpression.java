@@ -5,6 +5,7 @@ import com.github.moaxcp.verybinary.Pointer;
 import com.github.moaxcp.verybinary.Type;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 import static com.github.moaxcp.verybinary.math.BooleanGatherer.lessThanOrEqual;
 
@@ -39,5 +40,31 @@ public final class LessThanOrEqualExpression implements ArithmeticExpression, Mu
   @Override
   public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
     return expressions.stream().map(e -> e.evaluate(pointer)).gather(lessThanOrEqual()).findAny().orElse(BoolValue.FALSE);
+  }
+
+  @Override
+  public String toString() {
+    StringJoiner joiner = new StringJoiner(" <= ");
+    for (var expression : expressions) {
+      if (expression instanceof Multiply || expression instanceof Divide) {
+        joiner.add("(" + expression + ")");
+      } else {
+        joiner.add(expression.toString());
+      }
+    }
+    return joiner.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+
+    LessThanOrEqualExpression that = (LessThanOrEqualExpression) o;
+    return expressions.equals(that.expressions);
+  }
+
+  @Override
+  public int hashCode() {
+    return expressions.hashCode();
   }
 }

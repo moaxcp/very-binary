@@ -80,6 +80,8 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
         }
         case StructVariable structVariable -> {
         }
+        case Variable variable -> {
+        }
       }
     }
     if (!partOfTerm.isEmpty()) {
@@ -111,6 +113,7 @@ public final class Multiply implements ArithmeticExpression, MultiExpression<Ari
       case LessThanOrEqualExpression lessThanOrEqualExpression -> multiply(first, lessThanOrEqualExpression);
       case NotSameExpression notSameExpression -> multiply(first, notSameExpression);
       case ValueOfBit valueOfBit -> multiply(first, valueOfBit);
+      case Variable variable -> multiply(first, variable);
     };
   }
 

@@ -31,6 +31,8 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       }
       case ValueOfBit valueOfBit -> {
       }
+      case Variable variable -> {
+      }
     }
     return variables;
   }
@@ -54,6 +56,7 @@ public sealed interface Expression<T extends Value<T>> permits ArithmeticExpress
       case LessThanOrEqualExpression lessThanOrEqualExpression -> false;
       case NotSameExpression notSameExpression -> false;
       case ValueOfBit valueOfBit -> false;
+      case Variable variable -> false;
     };
   }
 

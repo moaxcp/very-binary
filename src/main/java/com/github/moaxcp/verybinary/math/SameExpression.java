@@ -7,6 +7,7 @@ import com.github.moaxcp.verybinary.Type;
 import java.util.List;
 
 import static com.github.moaxcp.verybinary.math.BooleanGatherer.equality;
+import static java.util.stream.Collectors.joining;
 
 public final class SameExpression implements ArithmeticExpression, MultiExpression<ArithmeticExpression, ArithmeticValue> {
 
@@ -43,5 +44,23 @@ public final class SameExpression implements ArithmeticExpression, MultiExpressi
   @Override
   public ArithmeticValue evaluate(Pointer<?, ? extends Type<?>> pointer) {
     return expressions.stream().map(e -> e.evaluate(pointer)).gather(equality()).findAny().orElse(BoolValue.FALSE);
+  }
+
+  @Override
+  public String toString() {
+    return "same(" + expressions.stream().map(Object::toString).collect(joining(", ")) + ")";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+
+    SameExpression that = (SameExpression) o;
+    return expressions.equals(that.expressions);
+  }
+
+  @Override
+  public int hashCode() {
+    return expressions.hashCode();
   }
 }

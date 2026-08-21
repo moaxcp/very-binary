@@ -68,7 +68,7 @@ public final class Sum implements ArithmeticExpression, MultiExpression<Arithmet
   @Override
   public String toString() {
     StringJoiner joiner = new StringJoiner(" + ");
-    for (Expression expression : expressions) {
+    for (var expression : expressions) {
       if (expression instanceof Multiply || expression instanceof Divide) {
         joiner.add("(" + expression + ")");
       } else {

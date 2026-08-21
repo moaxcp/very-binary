@@ -140,8 +140,6 @@ if the type is constant then lengthExpression should be set to constant of the c
 
 todo:
 
-* Change Variable back to ValueOf
-* Add Variable which is not immutable and allows the value to be set
 * Add support for default values. Constant values might actually be useless.
 * Add verification for being allocated
     * When a struct is created and allocated is true the byte array should be checked against the array for valid values.
